@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio/Video Editor PRO - Web</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 12px;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #58a6ff;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #2ea043;
+        }
+        
+        .btn-secondary {
+            background-color: #21262d;
+            color: #c9d1d9;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #30363d;
+        }
+        
+        /* Hidden file input */
+        #fileInput {
+            display: none;
+        }
+        
+        /* STATUS */
+        .status-bar {
+            padding: 15px 20px;
+            background-color: #161b22;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+        }
+        
+        .status-main {
+            font-size: 1.1rem;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+        }
+        
+        .status-selection {
+            font-size: 1rem;
+            color: #58a6ff;
+            font-weight: 500;
+        }
+        
+        /* TIMELINE */
+        .timeline-container {
+            padding: 25px;
+            background-color: #161b22;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .time-current {
+            color: #f85149;
+        }
+        
+        .time-selection {
+            color: #58a6ff;
+        }
+        
+        .time-total {
+            color: #8b949e;
+        }
+        
+        .timeline-track {
+            position: relative;
+            height: 80px;
+            background-color: #0d1117;
+            border-radius: 10px;
+            border: 2px solid #21262d;
+            cursor: pointer;
+        }
+        
+        .timeline-cursor {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background-color: #f85149;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(248, 81, 73, 0.7);
+        }
+        
+        /* TRACKS */
+        .tracks-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #161b22;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        
+        .tracks-empty {
+            text-align: center;
+            color: #8b949e;
+            padding: 60px;
+            font-size: 1.3rem;
+        }
+        
+        .track-item {
+            background-color: #0d1117;
+            border: 3px solid #21262d;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .track-item:hover {
+            border-color: #30363d;
+        }
+        
+        .track-item.selected {
+            border-color: #f0883e;
+            background-color: #1c2128;
+            box-shadow: 0 0 0 4px rgba(240, 136, 62, 0.15);
+        }
+        
+        .track-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #c9d1d9;
+            margin-bottom: 20px;
+        }
+        
+        .track-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .track-info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .track-info-label {
+            color: #6e7681;
+            font-weight: 500;
+        }
+        
+        .track-info-value {
+            color: #c9d1d9;
+            font-weight: 700;
+        }
+        
+        .track-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .track-btn {
+            padding: 8px 16px;
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .track-btn:hover {
+            background-color: #30363d;
+        }
+        
+        /* Progress */
+        .progress-container {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #238636;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            color: #8b949e;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Dialogs */
+        dialog {
+            background-color: #161b22;
+            color: #c9d1d9;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            padding: 30px;
+            min-width: 400px;
+        }
+        
+        dialog h2 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+        }
+        
+        dialog button, dialog select, dialog input {
+            padding: 12px 20px;
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        dialog input[type="text"],
+        dialog input[type="number"] {
+            background-color: #0d1117;
+            width: 100%;
+        }
+        
+        dialog select {
+            width: 100%;
+        }
+        
+        .sr-only {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+    </style>
+</head>
+<body>
+    <div id="statusAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    
+    <div class="app-container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>🎬 Audio/Video Editor PRO</h1>
+            <div class="header-buttons">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">
+                    📤 Carica File
+                </button>
+                <button class="btn-secondary btn" onclick="document.getElementById('helpDialog').showModal()">
+                    ❓ Aiuto
+                </button>
+            </div>
+        </div>
+        
+        <!-- Hidden file input -->
+        <input type="file" id="fileInput" accept="audio/*,video/*" multiple>
+        
+        <!-- STATUS -->
+        <div class="status-bar">
+            <div class="status-main" id="statusText">Carica un file per iniziare</div>
+            <div class="status-selection" id="selectionInfo"></div>
+        </div>
+        
+        <!-- TIMELINE -->
+        <div class="timeline-container">
+            <div class="timeline-header">
+                <span class="time-current" id="currentTime">00:00.000</span>
+                <span class="time-selection" id="selectionLength"></span>
+                <span class="time-total" id="duration">00:00.000</span>
+            </div>
+            <div class="timeline-track" id="timelineTrack">
+                <div class="timeline-cursor" id="timelineCursor" style="left: 0%;"></div>
+            </div>
+        </div>
+        
+        <!-- TRACKS -->
+        <div class="tracks-container" id="tracksSection">
+            <div class="tracks-empty">Nessuna traccia<br>Clicca "Carica File" per iniziare</div>
+        </div>
+    </div>
+    
+    <!-- DIALOGS -->
+    <dialog id="effectsDialog">
+        <h2>Effetti Audio</h2>
+        <div id="effectsContent"></div>
+        <div style="margin-top: 25px;">
+            <button class="btn" onclick="app.applyEffects()">Applica</button>
+            <button class="btn-secondary" onclick="document.getElementById('effectsDialog').close()">Annulla</button>
+        </div>
+    </dialog>
+    
+    <dialog id="convertDialog">
+        <h2>Converti Formato</h2>
+        <p style="margin-bottom: 20px;">File: <strong id="convertFileName"></strong></p>
+        <select id="convertFormat" style="margin-bottom: 20px;">
+            <optgroup label="AUDIO">
+                <option value="mp3">MP3</option>
+                <option value="wav">WAV</option>
+                <option value="flac">FLAC</option>
+                <option value="m4a">M4A</option>
+            </optgroup>
+            <optgroup label="VIDEO">
+                <option value="mp4">MP4</option>
+                <option value="mkv">MKV</option>
+                <option value="avi">AVI</option>
+                <option value="mov">MOV</option>
+            </optgroup>
+        </select>
+        <div style="margin-top: 25px;">
+            <button class="btn" onclick="app.convertFile()">Converti</button>
+            <button class="btn-secondary" onclick="document.getElementById('convertDialog').close()">Annulla</button>
+        </div>
+    </dialog>
+    
+    <dialog id="helpDialog">
+        <h2>💡 Guida Rapida</h2>
+        <div style="line-height: 2;">
+            <p><strong>📤 Carica File:</strong> Clicca "Carica File" o trascina file nella pagina</p>
+            <p><strong>🎵 Effetti:</strong> Seleziona traccia, poi clicca "Effetti"</p>
+            <p><strong>🔄 Converti:</strong> Clicca "Converti" per cambiare formato</p>
+            <p><strong>💾 Download:</strong> Dopo il processamento, clicca "Download"</p>
+        </div>
+        <button class="btn" onclick="document.getElementById('helpDialog').close()" style="margin-top: 25px;">Chiudi</button>
+    </dialog>
+    
+    <script type="module" src="./web-main.js"></script>
+</body>
+</html>
