@@ -327,13 +327,13 @@
     <div class="app-container">
         <!-- HEADER -->
         <div class="header">
-            <h1>🎬 Audio/Video Editor PRO</h1>
+            <h1>Audio/Video Editor PRO</h1>
             <div class="header-buttons">
                 <button class="btn" onclick="document.getElementById('fileInput').click()">
-                    📤 Carica File
+                    Carica File
                 </button>
                 <button class="btn-secondary btn" onclick="document.getElementById('helpDialog').showModal()">
-                    ❓ Aiuto
+                    Aiuto
                 </button>
             </div>
         </div>
@@ -378,7 +378,97 @@
     <dialog id="convertDialog">
         <h2>Converti Formato</h2>
         <p style="margin-bottom: 20px;">File: <strong id="convertFileName"></strong></p>
-        <select id="convertFormat" style="margin-bottom: 20px;">
+        
+        <!-- Opzione Audio to Video -->
+        <div id="audioToVideoOption" style="display: none; margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 10px;">
+                <strong>Modalità conversione:</strong>
+            </label>
+            <select id="audioToVideoMode" onchange="app.updateConvertOptions()" 
+                    style="width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+                <option value="none">Conversione normale</option>
+                <option value="static">Video con immagine statica</option>
+                <option value="slideshow">Video slideshow (più immagini)</option>
+                <option value="background">Video con video background</option>
+            </select>
+        </div>
+        
+        <!-- Upload immagine/i -->
+        <div id="imageUploadSection" style="display: none; margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 10px;">
+                <strong>Seleziona immagine/i:</strong>
+            </label>
+            <input type="file" id="imageFileInput" accept="image/*" 
+                   style="width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+            <small style="color: #8b949e; display: block; margin-top: 5px;">
+                Formati: JPG, PNG, GIF, WebP
+            </small>
+            
+            <!-- Opzioni slideshow -->
+            <div id="slideshowOptions" style="display: none; margin-top: 15px; padding: 15px; background-color: #161b22; border-radius: 8px;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px;">
+                        <strong>Durata per immagine (secondi):</strong>
+                    </label>
+                    <input type="number" id="imageDuration" min="1" max="30" value="5" step="0.5"
+                           style="width: 100%; padding: 8px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px;">
+                        <strong>Tipo di transizione:</strong>
+                    </label>
+                    <select id="transitionType" 
+                            style="width: 100%; padding: 8px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+                        <option value="fade">Dissolvenza (Fade)</option>
+                        <option value="none">Nessuna transizione (Cut)</option>
+                    </select>
+                </div>
+                
+                <small style="color: #8b949e;">
+                    Se le immagini non coprono tutta la durata, l'ultima verrà estesa.
+                </small>
+            </div>
+        </div>
+        
+        <!-- Upload video -->
+        <div id="videoUploadSection" style="display: none; margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 10px;">
+                <strong>Seleziona video:</strong>
+            </label>
+            <input type="file" id="videoFileInput" accept="video/*" multiple
+                   style="width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+            <small style="color: #8b949e; display: block; margin-top: 5px;">
+                Formati: MP4, MKV, AVI, MOV, WebM (puoi selezionare più video)
+            </small>
+            
+            <!-- Opzioni video merge -->
+            <div id="videoMergeOptions" style="display: none; margin-top: 15px; padding: 15px; background-color: #161b22; border-radius: 8px;">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px;">
+                        <strong>Gestione durata:</strong>
+                    </label>
+                    <select id="videoMergeMode" 
+                            style="width: 100%; padding: 8px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
+                        <option value="loop">Loop video (ripeti fino a fine audio)</option>
+                        <option value="cut">Taglia al più corto</option>
+                        <option value="extend">Rallenta video per matchare audio</option>
+                    </select>
+                </div>
+                
+                <small style="color: #8b949e;">
+                    <strong>Loop:</strong> Il video si ripete finché non finisce l'audio<br>
+                    <strong>Taglia:</strong> Termina quando finisce audio o video (il più corto)<br>
+                    <strong>Rallenta:</strong> Il video viene rallentato per durare quanto l'audio
+                </small>
+            </div>
+        </div>
+        
+        <!-- Selezione formato -->
+        <label style="display: block; margin-bottom: 10px;">
+            <strong>Formato output:</strong>
+        </label>
+        <select id="convertFormat" style="margin-bottom: 20px; width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9;">
             <optgroup label="AUDIO">
                 <option value="mp3">MP3</option>
                 <option value="wav">WAV</option>
@@ -392,6 +482,7 @@
                 <option value="mov">MOV</option>
             </optgroup>
         </select>
+        
         <div style="margin-top: 25px;">
             <button class="btn" onclick="app.convertFile()">Converti</button>
             <button class="btn-secondary" onclick="document.getElementById('convertDialog').close()">Annulla</button>
@@ -399,12 +490,12 @@
     </dialog>
     
     <dialog id="helpDialog">
-        <h2>💡 Guida Rapida</h2>
+        <h2>Guida Rapida</h2>
         <div style="line-height: 2;">
-            <p><strong>📤 Carica File:</strong> Clicca "Carica File" o trascina file nella pagina</p>
-            <p><strong>🎵 Effetti:</strong> Seleziona traccia, poi clicca "Effetti"</p>
-            <p><strong>🔄 Converti:</strong> Clicca "Converti" per cambiare formato</p>
-            <p><strong>💾 Download:</strong> Dopo il processamento, clicca "Download"</p>
+            <p><strong>Carica File:</strong> Clicca "Carica File" o trascina file nella pagina</p>
+            <p><strong>Effetti:</strong> Seleziona traccia, poi clicca "Effetti"</p>
+            <p><strong>Converti:</strong> Clicca "Converti" per cambiare formato</p>
+            <p><strong>Download:</strong> Dopo il processamento, clicca "Download"</p>
         </div>
         <button class="btn" onclick="document.getElementById('helpDialog').close()" style="margin-top: 25px;">Chiudi</button>
     </dialog>

@@ -1,5 +1,5 @@
 // Configurazione API
-const API_URL = 'http://138.199.196.24/api'; // ✅ IL TUO IP
+const API_URL = 'http://138.199.196.24/api'; //  IL TUO IP
 
 class VideoEditorWeb {
     constructor() {
@@ -10,7 +10,7 @@ class VideoEditorWeb {
     }
 
     init() {
-        console.log('📹 Video Editor Web inizializzato');
+        console.log(' Video Editor Web inizializzato');
         this.setupEventListeners();
         this.updateDisplay();
     }
@@ -49,7 +49,7 @@ class VideoEditorWeb {
 
     async uploadFile(file) {
         try {
-            this.updateStatus(`📤 Upload ${file.name}...`);
+            this.updateStatus(` Upload ${file.name}...`);
 
             const formData = new FormData();
             formData.append('file', file);
@@ -73,7 +73,7 @@ class VideoEditorWeb {
             const track = {
                 id: data.fileId,
                 name: data.originalName,
-                filePath: data.filePath, // Path temporaneo sul server
+                filePath: data.filePath,
                 size: data.size,
                 duration: data.duration || 0,
                 type: this.getFileType(data.originalName),
@@ -82,11 +82,11 @@ class VideoEditorWeb {
             };
 
             this.tracks.push(track);
-            this.updateStatus(`✅ ${file.name} caricato!`);
+            this.updateStatus(` ${file.name} caricato!`);
             this.renderTracks();
 
         } catch (error) {
-            this.updateStatus(`❌ Errore: ${error.message}`, true);
+            this.updateStatus(` Errore: ${error.message}`, true);
             console.error('Upload error:', error);
         }
     }
@@ -108,7 +108,7 @@ class VideoEditorWeb {
         container.innerHTML = this.tracks.map((track, index) => `
             <div class="track-item ${this.selectedTrackId === track.id ? 'selected' : ''}" 
                  onclick="app.selectTrack('${track.id}')">
-                <div class="track-name">${track.type === 'audio' ? '🎵' : '🎬'} ${track.name}</div>
+                <div class="track-name">${track.type === 'audio' ? '' : ''} ${track.name}</div>
                 
                 <div class="track-info">
                     <div class="track-info-row">
@@ -132,14 +132,14 @@ class VideoEditorWeb {
                 <div class="track-actions">
                     ${track.type === 'audio' ? `
                         <button class="track-btn" onclick="event.stopPropagation(); app.openEffects('${track.id}')">
-                            🎨 Effetti
+                             Effetti
                         </button>
                     ` : ''}
                     <button class="track-btn" onclick="event.stopPropagation(); app.openConvert('${track.id}')">
-                        🔄 Converti
+                         Converti
                     </button>
                     <button class="track-btn" onclick="event.stopPropagation(); app.deleteTrack('${track.id}')">
-                        🗑️ Elimina
+                        Elimina
                     </button>
                 </div>
                 
@@ -164,7 +164,6 @@ class VideoEditorWeb {
         if (confirm('Eliminare questa traccia?')) {
             const track = this.tracks.find(t => t.id === trackId);
             
-            // Elimina file dal server
             if (track && track.filePath) {
                 fetch(`${API_URL}/file/${encodeURIComponent(track.filePath)}`, {
                     method: 'DELETE',
@@ -266,19 +265,17 @@ class VideoEditorWeb {
             const data = await response.json();
             if (!data.success) throw new Error(data.error);
 
-            // Aggiorna traccia
             track.effects = effects;
             track.processedId = data.outputId;
 
             this.hideProgress(track.id);
-            this.updateStatus('✅ Effetti applicati! Scarico file...');
+            this.updateStatus(' Effetti applicati! Scarico file...');
 
-            // Download automatico
             this.downloadFile(data.outputId, track.name);
 
         } catch (error) {
             this.hideProgress(track.id);
-            this.updateStatus(`❌ Errore: ${error.message}`, true);
+            this.updateStatus(` Errore: ${error.message}`, true);
             console.error('Effects error:', error);
         }
     }
@@ -289,7 +286,78 @@ class VideoEditorWeb {
 
         this.selectedTrackId = trackId;
         document.getElementById('convertFileName').textContent = track.name;
+        
+        // Se è audio, mostra opzione per video
+        if (track.type === 'audio') {
+            document.getElementById('audioToVideoOption').style.display = 'block';
+        } else {
+            document.getElementById('audioToVideoOption').style.display = 'none';
+            document.getElementById('audioToVideoMode').value = 'none';
+        }
+        
+        this.updateConvertOptions();
         document.getElementById('convertDialog').showModal();
+    }
+
+    updateConvertOptions() {
+        const track = this.tracks.find(t => t.id === this.selectedTrackId);
+        const videoMode = document.getElementById('audioToVideoMode').value;
+        const formatSelect = document.getElementById('convertFormat');
+        const imageUploadSection = document.getElementById('imageUploadSection');
+        const videoUploadSection = document.getElementById('videoUploadSection');
+        const slideshowOptions = document.getElementById('slideshowOptions');
+        const videoMergeOptions = document.getElementById('videoMergeOptions');
+        
+        // Reset display
+        imageUploadSection.style.display = 'none';
+        videoUploadSection.style.display = 'none';
+        slideshowOptions.style.display = 'none';
+        videoMergeOptions.style.display = 'none';
+        
+        if (videoMode === 'static' || videoMode === 'slideshow' || videoMode === 'background') {
+            // Mostra solo formati video
+            formatSelect.innerHTML = `
+                <option value="mp4">MP4</option>
+                <option value="mkv">MKV</option>
+                <option value="avi">AVI</option>
+                <option value="mov">MOV</option>
+            `;
+            
+            if (videoMode === 'static') {
+                imageUploadSection.style.display = 'block';
+                const imageInput = document.getElementById('imageFileInput');
+                imageInput.removeAttribute('multiple');
+                
+            } else if (videoMode === 'slideshow') {
+                imageUploadSection.style.display = 'block';
+                slideshowOptions.style.display = 'block';
+                const imageInput = document.getElementById('imageFileInput');
+                imageInput.setAttribute('multiple', '');
+                
+            } else if (videoMode === 'background') {
+                videoUploadSection.style.display = 'block';
+                videoMergeOptions.style.display = 'block';
+            }
+        } else {
+            // Conversione normale
+            if (track.type === 'audio') {
+                formatSelect.innerHTML = `
+                    <option value="mp3">MP3</option>
+                    <option value="wav">WAV</option>
+                    <option value="flac">FLAC</option>
+                    <option value="m4a">M4A</option>
+                `;
+            } else {
+                formatSelect.innerHTML = `
+                    <option value="mp4">MP4</option>
+                    <option value="mkv">MKV</option>
+                    <option value="avi">AVI</option>
+                    <option value="mov">MOV</option>
+                    <option value="mp3">MP3 (solo audio)</option>
+                    <option value="wav">WAV (solo audio)</option>
+                `;
+            }
+        }
     }
 
     async convertFile() {
@@ -297,41 +365,156 @@ class VideoEditorWeb {
         if (!track) return;
 
         const format = document.getElementById('convertFormat').value;
+        const videoMode = document.getElementById('audioToVideoMode')?.value;
+        
         document.getElementById('convertDialog').close();
 
         try {
-            this.showProgress(track.id, `Conversione in ${format.toUpperCase()}...`);
+            if (videoMode === 'static' || videoMode === 'slideshow' || videoMode === 'background') {
+                const formData = new FormData();
+                
+                // Recupera file audio dal server
+                const audioBlob = await this.getFileBlob(track.filePath);
+                formData.append('audio', audioBlob, track.name);
+                formData.append('format', format);
+                
+                if (videoMode === 'background') {
+                    // VIDEO BACKGROUND
+                    const videoInput = document.getElementById('videoFileInput');
+                    if (!videoInput.files || videoInput.files.length === 0) {
+                        this.updateStatus('Errore: Seleziona almeno un video', true);
+                        return;
+                    }
 
-            const response = await fetch(`${API_URL}/convert`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    filePath: track.filePath,
-                    format,
-                }),
-            });
+                    this.showProgress(track.id, `Unione audio con ${videoInput.files.length} video...`);
+                    
+                    for (let i = 0; i < videoInput.files.length; i++) {
+                        formData.append('videos', videoInput.files[i]);
+                    }
+                    
+                    const videoMergeMode = document.getElementById('videoMergeMode').value || 'loop';
+                    formData.append('videoMode', videoMergeMode);
+                    formData.append('replaceAudio', 'true');
 
-            if (!response.ok) throw new Error('Conversione fallita');
+                    const response = await fetch(`${API_URL}/audio-video-merge`, {
+                        method: 'POST',
+                        body: formData,
+                    });
 
-            const data = await response.json();
-            if (!data.success) throw new Error(data.error);
+                    if (!response.ok) throw new Error('Merge fallito');
 
-            this.hideProgress(track.id);
-            this.updateStatus(`✅ Convertito in ${format.toUpperCase()}! Scarico...`);
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.error);
 
-            // Download con nome corretto
-            const newName = track.name.replace(/\.[^.]+$/, `.${format}`);
-            this.downloadFile(data.outputId, newName);
+                    this.hideProgress(track.id);
+                    this.updateStatus(`Video con audio creato! Scarico...`);
+
+                    const newName = track.name.replace(/\.[^.]+$/, `_video.${format}`);
+                    this.downloadFile(data.outputId, newName);
+                    
+                } else if (videoMode === 'slideshow') {
+                    // SLIDESHOW
+                    const imageInput = document.getElementById('imageFileInput');
+                    if (!imageInput.files || imageInput.files.length === 0) {
+                        this.updateStatus('Errore: Seleziona almeno un\'immagine', true);
+                        return;
+                    }
+
+                    this.showProgress(track.id, `Creazione slideshow con ${imageInput.files.length} immagini...`);
+                    
+                    for (let i = 0; i < imageInput.files.length; i++) {
+                        formData.append('images', imageInput.files[i]);
+                    }
+                    
+                    const imageDuration = document.getElementById('imageDuration').value || 5;
+                    const transition = document.getElementById('transitionType').value || 'fade';
+                    formData.append('imageDuration', imageDuration);
+                    formData.append('transition', transition);
+
+                    const response = await fetch(`${API_URL}/audio-to-video-slideshow`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) throw new Error('Conversione fallita');
+
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.error);
+
+                    this.hideProgress(track.id);
+                    this.updateStatus(`Slideshow creato! Scarico...`);
+
+                    const newName = track.name.replace(/\.[^.]+$/, `_slideshow.${format}`);
+                    this.downloadFile(data.outputId, newName);
+                    
+                } else {
+                    // IMMAGINE STATICA
+                    const imageInput = document.getElementById('imageFileInput');
+                    if (!imageInput.files || imageInput.files.length === 0) {
+                        this.updateStatus('Errore: Seleziona un\'immagine', true);
+                        return;
+                    }
+
+                    this.showProgress(track.id, `Creazione video con immagine...`);
+                    
+                    formData.append('image', imageInput.files[0]);
+
+                    const response = await fetch(`${API_URL}/audio-to-video`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) throw new Error('Conversione fallita');
+
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.error);
+
+                    this.hideProgress(track.id);
+                    this.updateStatus(`Convertito in video ${format.toUpperCase()}! Scarico...`);
+
+                    const newName = track.name.replace(/\.[^.]+$/, `.${format}`);
+                    this.downloadFile(data.outputId, newName);
+                }
+
+            } else {
+                // CONVERSIONE NORMALE
+                this.showProgress(track.id, `Conversione in ${format.toUpperCase()}...`);
+
+                const response = await fetch(`${API_URL}/convert`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filePath: track.filePath,
+                        format,
+                    }),
+                });
+
+                if (!response.ok) throw new Error('Conversione fallita');
+
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+
+                this.hideProgress(track.id);
+                this.updateStatus(`Convertito in ${format.toUpperCase()}! Scarico...`);
+
+                const newName = track.name.replace(/\.[^.]+$/, `.${format}`);
+                this.downloadFile(data.outputId, newName);
+            }
 
         } catch (error) {
             this.hideProgress(track.id);
-            this.updateStatus(`❌ Errore: ${error.message}`, true);
+            this.updateStatus(`Errore: ${error.message}`, true);
             console.error('Convert error:', error);
         }
     }
 
+    async getFileBlob(filePath) {
+        const response = await fetch(`${API_URL}/file-download/${encodeURIComponent(filePath)}`);
+        if (!response.ok) throw new Error('File non trovato sul server');
+        return await response.blob();
+    }
+
     downloadFile(outputId, filename) {
-        // Crea link temporaneo per download
         const downloadUrl = `${API_URL}/download/${outputId}`;
         
         const a = document.createElement('a');
@@ -342,7 +525,7 @@ class VideoEditorWeb {
         a.click();
         document.body.removeChild(a);
 
-        this.updateStatus('📥 Download avviato!');
+        this.updateStatus(' Download avviato!');
     }
 
     showProgress(trackId, message) {
@@ -362,12 +545,10 @@ class VideoEditorWeb {
     }
 
     updateDisplay() {
-        // Update timeline cursor
         const maxDuration = Math.max(...this.tracks.map(t => t.duration || 0), 300);
         const percent = (this.cursorPosition / maxDuration) * 100;
         document.getElementById('timelineCursor').style.left = `${percent}%`;
 
-        // Update times
         document.getElementById('currentTime').textContent = this.formatTime(this.cursorPosition);
         document.getElementById('duration').textContent = this.formatTime(maxDuration);
     }
@@ -401,6 +582,6 @@ class VideoEditorWeb {
 const app = new VideoEditorWeb();
 window.app = app;
 
-console.log('🎬 Video Editor Web - Versione Semplice');
+console.log(' Video Editor Web - Versione Completa');
 console.log('API URL:', API_URL);
-console.log('✅ Storage locale - niente cloud');
+console.log(' Storage locale - niente cloud');
