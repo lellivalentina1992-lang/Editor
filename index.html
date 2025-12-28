@@ -282,6 +282,7 @@
                 <button class="btn" onclick="document.getElementById('fileInput').click()">
                     Carica File
                 </button>
+                <button class="btn" onclick="app.openEffectsMenu()">🎨 Effetti (E)</button>
                 <button class="btn" onclick="app.exportProject()" style="margin-right: 10px;">💾 Export</button>
                 <button class="btn-secondary btn" onclick="document.getElementById('helpDialog').showModal()">
                     Aiuto
@@ -1014,14 +1015,108 @@ class VideoEditorWeb {
         this.updateStatus(`✂️ Clip tagliata: ${this.formatTime(newDuration)}`);
     }
     
-    snapToGrid(value, gridSize = 1) {
-        // Snap a griglia (1 secondo di default)
-        return Math.round(value / gridSize) * gridSize;
+    // ============================================
+    // NUOVO: Funzioni per gli effetti
+    // ============================================
+    
+    openEffectsMenu() {
+        if (!this.selectedTrackId) {
+            this.updateStatus('⚠️ Seleziona prima una traccia per applicare effetti', true);
+            return;
+        }
+        
+        const track = this.tracks.find(t => t.id === this.selectedTrackId);
+        if (!track || track.type === 'empty') {
+            this.updateStatus('⚠️ Carica un file nella traccia prima di applicare effetti', true);
+            return;
+        }
+        
+        this.updateStatus(`🎨 Menu effetti per: ${track.name}`);
+        document.getElementById('effectsDialog').showModal();
     }
     
-    enableSnapToGrid(enabled = true) {
-        this.snapEnabled = enabled;
-        this.updateStatus(`Snap: ${enabled ? 'ON' : 'OFF'}`);
+    async applyEffect(effectType) {
+        const track = this.tracks.find(t => t.id === this.selectedTrackId);
+        if (!track) return;
+        
+        // Controlla che ci sia un file caricato
+        if (!track.fileId) {
+            this.updateStatus('⚠️ Nessun file caricato su questa traccia', true);
+            return;
+        }
+        
+        try {
+            // Controlla se c'è una selezione IN-OUT
+            const hasSelection = track.localInPoint !== null && track.localOutPoint !== null && track.localInPoint < track.localOutPoint;
+            
+            // Mostra loading con info selezione
+            if (hasSelection) {
+                this.updateStatus(`⏳ Applicando ${effectType} su selezione ${this.formatTime(track.localInPoint)}-${this.formatTime(track.localOutPoint)}...`);
+            } else {
+                this.updateStatus(`⏳ Applicando ${effectType} su tutto il file...`);
+            }
+            
+            document.getElementById('effectsDialog').close();
+            
+            // Inizializza array effetti se non esiste
+            if (!track.effects) {
+                track.effects = [];
+            }
+            
+            // Aggiungi l'effetto alla lista
+            const newEffect = {
+                type: effectType,
+                timestamp: Date.now()
+            };
+            track.effects.push(newEffect);
+            
+            // Chiama il backend per applicare l'effetto REALMENTE con supporto selezione
+            const response = await fetch(`${API_URL}/apply-effects`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fileId: track.fileId,
+                    effects: track.effects,
+                    inPoint: track.localInPoint,              // ← NUOVO: Punto IN
+                    outPoint: track.localOutPoint,            // ← NUOVO: Punto OUT
+                    applyToSelection: hasSelection            // ← NUOVO: Flag selezione
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Errore ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Aggiorna il file della traccia con quello processato
+                track.fileId = data.outputFile;
+                track.filePath = data.outputPath;
+                
+                // Messaggio di successo differenziato
+                if (hasSelection) {
+                    this.updateStatus(`✅ ${effectType} applicato su selezione!`);
+                } else {
+                    this.updateStatus(`✅ ${effectType} applicato con successo!`);
+                }
+                
+                this.renderTracks();
+            } else {
+                throw new Error(data.error || 'Errore sconosciuto');
+            }
+            
+        } catch (error) {
+            console.error('Errore apply effect:', error);
+            this.updateStatus(`❌ Errore: ${error.message}`, true);
+            
+            // Rimuovi l'effetto dalla lista se fallisce
+            if (track.effects) {
+                track.effects.pop();
+            }
+        }
     }
 
 }
@@ -1151,10 +1246,10 @@ document.addEventListener('keydown', (e) => {
         }
     }
     
-    // Ctrl+E = Export
-    if (key === 'e' && ctrl) {
+    // E o Ctrl+E = Apri menu effetti
+    if (key === 'e') {
         e.preventDefault();
-        app.exportProject();
+        app.openEffectsMenu();
     }
 
     if (key === 'delete') {
@@ -1220,6 +1315,73 @@ console.log('🎬 Editor pronto!');
         
         <button class="btn-secondary btn" onclick="document.getElementById('exportDialog').close()" style="width: 100%; margin-top: 20px;">
             Annulla
+        </button>
+    </dialog>
+
+    <dialog id="effectsDialog" style="max-width: 600px; padding: 30px; background-color: #161b22; border: 1px solid #30363d; border-radius: 12px; color: #c9d1d9;">
+        <h2 style="color: #58a6ff;">🎨 Effetti Audio/Video</h2>
+        <p style="margin: 20px 0; color: #8b949e;">Seleziona un effetto da applicare alla traccia:</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;">
+            <button class="btn" onclick="app.applyEffect('Fade In')" style="padding: 15px;">
+                📈 Fade In
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Fade Out')" style="padding: 15px;">
+                📉 Fade Out
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Reverse')" style="padding: 15px;">
+                ⏪ Reverse
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Speed Up')" style="padding: 15px;">
+                ⏩ Speed Up
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Slow Down')" style="padding: 15px;">
+                🐌 Slow Down
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Echo')" style="padding: 15px;">
+                🔊 Echo
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Normalize')" style="padding: 15px;">
+                📊 Normalize
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Equalizer')" style="padding: 15px;">
+                🎚️ Equalizer
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Grayscale')" style="padding: 15px; background-color: #484f58;">
+                ⬛ Grayscale
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Brightness')" style="padding: 15px; background-color: #484f58;">
+                ☀️ Brightness
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Contrast')" style="padding: 15px; background-color: #484f58;">
+                🔆 Contrast
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Sepia')" style="padding: 15px; background-color: #484f58;">
+                📜 Sepia
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Saturation')" style="padding: 15px; background-color: #484f58;">
+                🎨 Saturation
+            </button>
+            
+            <button class="btn" onclick="app.applyEffect('Blur')" style="padding: 15px; background-color: #484f58;">
+                💨 Blur
+            </button>
+        </div>
+        
+        <button class="btn-secondary btn" onclick="document.getElementById('effectsDialog').close()" style="width: 100%; margin-top: 20px;">
+            Chiudi
         </button>
     </dialog>
 
