@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editor Grafico Accessibile</title>
     
+    <!-- CARICAMENTO GLFX.JS - LIBRERIA GPU WEBGL -->
+    <!-- Caricato in modo sincrono per garantire disponibilità immediata -->
+    <script src="https://cdn.jsdelivr.net/npm/glfx@0.0.4/glfx.min.js" 
+            onerror="console.warn('CDN jsdelivr fallito, provo unpkg...'); 
+                     var s=document.createElement('script'); 
+                     s.src='https://unpkg.com/glfx@0.0.4/glfx.min.js'; 
+                     document.head.appendChild(s);"></script>
+    
     <!--
     ═══════════════════════════════════════════════════════════════════════════════
     EDITOR GRAFICO ACCESSIBILE - PROGETTATO SECONDO WCAG 2.1 AA
@@ -623,6 +631,27 @@ label {
 .pb-section textarea {
     font-family: inherit;
     font-size: 14px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ACCESSIBILITÀ - PULSANTI ALLINEAMENTO VERTICALI
+   ══════════════════════════════════════════════════════════
+   I pulsanti di allineamento devono essere disposti in verticale
+   per facilitare la navigazione con screen reader
+   ══════════════════════════════════════════════════════════ */
+
+.alignment-grid,
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alignment-grid button,
+.btn-group button {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
 }
     </style>
     
@@ -2630,7 +2659,7 @@ label {
                     <div class="section-basic">
                         <div class="control-group">
                             <strong class="control-group-title">Formato</strong>
-                            <select id="tpl">
+                            <select id="tpl" aria-label="Seleziona template canvas. Usa frecce su/giù per cambiare, Invio per confermare">
                                 <option value="instagram-post" selected>Post Instagram (1080x1080)</option>
                                 <option value="instagram-story">Storia Instagram (1080x1920)</option>
                                 <option value="instagram-reel">Reel Instagram (1080x1920)</option>
@@ -2719,7 +2748,7 @@ label {
                         
                         <div class="control-group" id="bg-color-controls">
                             <strong class="control-group-title">Colore</strong>
-                            <select id="bg-color-preset">
+                            <select id="bg-color-preset" aria-label="Colore sfondo">
                                 <option value="#ffffff" selected>Bianco</option>
                                 <option value="transparent">Trasparente</option>
                                 <option value="#000000">Nero</option>
@@ -2977,7 +3006,7 @@ label {
                         
                         <div class="control-group">
                             <strong class="control-group-title">Font</strong>
-                            <select id="new-font-family">
+                            <select id="new-font-family" aria-label="Font">
                                 <option value="Arial" selected>Arial</option>
                                 <option value="Montserrat">Montserrat</option>
                                 <option value="Open Sans">Open Sans</option>
@@ -3024,8 +3053,7 @@ label {
                         
                         <div class="control-group">
                             <strong class="control-group-title">Colore</strong>
-                            <label for="text-color-preset" class="sr-only">Seleziona colore testo</label>
-                            <select id="text-color-preset" aria-describedby="text-color-preset-desc">
+                            <select id="text-color-preset" aria-label="Colore testo">
                                 <option value="#000000">Nero</option>
                                 <option value="#ffffff">Bianco</option>
                                 <option value="#ff0000">Rosso</option>
@@ -3397,7 +3425,7 @@ label {
             
             <!-- PANNELLO 7: MODIFICA LIVELLO -->
             <section class="section-panel">
-                <h1>Pannello Proprietà</h1>
+                <h1>Modifica Livelli</h1>
                 <button class="section-header" aria-expanded="true" aria-controls="edit-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
                     <span class="section-number">7</span>
                     <div class="section-heading">Modifica Livello</div>
@@ -3443,7 +3471,7 @@ label {
                     <div class="control-group" id="font-controls" class="hidden">
                         <strong class="control-group-title">Font</strong>
                         <!-- Select popolato dinamicamente in base a connettività -->
-                        <select id="font-family" aria-label="Seleziona famiglia font">
+                        <select id="font-family" aria-label="Font">
                             <option value="Arial">Caricamento font...</option>
                         </select>
                     
@@ -3531,7 +3559,7 @@ label {
                     
                     <div class="control-group" id="color-controls" class="hidden">
                         <strong class="control-group-title">Colore</strong>
-                        <select id="layer-color-preset">
+                        <select id="layer-color-preset" aria-label="Colore layer">
                             <option value="#000000">Nero</option>
                             <option value="#ffffff">Bianco</option>
                             <option value="#ff0000">Rosso</option>
@@ -4451,28 +4479,6 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             </p>
                         </div>
                         
-                        <!-- BLUR -->
-                        <div class="control-group" style="background: #e0f2fe; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 2px solid #0284c7;">
-                            <div style="color: #075985; margin-bottom: 12px; font-size: 15px; font-weight: 600;">
-                                🌊 Blur (Sfocatura Gaussiana)
-                            </div>
-                            <div class="input-with-label">
-                                <label for="blur-radius">Raggio Sfocatura (0-50)</label>
-                                <div class="slider-group">
-                                    <input type="range" id="blur-radius" min="0" max="50" value="10" step="1"
-                                           aria-describedby="blur-help">
-                                    <span class="slider-value" id="blur-radius-value">10</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary btn-full" id="btn-apply-blur"
-                                    style="margin-top: 12px; background: linear-gradient(to right, #0284c7, #075985);">
-                                🌊 Applica Blur
-                            </button>
-                            <p id="blur-help" style="font-size: 11px; color: #075985; margin-top: 8px;">
-                                Sfocatura morbida stile fotografico. Basso = sottile, alto = effetto dream.
-                                <strong>Premi F2 per guida completa</strong>
-                            </p>
-                        </div>
                         
                         <!-- EMBOSS -->
                         <div class="control-group" style="background: #fce7f3; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 2px solid #db2777;">
@@ -4757,12 +4763,12 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
             </section>
             
             <!-- ═══════════════════════════════════════════════════════════════ -->
-            <!-- PANNELLO 8B: EFFETTI GPU GLOBALI (Pipeline Unificata) -->
+            <!-- PANNELLO 9: EFFETTI GPU GLOBALI (Pipeline Unificata) -->
             <!-- ═══════════════════════════════════════════════════════════════ -->
             <section class="section-panel">
                 <h1>Filtri</h1>
                 <button class="section-header" aria-expanded="false" aria-controls="gpu-global-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">8B</span>
+                    <span class="section-number">9</span>
                     <div class="section-heading">✨ Effetti GPU Globali</div>
                 </button>
                 <div class="section-content collapsed" id="gpu-global-section">
@@ -4889,11 +4895,11 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
             </section>
 
             
-            <!-- PANNELLO 9: GESTIONE LIVELLI -->
+            <!-- PANNELLO 10: GESTIONE LIVELLI -->
             <section class="section-panel">
                 <h1>Pannello Livelli</h1>
                 <button class="section-header" aria-expanded="true" aria-controls="layers-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">9</span>
+                    <span class="section-number">10</span>
                     <div class="section-heading">Gestione Livelli</div>
                 </button>
                 <div class="section-content" id="layers-section">
@@ -4944,10 +4950,10 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 </div>
             </section>
             
-            <!-- PANNELLO 10: ALLINEAMENTO -->
+            <!-- PANNELLO 11: ALLINEAMENTO -->
             <section class="section-panel">
                 <button class="section-header" aria-expanded="false" aria-controls="align-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">10</span>
+                    <span class="section-number">11</span>
                     <div class="section-heading">Allineamento & Distribuzione</div>
                 </button>
                 <div class="section-content collapsed" id="align-section">
@@ -5014,10 +5020,10 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 </div>
             </section>
             
-            <!-- PANNELLO 11: PALETTE COLORI -->
+            <!-- PANNELLO 12: PALETTE COLORI -->
             <section class="section-panel">
                 <button class="section-header" aria-expanded="false" aria-controls="palette-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">11</span>
+                    <span class="section-number">12</span>
                     <div class="section-heading">Palette Colori</div>
                 </button>
                 <div class="section-content collapsed" id="palette-section">
@@ -5030,15 +5036,16 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                     <button class="btn btn-secondary btn-full" id="btn-save-color" class="mt-12">Salva Colore Attuale</button>
                 </div>
             </section>
+            </section>
             
             
-            <!-- PANNELLO 12: ESPORTA -->
+            <!-- PANNELLO 13: EFFETTI GPU AVANZATI (WebGL - glfx.js) -->
             <section class="section-panel">
-                <button class="section-header" aria-expanded="false" aria-controls="export-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">12</span>
-                                <!-- ═══════════════════════════════════════════════════════════════════════
-                 EFFETTI GPU AVANZATI (WebGL - glfx.js)
-                 ═══════════════════════════════════════════════════════════════════════ -->
+                <button class="section-header" aria-expanded="false" aria-controls="gpu-advanced-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
+                    <span class="section-number">13</span>
+                    <div class="section-heading">🎮 Effetti GPU Avanzati</div>
+                </button>
+                <div class="section-content collapsed" id="gpu-advanced-section">
             
             <div class="control-section" role="region" aria-label="Effetti GPU Avanzati">
                 <div class="section-heading">
@@ -5066,7 +5073,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 <div class="control-group">
 <!-- CURVES PRO -->
                 <div class="gpu-effect-box">
-                                            📈 Curves Pro 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        📈 Curves Pro 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5089,7 +5097,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
 
                 <!-- COLOR BALANCE PRO -->
                 <div class="gpu-effect-box">
-                                            🎨 Color Balance Pro 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        🎨 Color Balance Pro 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5125,7 +5134,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
 
                 <!-- BLUR PRO GPU -->
                 <div class="gpu-effect-box">
-                                            💫 Blur Pro (Gaussian) 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        💫 Blur Pro (Gaussian) 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5147,7 +5157,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
 
                 <!-- BLOOM PRO -->
                 <div class="gpu-effect-box">
-                                            ✨ Bloom Pro (Glow Realistico) 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        ✨ Bloom Pro (Glow Realistico) 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5180,7 +5191,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 
                 <!-- VIBRANCE -->
                 <div class="gpu-effect-box">
-                                            🟦 Vibrance (Saturazione Intelligente) 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        🟦 Vibrance (Saturazione Intelligente) 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5205,7 +5217,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 
                 <!-- WHITE BALANCE PRO -->
                 <div class="gpu-effect-box">
-                                            🟪 White Balance Pro 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        🟪 White Balance Pro 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5241,7 +5254,8 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 
                 <!-- HIGHLIGHTS & SHADOWS -->
                 <div class="gpu-effect-box">
-                                            🟧 Highlights & Shadows 
+                    <div style="color: rgba(255,255,255,0.95); margin-bottom: 12px; font-size: 15px; font-weight: 600;">
+                        🟧 Highlights & Shadows 
                         <span class="gpu-badge">GPU</span>
                     </div>
                     <div class="input-with-label">
@@ -5597,12 +5611,18 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                 </div>
             </div>
 
-            <!-- Sezione Esporta -->
+            </section>
+            
+            
+            <!-- PANNELLO 14: ESPORTA -->
+            <section class="section-panel">
+                <button class="section-header" aria-expanded="false" aria-controls="export-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
+                    <span class="section-number">14</span>
+                    <div class="section-heading">Esporta</div>
+                </button>
+            <div class="section-content" id="export-section">
             <div class="control-section" role="region" aria-label="Esporta">
-                <h1>Esporta</h1>
-                <div class="section-heading">Esporta</div>
-                <div class="section-content" id="export-section">
-                    <p class="section-description">Salva il tuo progetto</p>
+                <p class="section-description">Salva il tuo progetto</p>
                     
                     <div class="control-group">
                         <strong class="control-group-title">Immagine</strong>
@@ -5621,12 +5641,13 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                         </label>
                     </div>
                 </div>
+            </div>
             </section>
             
-            <!-- PANNELLO 13: ANALISI -->
+            <!-- PANNELLO 15: ANALISI -->
             <section class="section-panel">
                 <button class="section-header" aria-expanded="false" aria-controls="analysis-section" style="border: none; width: 100%; text-align: left; cursor: pointer;">
-                    <span class="section-number">13</span>
+                    <span class="section-number">15</span>
                     <div class="section-heading">Analisi & Revisione</div>
                 </button>
                 <div class="section-content collapsed" id="analysis-section">
@@ -5692,8 +5713,6 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
             <div class="canvas-container" id="main-canvas">
                 <canvas id="canvas" width="1080" height="1080" role="img" aria-label="Area di lavoro principale"></canvas>
             </div>
-        </div>
-    </div>
     </main>
     
     <!-- TOAST NOTIFICHE -->
@@ -7424,15 +7443,15 @@ const state = window.state = {
                 
                 announceToScreenReader(message, 'polite');
                 
-                const gpuPanel = document.getElementById('gpu-status-panel');
-                if (gpuPanel) {
-                    gpuPanel.innerHTML = `
-                        <strong style="color: #fff;">⚠️ WebGL Non Disponibile</strong>
-                        <p style="margin: 8px 0 0 0; font-size: 13px; color: rgba(255,255,255,0.9);">
-                            Effetti GPU disabilitati. Usa effetti alternativi compatibili.
-                        </p>
-                    `;
-                    gpuPanel.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+                // NASCONDI COMPLETAMENTE LA SEZIONE GPU se WebGL non è disponibile
+                const gpuSection = document.querySelector('[aria-label="Effetti GPU Avanzati"]');
+                if (gpuSection) {
+                    // Trova il pannello padre (section-panel) che contiene questa sezione
+                    const sectionPanel = gpuSection.closest('.section-panel');
+                    if (sectionPanel) {
+                        sectionPanel.style.display = 'none';
+                        announceToScreenReader('La sezione Effetti GPU Avanzati è stata nascosta perché WebGL non è disponibile.', 'polite');
+                    }
                 }
             }
         }
@@ -11457,10 +11476,27 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             document.querySelectorAll('input[name="bg-color-format"]').forEach(radio => {
                 radio.addEventListener('change', e => {
                     const isHex = e.target.value === 'hex';
-                    document.getElementById('bg-gradient-hex-controls').style.display = isHex ? 'block' : 'none';
-                    document.getElementById('bg-gradient-rgb-controls').style.display = isHex ? 'none' : 'block';
-                    document.getElementById('bg-gradient-hex-controls-2').style.display = isHex ? 'block' : 'none';
-                    document.getElementById('bg-gradient-rgb-controls-2').style.display = isHex ? 'none' : 'block';
+                    
+                    // Helper function per mostrare/nascondere e abilitare/disabilitare
+                    function toggleControls(element, visible) {
+                        if (!element) return;
+                        element.style.display = visible ? 'block' : 'none';
+                        // Riabilita/disabilita gli input quando mostri/nascondi
+                        element.querySelectorAll('input').forEach(input => {
+                            if (visible) {
+                                input.removeAttribute('disabled');
+                                input.removeAttribute('tabindex');
+                            } else {
+                                input.setAttribute('disabled', 'disabled');
+                                input.setAttribute('tabindex', '-1');
+                            }
+                        });
+                    }
+                    
+                    toggleControls(document.getElementById('bg-gradient-hex-controls'), isHex);
+                    toggleControls(document.getElementById('bg-gradient-rgb-controls'), !isHex);
+                    toggleControls(document.getElementById('bg-gradient-hex-controls-2'), isHex);
+                    toggleControls(document.getElementById('bg-gradient-rgb-controls-2'), !isHex);
                 });
             });
             
@@ -13064,10 +13100,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 }
             });
             
-            document.getElementById('shadow-color').addEventListener('change', () => {
+            document.getElementById('shadow-color').addEventListener('change', (e) => {
                 const layer = getSelectedLayer();
                 if (layer && layer.dropShadow) {
-                    layer.dropShadow.color = document.getElementById('shadow-color').value;
+                    layer.dropShadow.color = e.target.value;
                     saveState('Colore ombra modificato');
                     scheduleRender();
                 }
@@ -20064,12 +20100,52 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
     );
     
     colorSelects.forEach(select => {
+      // SOLUZIONE RADICALE: Sposta l'ID in data-id
+      const originalId = select.id;
+      select.setAttribute('data-id', originalId);
+      
+      // Rimuovi l'ID (questo impedisce a NVDA di leggerlo)
+      select.removeAttribute('id');
+      
+      // Aggiungi un nuovo ID semplice e neutro
+      select.id = 'c' + Math.random().toString(36).substr(2, 9);
+      
+      // Per ogni option, aggiungi aria-label con solo il nome del colore
+      const options = select.querySelectorAll('option');
+      options.forEach(option => {
+        const text = option.textContent.trim();
+        const value = option.value;
+        
+        // Se il valore è un colore HEX (#xxxxxx)
+        if (value.startsWith('#') && value.length === 7) {
+          // Salva il valore HEX in data-hex
+          option.setAttribute('data-hex', value);
+          // Aggiungi aria-label che contiene SOLO il nome del colore
+          option.setAttribute('aria-label', text);
+        }
+      });
+      
+      // Marca come processata
+      select.setAttribute('data-verbosity-reduced', 'true');
     });
     
     if (colorSelects.length > 0) {
       console.log(`✓ Verbosità ridotta per ${colorSelects.length} select colori`);
     }
   }
+  
+  // Patch getElementById per supportare data-id
+  (function patchGetElementById() {
+    const original = document.getElementById;
+    document.getElementById = function(id) {
+      // Prima prova con l'ID normale
+      let element = original.call(document, id);
+      if (element) return element;
+      
+      // Poi cerca per data-id
+      return document.querySelector(`[data-id="${id}"]`);
+    };
+  })();
   
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', reduceColorSelectVerbosity);
@@ -20088,6 +20164,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             const hasColorSelect = node.matches && node.matches('select[id*="color"], select[id*="Color"]');
             const childColorSelects = node.querySelectorAll && node.querySelectorAll('select[id*="color"], select[id*="Color"]');
             if (hasColorSelect || (childColorSelects && childColorSelects.length > 0)) {
+              console.log('🔍 Rilevato nuovo select colore, applicando fix verbosità...');
               needsUpdate = true;
             }
           }
@@ -20095,7 +20172,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
       }
     });
     if (needsUpdate) {
-      reduceColorSelectVerbosity();
+      setTimeout(() => reduceColorSelectVerbosity(), 100); // Piccolo delay per assicurarsi che il DOM sia completo
     }
   });
   
@@ -21990,7 +22067,7 @@ NON aggiungere testo prima o dopo il JSON.`
   
   // ==================== HELPER FUNCTIONS ====================
   
-  function announceExtraAI(text, priority = 'polite') {
+  function announce(text, priority = 'polite') {
     const regionId = priority === 'assertive' ? 'sr-assert' : 'sr-polite';
     const region = document.getElementById(regionId);
     if (region) {
@@ -22375,10 +22452,103 @@ window.ImageMemoryManager={config:{maxLoadedImages:50,unloadDelay:5000,enableDeb
 // ✨ EFFETTI AVANZATI v34.1
 // ════════════════════════════════════════════════════════════════════
 
-const AdvancedEffects={applyPixelate(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=Math.ceil(a.width/t),s=Math.ceil(a.height/t),l=document.createElement("canvas"),c=l.getContext("2d");l.width=o,l.height=s,c.drawImage(i,0,0,o,s),n.imageSmoothingEnabled=!1,n.drawImage(l,0,0,o,s,0,0,a.width,a.height);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Pixelate applicato (${t}px blocchi)`,"polite")},r.src=i.toDataURL(),!0},applyGlow(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d"),s=Math.ceil(t);n.width=i.width+2*s,n.height=i.height+2*s,o.shadowColor=a,o.shadowBlur=t,o.shadowOffsetX=0,o.shadowOffsetY=0,o.drawImage(i,s,s);const l=Math.ceil(t/30);for(let e=0;e<l;e++)o.drawImage(i,s,s);const c=new Image;return c.onload=()=>{e.imageElement=c,e.imageData=n.toDataURL(),e.width=n.width,e.height=n.height,window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Glow applicato (intensità ${t})`,"polite")},c.src=n.toDataURL(),!0},applyVignette(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=i.width/2,l=i.height/2,c=Math.sqrt(s*s+l*l),r=c*a/100,d=o.createRadialGradient(s,l,r,s,l,c);d.addColorStop(0,"rgba(0,0,0,0)"),d.addColorStop(1,`rgba(0,0,0,${t/100})`),o.fillStyle=d,o.fillRect(0,0,i.width,i.height);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Vignette applicato (int ${t}, size ${a})`,"polite")},m.src=n.toDataURL(),!0},applySharpen(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=[0,-1,0,-1,5,-1,0,-1,0],c=t/100,r=new Uint8ClampedArray(s),d=a.width,m=a.height;for(let e=1;e<m-1;e++)for(let t=1;t<d-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const c=(e+n)*d+(t+o),r=3*(n+1)+(o+1);i+=s[4*c+a]*l[r]}const n=4*(e*d+t)+a,o=s[n];r[n]=o+(i-o)*c}for(let e=0;e<s.length;e++)s[e]=r[e];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Sharpen applicato (amount ${t})`,"polite")},g.src=i.toDataURL(),!0},applyAutoLevels(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data;let l=255,c=0,r=255,d=0,m=255,g=0;for(let e=0;e<s.length;e+=4){const t=s[e],a=s[e+1],i=s[e+2];t<l&&(l=t),t>c&&(c=t),a<r&&(r=a),a>d&&(d=a),i<m&&(m=i),i>g&&(g=i)}const u=t/100;for(let e=0;e<s.length;e+=4){const t=c-l>0?255*(s[e]-l)/(c-l):s[e],a=d-r>0?255*(s[e+1]-r)/(d-r):s[e+1],i=g-m>0?255*(s[e+2]-m)/(g-m):s[e+2];s[e]=Math.min(255,Math.max(0,s[e]+(t-s[e])*u)),s[e+1]=Math.min(255,Math.max(0,s[e+1]+(a-s[e+1])*u)),s[e+2]=Math.min(255,Math.max(0,s[e+2]+(i-s[e+2])*u))}n.putImageData(o,0,0);const h=new Image;return h.onload=()=>{e.imageElement=h,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Auto Levels applicato (strength ${t})`,"polite")},h.src=i.toDataURL(),!0},applyNoise(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100*255;for(let e=0;e<l.length;e+=4)if("mono"===a){const t=(Math.random()-.5)*c;l[e]+=t,l[e+1]+=t,l[e+2]+=t}else l[e]+=(Math.random()-.5)*c,l[e+1]+=(Math.random()-.5)*c,l[e+2]+=(Math.random()-.5)*c;o.putImageData(s,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Noise/Grain applicato (${a}, amount ${t})`,"polite")},r.src=n.toDataURL(),!0},applyTemperature(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100,r=a/100;for(let e=0;e<l.length;e+=4){const t=c>0?c*20:c*15,a=c>0?-c*10:c*20;l[e]=Math.min(255,Math.max(0,l[e]+t)),l[e+2]=Math.min(255,Math.max(0,l[e+2]+a));const i=r>0?r*15:-r*15,n=r>0?-r*15:r*15;l[e]=Math.min(255,Math.max(0,l[e]+i)),l[e+1]=Math.min(255,Math.max(0,l[e+1]+n))}o.putImageData(s,0,0);const d=new Image;return d.onload=()=>{e.imageElement=d,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Temperature applicato (temp ${t}, tint ${a})`,"polite")},d.src=n.toDataURL(),!0},createGradientText(text,t,a,i,n){const o=document.createElement("canvas"),s=o.getContext("2d");s.font=`bold ${n}px Arial`;const l=s.measureText(text);o.width=Math.ceil(l.width)+20,o.height=n+40,s.font=`bold ${n}px Arial`,s.textBaseline="middle";const c=s.createLinearGradient(0,0,Math.cos(i*Math.PI/180)*o.width,Math.sin(i*Math.PI/180)*o.height);c.addColorStop(0,t),c.addColorStop(1,a),s.fillStyle=c,s.fillText(text,10,o.height/2);const r=new Image;return r.onload=()=>{const newLayer={type:"image",imageElement:r,imageData:o.toDataURL(),x:100,y:100,width:o.width,height:o.height,name:`Gradient Text: ${text.substring(0,15)}...`,visible:!0,locked:!1};window.state&&window.state.layers&&(window.state.layers.push(newLayer),window.state.currentLayerIndex=window.state.layers.length-1,window.updateLayersList&&window.updateLayersList(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Testo gradient creato: "${text}"`,"polite"))},r.src=o.toDataURL(),!0},applyDuotone(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;const r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=c[e]*(1-p)+p*(r+a*(g-r)),n=c[e+1]*(1-p)+p*(d+a*(u-d)),o=c[e+2]*(1-p)+p*(m+a*(h-m));c[e]=Math.min(255,Math.max(0,i)),c[e+1]=Math.min(255,Math.max(0,n)),c[e+2]=Math.min(255,Math.max(0,o))}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Duotone applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0},applyHSLShift(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;function rgbToHsl(e,t,a){e/=255,t/=255,a/=255;const i=Math.max(e,t,a),n=Math.min(e,t,a);let o,s,l=(i+n)/2;if(i===n)o=s=0;else{const c=i-n;s=l>.5?c/(2-i-n):c/(i+n),o=i===e?(t-a)/c+(t<a?6:0):i===t?(a-e)/c+2:(e-t)/c+4,o/=6}return[o,s,l]}function hslToRgb(e,t,a){let i,n,o;if(0===t)i=n=o=a;else{const s=(e,t,a)=>(a<0&&(a+=1),a>1&&(a-=1),a<1/6?e+6*(t-e)*a:a<.5?t:a<2/3?e+(t-e)*(2/3-a)*6:e),l=a<.5?a*(1+t):a+t-a*t,c=2*a-l;i=s(c,l,e+1/3),n=s(c,l,e),o=s(c,l,e-1/3)}return[Math.round(255*i),Math.round(255*n),Math.round(255*o)]}for(let e=0;e<c.length;e+=4){let[n,o,s]=rgbToHsl(c[e],c[e+1],c[e+2]);n=(n+t/360+1)%1,o=Math.min(1,Math.max(0,o+a/100)),s=Math.min(1,Math.max(0,s+i/100));const[l,r,d]=hslToRgb(n,o,s);c[e]=l,c[e+1]=r,c[e+2]=d}s.putImageData(l,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`HSL Shift applicato (H:${t} S:${a} L:${i})`,"polite")},r.src=o.toDataURL(),!0},applyOilPainting(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(l),r=i.width,d=i.height;for(let e=0;e<a;e++)for(let e=t;e<d-t;e++)for(let a=t;a<r-t;a++){const i=[];for(let n=-t;n<=t;n++)for(let t=-t;t<=t;t++){const o=4*((e+n)*r+(a+t));i.push([l[o],l[o+1],l[o+2]])}i.sort(((e,t)=>{const a=.299*e[0]+.587*e[1]+.114*e[2],i=.299*t[0]+.587*t[1]+.114*t[2];return a-i}));const n=i[Math.floor(i.length/2)],o=4*(e*r+a);c[o]=n[0],c[o+1]=n[1],c[o+2]=n[2]}for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Oil Painting applicato (brush ${t}, int ${a})`,"polite")},m.src=n.toDataURL(),!0},applyBlur(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.filter=`blur(${t}px)`,n.drawImage(a,0,0);const o=new Image;return o.onload=()=>{e.imageElement=o,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Blur applicato (radius ${t})`,"polite")},o.src=i.toDataURL(),!0},applyEmboss(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=new Uint8ClampedArray(s),c=a.width,r=a.height,d=[-2,-1,0,-1,1,1,0,1,2],m=t/100;for(let e=1;e<r-1;e++)for(let t=1;t<c-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const l=(e+n)*c+(t+o),r=3*(n+1)+(o+1);i+=s[4*l+a]*d[r]}const n=4*(e*c+t)+a;l[n]=Math.min(255,Math.max(0,128+i*m))}for(let e=0;e<s.length;e+=4)s[e]=l[e],s[e+1]=l[e+1],s[e+2]=l[e+2];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Emboss applicato (strength ${t})`,"polite")},g.src=i.toDataURL(),!0},applyEdgeDetect(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(s),r=i.width,d=i.height,m=[-1,-1,-1,-1,8,-1,-1,-1,-1],g=t/100*255;for(let e=1;e<d-1;e++)for(let t=1;t<r-1;t++){let a=0;for(let i=-1;i<=1;i++)for(let n=-1;n<=1;n++){const o=4*((e+i)*r+(t+n)),s=3*(i+1)+(n+1),c=.299*l[o]+.587*l[o+1]+.114*l[o+2];a+=c*m[s]}const i=4*(e*r+t),n=Math.abs(a)>g?255:0;c[i]=n,c[i+1]=n,c[i+2]=n,c[i+3]=255}if("true"===a)for(let e=0;e<c.length;e+=4)c[e]=255-c[e],c[e+1]=255-c[e+1],c[e+2]=255-c[e+2];for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Edge Detect applicato (threshold ${t}, ${"true"===a?"invertito":"normale"})`,"polite")},u.src=n.toDataURL(),!0},applyClarity(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height);const l=document.createElement("canvas"),c=l.getContext("2d");l.width=i.width,l.height=i.height,c.filter=`blur(${a}px)`,c.drawImage(i,0,0);const r=c.getImageData(0,0,i.width,i.height),d=s.data,m=r.data,g=t/100;for(let e=0;e<d.length;e+=4){for(let t=0;t<3;t++){const a=e+t,i=d[a]-m[a];d[a]=Math.min(255,Math.max(0,d[a]+i*g))}}o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Clarity applicato (amount ${t}, radius ${a})`,"polite")},u.src=n.toDataURL(),!0},applyDenoise(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=n.width,d=n.height,m=Math.ceil(t/20)+1,g=a/100,u=t/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2];c[e]=t,c[e+1]=t,c[e+2]=t}const h=new Uint8ClampedArray(c);for(let e=m;e<d-m;e++)for(let t=m;t<r-m;t++){let a=0,i=0;for(let n=-m;n<=m;n++)for(let o=-m;o<=m;o++){const s=4*((e+n)*r+(t+o));a+=c[s],i++}const n=4*(e*r+t),o=a/i,s=c[n];h[n]=s+(o-s)*u,h[n+1]=h[n],h[n+2]=h[n]}s.drawImage(n,0,0);const p=s.getImageData(0,0,n.width,n.height),f=p.data;for(let e=0;e<f.length;e+=4){const t=h[e],a=f[e]-t,n=f[e+1]-t,o=f[e+2]-t,s=1-g;f[e]=Math.min(255,Math.max(0,t+a*s)),f[e+1]=Math.min(255,Math.max(0,t+n*s)),f[e+2]=Math.min(255,Math.max(0,t+o*s))}const y=i/100;for(let e=0;e<f.length;e+=4){const t=f[e]-h[e],a=f[e+1]-h[e+1],i=f[e+2]-h[e+2];f[e]=Math.min(255,Math.max(0,f[e]+t*y)),f[e+1]=Math.min(255,Math.max(0,f[e+1]+a*y)),f[e+2]=Math.min(255,Math.max(0,f[e+2]+i*y))}s.putImageData(p,0,0);const b=new Image;return b.onload=()=>{e.imageElement=b,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Denoise applicato (luma ${t}, color ${a}, sharp ${i})`,"polite")},b.src=o.toDataURL(),!0},applyGradientMap(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=r+a*(g-r),n=d+a*(u-d),o=m+a*(h-m);c[e]=c[e]*(1-p)+i*p,c[e+1]=c[e+1]*(1-p)+n*p,c[e+2]=c[e+2]*(1-p)+o*p}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Gradient Map applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0}};
+const AdvancedEffects={applyPixelate(e,t){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=Math.ceil(a.width/t),s=Math.ceil(a.height/t),l=document.createElement("canvas"),c=l.getContext("2d");l.width=o,l.height=s,c.drawImage(i,0,0,o,s),n.imageSmoothingEnabled=!1,n.drawImage(l,0,0,o,s,0,0,a.width,a.height);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Pixelate applicato (${t}px blocchi)`,"polite")},r.src=i.toDataURL(),!0},applyGlow(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d"),s=Math.ceil(t);n.width=i.width+2*s,n.height=i.height+2*s,o.shadowColor=a,o.shadowBlur=t,o.shadowOffsetX=0,o.shadowOffsetY=0,o.drawImage(i,s,s);const l=Math.ceil(t/30);for(let e=0;e<l;e++)o.drawImage(i,s,s);const c=new Image;return c.onload=()=>{e.imageElement=c,e.imageData=n.toDataURL(),e.width=n.width,e.height=n.height,window.scheduleRender&&window.scheduleRender(),announce(`Glow applicato (intensità ${t})`,"polite")},c.src=n.toDataURL(),!0},applyVignette(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=i.width/2,l=i.height/2,c=Math.sqrt(s*s+l*l),r=c*a/100,d=o.createRadialGradient(s,l,r,s,l,c);d.addColorStop(0,"rgba(0,0,0,0)"),d.addColorStop(1,`rgba(0,0,0,${t/100})`),o.fillStyle=d,o.fillRect(0,0,i.width,i.height);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Vignette applicato (int ${t}, size ${a})`,"polite")},m.src=n.toDataURL(),!0},applySharpen(e,t){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=[0,-1,0,-1,5,-1,0,-1,0],c=t/100,r=new Uint8ClampedArray(s),d=a.width,m=a.height;for(let e=1;e<m-1;e++)for(let t=1;t<d-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const c=(e+n)*d+(t+o),r=3*(n+1)+(o+1);i+=s[4*c+a]*l[r]}const n=4*(e*d+t)+a,o=s[n];r[n]=o+(i-o)*c}for(let e=0;e<s.length;e++)s[e]=r[e];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Sharpen applicato (amount ${t})`,"polite")},g.src=i.toDataURL(),!0},applyAutoLevels(e,t){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data;let l=255,c=0,r=255,d=0,m=255,g=0;for(let e=0;e<s.length;e+=4){const t=s[e],a=s[e+1],i=s[e+2];t<l&&(l=t),t>c&&(c=t),a<r&&(r=a),a>d&&(d=a),i<m&&(m=i),i>g&&(g=i)}const u=t/100;for(let e=0;e<s.length;e+=4){const t=c-l>0?255*(s[e]-l)/(c-l):s[e],a=d-r>0?255*(s[e+1]-r)/(d-r):s[e+1],i=g-m>0?255*(s[e+2]-m)/(g-m):s[e+2];s[e]=Math.min(255,Math.max(0,s[e]+(t-s[e])*u)),s[e+1]=Math.min(255,Math.max(0,s[e+1]+(a-s[e+1])*u)),s[e+2]=Math.min(255,Math.max(0,s[e+2]+(i-s[e+2])*u))}n.putImageData(o,0,0);const h=new Image;return h.onload=()=>{e.imageElement=h,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Auto Levels applicato (strength ${t})`,"polite")},h.src=i.toDataURL(),!0},applyNoise(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100*255;for(let e=0;e<l.length;e+=4)if("mono"===a){const t=(Math.random()-.5)*c;l[e]+=t,l[e+1]+=t,l[e+2]+=t}else l[e]+=(Math.random()-.5)*c,l[e+1]+=(Math.random()-.5)*c,l[e+2]+=(Math.random()-.5)*c;o.putImageData(s,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Noise/Grain applicato (${a}, amount ${t})`,"polite")},r.src=n.toDataURL(),!0},applyTemperature(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100,r=a/100;for(let e=0;e<l.length;e+=4){const t=c>0?c*20:c*15,a=c>0?-c*10:c*20;l[e]=Math.min(255,Math.max(0,l[e]+t)),l[e+2]=Math.min(255,Math.max(0,l[e+2]+a));const i=r>0?r*15:-r*15,n=r>0?-r*15:r*15;l[e]=Math.min(255,Math.max(0,l[e]+i)),l[e+1]=Math.min(255,Math.max(0,l[e+1]+n))}o.putImageData(s,0,0);const d=new Image;return d.onload=()=>{e.imageElement=d,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Temperature applicato (temp ${t}, tint ${a})`,"polite")},d.src=n.toDataURL(),!0},createGradientText(text,t,a,i,n){const o=document.createElement("canvas"),s=o.getContext("2d");s.font=`bold ${n}px Arial`;const l=s.measureText(text);o.width=Math.ceil(l.width)+20,o.height=n+40,s.font=`bold ${n}px Arial`,s.textBaseline="middle";const c=s.createLinearGradient(0,0,Math.cos(i*Math.PI/180)*o.width,Math.sin(i*Math.PI/180)*o.height);c.addColorStop(0,t),c.addColorStop(1,a),s.fillStyle=c,s.fillText(text,10,o.height/2);const r=new Image;return r.onload=()=>{const newLayer={type:"image",imageElement:r,imageData:o.toDataURL(),x:100,y:100,width:o.width,height:o.height,name:`Gradient Text: ${text.substring(0,15)}...`,visible:!0,locked:!1};window.state&&window.state.layers&&(window.state.layers.push(newLayer),window.state.currentLayerIndex=window.state.layers.length-1,window.updateLayersList&&window.updateLayersList(),window.scheduleRender&&window.scheduleRender(),announce(`Testo gradient creato: "${text}"`,"polite"))},r.src=o.toDataURL(),!0},applyDuotone(e,t,a,i){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;const r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=c[e]*(1-p)+p*(r+a*(g-r)),n=c[e+1]*(1-p)+p*(d+a*(u-d)),o=c[e+2]*(1-p)+p*(m+a*(h-m));c[e]=Math.min(255,Math.max(0,i)),c[e+1]=Math.min(255,Math.max(0,n)),c[e+2]=Math.min(255,Math.max(0,o))}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Duotone applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0},applyHSLShift(e,t,a,i){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;function rgbToHsl(e,t,a){e/=255,t/=255,a/=255;const i=Math.max(e,t,a),n=Math.min(e,t,a);let o,s,l=(i+n)/2;if(i===n)o=s=0;else{const c=i-n;s=l>.5?c/(2-i-n):c/(i+n),o=i===e?(t-a)/c+(t<a?6:0):i===t?(a-e)/c+2:(e-t)/c+4,o/=6}return[o,s,l]}function hslToRgb(e,t,a){let i,n,o;if(0===t)i=n=o=a;else{const s=(e,t,a)=>(a<0&&(a+=1),a>1&&(a-=1),a<1/6?e+6*(t-e)*a:a<.5?t:a<2/3?e+(t-e)*(2/3-a)*6:e),l=a<.5?a*(1+t):a+t-a*t,c=2*a-l;i=s(c,l,e+1/3),n=s(c,l,e),o=s(c,l,e-1/3)}return[Math.round(255*i),Math.round(255*n),Math.round(255*o)]}for(let e=0;e<c.length;e+=4){let[n,o,s]=rgbToHsl(c[e],c[e+1],c[e+2]);n=(n+t/360+1)%1,o=Math.min(1,Math.max(0,o+a/100)),s=Math.min(1,Math.max(0,s+i/100));const[l,r,d]=hslToRgb(n,o,s);c[e]=l,c[e+1]=r,c[e+2]=d}s.putImageData(l,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`HSL Shift applicato (H:${t} S:${a} L:${i})`,"polite")},r.src=o.toDataURL(),!0},applyOilPainting(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(l),r=i.width,d=i.height;for(let e=0;e<a;e++)for(let e=t;e<d-t;e++)for(let a=t;a<r-t;a++){const i=[];for(let n=-t;n<=t;n++)for(let t=-t;t<=t;t++){const o=4*((e+n)*r+(a+t));i.push([l[o],l[o+1],l[o+2]])}i.sort(((e,t)=>{const a=.299*e[0]+.587*e[1]+.114*e[2],i=.299*t[0]+.587*t[1]+.114*t[2];return a-i}));const n=i[Math.floor(i.length/2)],o=4*(e*r+a);c[o]=n[0],c[o+1]=n[1],c[o+2]=n[2]}for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Oil Painting applicato (brush ${t}, int ${a})`,"polite")},m.src=n.toDataURL(),!0},applyBlur(e,t){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.filter=`blur(${t}px)`,n.drawImage(a,0,0);const o=new Image;return o.onload=()=>{e.imageElement=o,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Blur applicato (radius ${t})`,"polite")},o.src=i.toDataURL(),!0},applyEmboss(e,t){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=new Uint8ClampedArray(s),c=a.width,r=a.height,d=[-2,-1,0,-1,1,1,0,1,2],m=t/100;for(let e=1;e<r-1;e++)for(let t=1;t<c-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const l=(e+n)*c+(t+o),r=3*(n+1)+(o+1);i+=s[4*l+a]*d[r]}const n=4*(e*c+t)+a;l[n]=Math.min(255,Math.max(0,128+i*m))}for(let e=0;e<s.length;e+=4)s[e]=l[e],s[e+1]=l[e+1],s[e+2]=l[e+2];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Emboss applicato (strength ${t})`,"polite")},g.src=i.toDataURL(),!0},applyEdgeDetect(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(s),r=i.width,d=i.height,m=[-1,-1,-1,-1,8,-1,-1,-1,-1],g=t/100*255;for(let e=1;e<d-1;e++)for(let t=1;t<r-1;t++){let a=0;for(let i=-1;i<=1;i++)for(let n=-1;n<=1;n++){const o=4*((e+i)*r+(t+n)),s=3*(i+1)+(n+1),c=.299*l[o]+.587*l[o+1]+.114*l[o+2];a+=c*m[s]}const i=4*(e*r+t),n=Math.abs(a)>g?255:0;c[i]=n,c[i+1]=n,c[i+2]=n,c[i+3]=255}if("true"===a)for(let e=0;e<c.length;e+=4)c[e]=255-c[e],c[e+1]=255-c[e+1],c[e+2]=255-c[e+2];for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Edge Detect applicato (threshold ${t}, ${"true"===a?"invertito":"normale"})`,"polite")},u.src=n.toDataURL(),!0},applyClarity(e,t,a){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height);const l=document.createElement("canvas"),c=l.getContext("2d");l.width=i.width,l.height=i.height,c.filter=`blur(${a}px)`,c.drawImage(i,0,0);const r=c.getImageData(0,0,i.width,i.height),d=s.data,m=r.data,g=t/100;for(let e=0;e<d.length;e+=4){for(let t=0;t<3;t++){const a=e+t,i=d[a]-m[a];d[a]=Math.min(255,Math.max(0,d[a]+i*g))}}o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Clarity applicato (amount ${t}, radius ${a})`,"polite")},u.src=n.toDataURL(),!0},applyDenoise(e,t,a,i){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=n.width,d=n.height,m=Math.ceil(t/20)+1,g=a/100,u=t/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2];c[e]=t,c[e+1]=t,c[e+2]=t}const h=new Uint8ClampedArray(c);for(let e=m;e<d-m;e++)for(let t=m;t<r-m;t++){let a=0,i=0;for(let n=-m;n<=m;n++)for(let o=-m;o<=m;o++){const s=4*((e+n)*r+(t+o));a+=c[s],i++}const n=4*(e*r+t),o=a/i,s=c[n];h[n]=s+(o-s)*u,h[n+1]=h[n],h[n+2]=h[n]}s.drawImage(n,0,0);const p=s.getImageData(0,0,n.width,n.height),f=p.data;for(let e=0;e<f.length;e+=4){const t=h[e],a=f[e]-t,n=f[e+1]-t,o=f[e+2]-t,s=1-g;f[e]=Math.min(255,Math.max(0,t+a*s)),f[e+1]=Math.min(255,Math.max(0,t+n*s)),f[e+2]=Math.min(255,Math.max(0,t+o*s))}const y=i/100;for(let e=0;e<f.length;e+=4){const t=f[e]-h[e],a=f[e+1]-h[e+1],i=f[e+2]-h[e+2];f[e]=Math.min(255,Math.max(0,f[e]+t*y)),f[e+1]=Math.min(255,Math.max(0,f[e+1]+a*y)),f[e+2]=Math.min(255,Math.max(0,f[e+2]+i*y))}s.putImageData(p,0,0);const b=new Image;return b.onload=()=>{e.imageElement=b,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Denoise applicato (luma ${t}, color ${a}, sharp ${i})`,"polite")},b.src=o.toDataURL(),!0},applyGradientMap(e,t,a,i){if(!e||!e.imageElement)return announce("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=r+a*(g-r),n=d+a*(u-d),o=m+a*(h-m);c[e]=c[e]*(1-p)+i*p,c[e+1]=c[e+1]*(1-p)+n*p,c[e+2]=c[e+2]*(1-p)+o*p}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announce(`Gradient Map applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0}};
+
+// Helper function: Convert any layer to image before applying effects
+window.convertLayerToImage = function(layer) {
+    if (!layer) return null;
+    
+    // Se è già un'immagine, restituiscila direttamente
+    if (layer.type === 'image' && layer.imageElement) {
+        return layer;
+    }
+    
+    // Avvisa l'utente PRIMA della conversione
+    const layerTypeName = layer.type === 'shape' ? 'forma' : layer.type === 'text' ? 'testo' : 'livello';
+    announce(
+        `ATTENZIONE: La ${layerTypeName} verrà convertita in immagine. ` +
+        `Dopo la conversione non potrai più modificare colore, forma o testo. ` +
+        `Se vuoi mantenere l'originale, annulla e duplica prima il livello.`,
+        "assertive"
+    );
+    
+    // Altrimenti, render il livello su canvas temporaneo
+    const tempCanvas = document.createElement('canvas');
+    const ctx = tempCanvas.getContext('2d');
+    
+    // Determina dimensioni
+    if (layer.type === 'shape') {
+        tempCanvas.width = layer.width || 200;
+        tempCanvas.height = layer.height || 200;
+        
+        // Disegna la forma
+        ctx.fillStyle = layer.fill || '#0000ff';
+        if (layer.shapeType === 'rectangle') {
+            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        } else if (layer.shapeType === 'circle') {
+            ctx.beginPath();
+            ctx.arc(tempCanvas.width/2, tempCanvas.height/2, Math.min(tempCanvas.width, tempCanvas.height)/2, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (layer.shapeType === 'triangle') {
+            ctx.beginPath();
+            ctx.moveTo(tempCanvas.width/2, 0);
+            ctx.lineTo(tempCanvas.width, tempCanvas.height);
+            ctx.lineTo(0, tempCanvas.height);
+            ctx.closePath();
+            ctx.fill();
+        }
+    } else if (layer.type === 'text') {
+        // Per il testo, usa le dimensioni esistenti o calcola
+        const fontSize = layer.fontSize || 32;
+        ctx.font = `${layer.fontWeight || 400} ${fontSize}px ${layer.fontFamily || 'Arial'}`;
+        const metrics = ctx.measureText(layer.text || '');
+        tempCanvas.width = Math.ceil(metrics.width) + 20;
+        tempCanvas.height = fontSize + 20;
+        
+        // Ridisegna il testo
+        ctx.font = `${layer.fontWeight || 400} ${fontSize}px ${layer.fontFamily || 'Arial'}`;
+        ctx.fillStyle = layer.color || '#000000';
+        ctx.fillText(layer.text || '', 10, fontSize + 5);
+    } else {
+        // Tipo sconosciuto
+        announce("Tipo di livello non supportato per gli effetti", "assertive");
+        return null;
+    }
+    
+    // Crea imageElement (deve essere sincrono)
+    const dataURL = tempCanvas.toDataURL();
+    const img = new Image();
+    img.width = tempCanvas.width;
+    img.height = tempCanvas.height;
+    img.src = dataURL;
+    
+    // Converti il layer in tipo image
+    layer.type = 'image';
+    layer.imageElement = img;
+    layer.imageData = dataURL;
+    layer.width = tempCanvas.width;
+    layer.height = tempCanvas.height;
+    
+    announce("Conversione completata. Il livello è ora un'immagine.", "polite");
+    
+    return layer;
+};
+
+// Wrapper function: Apply effect with automatic conversion
+window.applyEffectWithConversion = function(effectFunc, layer, ...args) {
+    if (!layer) {
+        announce("Seleziona un livello prima", "assertive");
+        return false;
+    }
+    
+    const converted = window.convertLayerToImage(layer);
+    if (!converted) return false;
+    
+    return effectFunc(converted, ...args);
+};
 
 // Event Listeners
-document.getElementById("pixelate-size")?.addEventListener("input",(e=>{const t=document.getElementById("pixelate-size-value");t&&(t.textContent=e.target.value+" px")})),document.getElementById("btn-apply-pixelate")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("pixelate-size").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyPixelate(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("glow-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("glow-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-glow")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("glow-intensity").value),t=document.getElementById("glow-color").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyGlow(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("vignette-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("vignette-size")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-vignette")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("vignette-intensity").value),t=parseInt(document.getElementById("vignette-size").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyVignette(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("sharpen-amount")?.addEventListener("input",(e=>{const t=document.getElementById("sharpen-amount-value"),a=document.getElementById("sharpen-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("sharpen-preset")?.addEventListener("change",(e=>{const t={light:50,medium:100,strong:150}[e.target.value],a=document.getElementById("sharpen-amount"),i=document.getElementById("sharpen-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-sharpen")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("sharpen-amount").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applySharpen(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("autolevels-strength")?.addEventListener("input",(e=>{const t=document.getElementById("autolevels-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-autolevels")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("autolevels-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyAutoLevels(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("noise-amount")?.addEventListener("input",(e=>{const t=document.getElementById("noise-amount-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-noise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("noise-amount").value),t=document.getElementById("noise-type").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyNoise(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("temperature-value")?.addEventListener("input",(e=>{const t=document.getElementById("temperature-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("tint-value")?.addEventListener("input",(e=>{const t=document.getElementById("tint-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-temperature")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("temperature-value").value),t=parseInt(document.getElementById("tint-value").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyTemperature(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("gradient-text-angle")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-angle-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("gradient-text-font-size")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-font-size-value");t&&(t.textContent=e.target.value+"px")})),document.getElementById("btn-create-gradient-text")?.addEventListener("click",(()=>{const e=document.getElementById("gradient-text-input").value;if(!e||""===e.trim())return void announceExtraAI("Inserisci un testo da creare","assertive");const t=document.getElementById("gradient-text-color1").value,a=document.getElementById("gradient-text-color2").value,i=parseInt(document.getElementById("gradient-text-angle").value),n=parseInt(document.getElementById("gradient-text-font-size").value);AdvancedEffects.createGradientText(e,t,a,i,n)})),document.getElementById("duotone-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("duotone-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-duotone")?.addEventListener("click",(()=>{const e=document.getElementById("duotone-color1").value,t=document.getElementById("duotone-color2").value,a=parseInt(document.getElementById("duotone-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDuotone(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("hsl-hue")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-hue-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("hsl-saturation")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-saturation-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("hsl-lightness")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-lightness-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("btn-apply-hsl")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("hsl-hue").value),t=parseInt(document.getElementById("hsl-saturation").value),a=parseInt(document.getElementById("hsl-lightness").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyHSLShift(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("oil-brush-size")?.addEventListener("input",(e=>{const t=document.getElementById("oil-brush-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("oil-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("oil-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-oil")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("oil-brush-size").value),t=parseInt(document.getElementById("oil-intensity").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyOilPainting(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")}));document.getElementById("blur-radius")?.addEventListener("input",(e=>{const t=document.getElementById("blur-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-blur")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("blur-radius").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyBlur(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("emboss-strength")?.addEventListener("input",(e=>{const t=document.getElementById("emboss-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-emboss")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("emboss-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyEmboss(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("edge-threshold")?.addEventListener("input",(e=>{const t=document.getElementById("edge-threshold-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-edge")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("edge-threshold").value),t=document.getElementById("edge-invert").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyEdgeDetect(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("clarity-amount")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-amount-value"),a=document.getElementById("clarity-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("clarity-radius")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("clarity-preset")?.addEventListener("change",(e=>{const t={subtle:30,moderate:50,strong:80,extreme:120}[e.target.value],a=document.getElementById("clarity-amount"),i=document.getElementById("clarity-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-clarity")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("clarity-amount").value),t=parseInt(document.getElementById("clarity-radius").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyClarity(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("denoise-luminance")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-luminance-value"),a=document.getElementById("denoise-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("denoise-color")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-color-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-sharpen")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-sharpen-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-preset")?.addEventListener("change",(e=>{const presets={light:[30,20,15],moderate:[50,30,20],strong:[70,50,30],aggressive:[85,70,40]},preset=presets[e.target.value];if(preset){const e=document.getElementById("denoise-luminance"),t=document.getElementById("denoise-color"),a=document.getElementById("denoise-sharpen");e&&(e.value=preset[0],document.getElementById("denoise-luminance-value").textContent=preset[0]),t&&(t.value=preset[1],document.getElementById("denoise-color-value").textContent=preset[1]),a&&(a.value=preset[2],document.getElementById("denoise-sharpen-value").textContent=preset[2])}})),document.getElementById("btn-apply-denoise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("denoise-luminance").value),t=parseInt(document.getElementById("denoise-color").value),a=parseInt(document.getElementById("denoise-sharpen").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDenoise(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("softlut-intensity")?.addEventListener("input",e=>{const t=document.getElementById("softlut-intensity-value");t&&(t.textContent=e.target.value)}),document.getElementById("btn-apply-softlut")?.addEventListener("click",()=>{const preset=document.getElementById("softlut-preset").value,intensity=parseInt(document.getElementById("softlut-intensity").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applySoftLUT(layer,preset,intensity):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("posterize-levels")?.addEventListener("input",e=>{const t=document.getElementById("posterize-levels-value"),a=document.getElementById("posterize-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")}),document.getElementById("posterize-preset")?.addEventListener("change",e=>{const levels={low:4,medium:8,high:16}[e.target.value],input=document.getElementById("posterize-levels"),value=document.getElementById("posterize-levels-value");levels&&input&&(input.value=levels,value&&(value.textContent=levels))}),document.getElementById("btn-apply-posterize")?.addEventListener("click",()=>{const levels=parseInt(document.getElementById("posterize-levels").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyPosterize(layer,levels):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("invert-preset")?.addEventListener("change",e=>{const presets={full:[!0,!0,!0],cyan:[!1,!0,!0],magenta:[!0,!1,!0],yellow:[!0,!0,!1]},preset=presets[e.target.value];if(preset){const e=document.getElementById("invert-red"),t=document.getElementById("invert-green"),a=document.getElementById("invert-blue");e&&(e.checked=preset[0]),t&&(t.checked=preset[1]),a&&(a.checked=preset[2])}}),document.getElementById("btn-apply-invert")?.addEventListener("click",()=>{const r=document.getElementById("invert-red").checked,g=document.getElementById("invert-green").checked,b=document.getElementById("invert-blue").checked,layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyInvertColors(layer,r,g,b):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("gradmap-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("gradmap-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("gradmap-preset")?.addEventListener("change",(e=>{const presets={goldenblue:["#d4a574","#4a90e2"],cyanred:["#1fa2a6","#e63946"],purpleorange:["#7209b7","#f77f00"],greenmint:["#2d6a4f","#95d5b2"],retrowarm:["#5a3a31","#f4dfc8"]},preset=presets[e.target.value];if(preset){const e=document.getElementById("gradmap-shadow"),t=document.getElementById("gradmap-highlight");e&&(e.value=preset[0]),t&&(t.value=preset[1])}})),document.getElementById("btn-apply-gradmap")?.addEventListener("click",(()=>{const e=document.getElementById("gradmap-shadow").value,t=document.getElementById("gradmap-highlight").value,a=parseInt(document.getElementById("gradmap-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyGradientMap(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")}));
+document.getElementById("pixelate-size")?.addEventListener("input",(e=>{const t=document.getElementById("pixelate-size-value");t&&(t.textContent=e.target.value+" px")})),document.getElementById("btn-apply-pixelate")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("pixelate-size").value),t=window.state?.layers[window.state?.currentLayerIndex];if(!t)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(t);converted&&AdvancedEffects.applyPixelate(converted,e)})),document.getElementById("glow-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("glow-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-glow")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("glow-intensity").value),t=document.getElementById("glow-color").value,a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyGlow(converted,e,t)})),document.getElementById("vignette-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("vignette-size")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-vignette")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("vignette-intensity").value),t=parseInt(document.getElementById("vignette-size").value),a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyVignette(converted,e,t)})),document.getElementById("sharpen-amount")?.addEventListener("input",(e=>{const t=document.getElementById("sharpen-amount-value"),a=document.getElementById("sharpen-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("sharpen-preset")?.addEventListener("change",(e=>{const t={light:50,medium:100,strong:150}[e.target.value],a=document.getElementById("sharpen-amount"),i=document.getElementById("sharpen-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-sharpen")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("sharpen-amount").value),t=window.state?.layers[window.state?.currentLayerIndex];if(!t)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(t);converted&&AdvancedEffects.applySharpen(converted,e)})),document.getElementById("autolevels-strength")?.addEventListener("input",(e=>{const t=document.getElementById("autolevels-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-autolevels")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("autolevels-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];if(!t)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(t);converted&&AdvancedEffects.applyAutoLevels(converted,e)})),document.getElementById("noise-amount")?.addEventListener("input",(e=>{const t=document.getElementById("noise-amount-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-noise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("noise-amount").value),t=document.getElementById("noise-type").value,a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyNoise(converted,e,t)})),document.getElementById("temperature-value")?.addEventListener("input",(e=>{const t=document.getElementById("temperature-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("tint-value")?.addEventListener("input",(e=>{const t=document.getElementById("tint-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-temperature")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("temperature-value").value),t=parseInt(document.getElementById("tint-value").value),a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyTemperature(converted,e,t)})),document.getElementById("gradient-text-angle")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-angle-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("gradient-text-font-size")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-font-size-value");t&&(t.textContent=e.target.value+"px")})),document.getElementById("btn-create-gradient-text")?.addEventListener("click",(()=>{const e=document.getElementById("gradient-text-input").value;if(!e||""===e.trim())return void announce("Inserisci un testo da creare","assertive");const t=document.getElementById("gradient-text-color1").value,a=document.getElementById("gradient-text-color2").value,i=parseInt(document.getElementById("gradient-text-angle").value),n=parseInt(document.getElementById("gradient-text-font-size").value);AdvancedEffects.createGradientText(e,t,a,i,n)})),document.getElementById("duotone-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("duotone-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-duotone")?.addEventListener("click",(()=>{const e=document.getElementById("duotone-color1").value,t=document.getElementById("duotone-color2").value,a=parseInt(document.getElementById("duotone-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];if(!i)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(i);converted&&AdvancedEffects.applyDuotone(converted,e,t,a)})),document.getElementById("hsl-hue")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-hue-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("hsl-saturation")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-saturation-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("hsl-lightness")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-lightness-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("btn-apply-hsl")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("hsl-hue").value),t=parseInt(document.getElementById("hsl-saturation").value),a=parseInt(document.getElementById("hsl-lightness").value),i=window.state?.layers[window.state?.currentLayerIndex];if(!i)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(i);converted&&AdvancedEffects.applyHSLShift(converted,e,t,a)})),document.getElementById("oil-brush-size")?.addEventListener("input",(e=>{const t=document.getElementById("oil-brush-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("oil-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("oil-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-oil")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("oil-brush-size").value),t=parseInt(document.getElementById("oil-intensity").value),a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyOilPainting(converted,e,t)}));document.getElementById("blur-radius")?.addEventListener("input",(e=>{const t=document.getElementById("blur-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-blur")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("blur-radius").value),t=window.state?.layers[window.state?.currentLayerIndex];if(!t)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(t);converted&&AdvancedEffects.applyBlur(converted,e)})),document.getElementById("emboss-strength")?.addEventListener("input",(e=>{const t=document.getElementById("emboss-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-emboss")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("emboss-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];if(!t)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(t);converted&&AdvancedEffects.applyEmboss(converted,e)})),document.getElementById("edge-threshold")?.addEventListener("input",(e=>{const t=document.getElementById("edge-threshold-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-edge")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("edge-threshold").value),t=document.getElementById("edge-invert").value,a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyEdgeDetect(converted,e,t)})),document.getElementById("clarity-amount")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-amount-value"),a=document.getElementById("clarity-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("clarity-radius")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("clarity-preset")?.addEventListener("change",(e=>{const t={subtle:30,moderate:50,strong:80,extreme:120}[e.target.value],a=document.getElementById("clarity-amount"),i=document.getElementById("clarity-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-clarity")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("clarity-amount").value),t=parseInt(document.getElementById("clarity-radius").value),a=window.state?.layers[window.state?.currentLayerIndex];if(!a)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(a);converted&&AdvancedEffects.applyClarity(converted,e,t)})),document.getElementById("denoise-luminance")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-luminance-value"),a=document.getElementById("denoise-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("denoise-color")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-color-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-sharpen")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-sharpen-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-preset")?.addEventListener("change",(e=>{const presets={light:[30,20,15],moderate:[50,30,20],strong:[70,50,30],aggressive:[85,70,40]},preset=presets[e.target.value];if(preset){const e=document.getElementById("denoise-luminance"),t=document.getElementById("denoise-color"),a=document.getElementById("denoise-sharpen");e&&(e.value=preset[0],document.getElementById("denoise-luminance-value").textContent=preset[0]),t&&(t.value=preset[1],document.getElementById("denoise-color-value").textContent=preset[1]),a&&(a.value=preset[2],document.getElementById("denoise-sharpen-value").textContent=preset[2])}})),document.getElementById("btn-apply-denoise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("denoise-luminance").value),t=parseInt(document.getElementById("denoise-color").value),a=parseInt(document.getElementById("denoise-sharpen").value),i=window.state?.layers[window.state?.currentLayerIndex];if(!i)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(i);converted&&AdvancedEffects.applyDenoise(converted,e,t,a)})),document.getElementById("softlut-intensity")?.addEventListener("input",e=>{const t=document.getElementById("softlut-intensity-value");t&&(t.textContent=e.target.value)}),document.getElementById("btn-apply-softlut")?.addEventListener("click",()=>{const preset=document.getElementById("softlut-preset").value,intensity=parseInt(document.getElementById("softlut-intensity").value),layer=window.state?.layers[window.state?.currentLayerIndex];if(!layer)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(layer);converted&&AdvancedEffects.applySoftLUT(converted,preset,intensity)}),document.getElementById("posterize-levels")?.addEventListener("input",e=>{const t=document.getElementById("posterize-levels-value"),a=document.getElementById("posterize-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")}),document.getElementById("posterize-preset")?.addEventListener("change",e=>{const levels={low:4,medium:8,high:16}[e.target.value],input=document.getElementById("posterize-levels"),value=document.getElementById("posterize-levels-value");levels&&input&&(input.value=levels,value&&(value.textContent=levels))}),document.getElementById("btn-apply-posterize")?.addEventListener("click",()=>{const levels=parseInt(document.getElementById("posterize-levels").value),layer=window.state?.layers[window.state?.currentLayerIndex];if(!layer)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(layer);converted&&AdvancedEffects.applyPosterize(converted,levels)}),document.getElementById("invert-preset")?.addEventListener("change",e=>{const presets={full:[!0,!0,!0],cyan:[!1,!0,!0],magenta:[!0,!1,!0],yellow:[!0,!0,!1]},preset=presets[e.target.value];if(preset){const e=document.getElementById("invert-red"),t=document.getElementById("invert-green"),a=document.getElementById("invert-blue");e&&(e.checked=preset[0]),t&&(t.checked=preset[1]),a&&(a.checked=preset[2])}}),document.getElementById("btn-apply-invert")?.addEventListener("click",()=>{const r=document.getElementById("invert-red").checked,g=document.getElementById("invert-green").checked,b=document.getElementById("invert-blue").checked,layer=window.state?.layers[window.state?.currentLayerIndex];if(!layer)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(layer);converted&&AdvancedEffects.applyInvertColors(converted,r,g,b)}),document.getElementById("gradmap-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("gradmap-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("gradmap-preset")?.addEventListener("change",(e=>{const presets={goldenblue:["#d4a574","#4a90e2"],cyanred:["#1fa2a6","#e63946"],purpleorange:["#7209b7","#f77f00"],greenmint:["#2d6a4f","#95d5b2"],retrowarm:["#5a3a31","#f4dfc8"]},preset=presets[e.target.value];if(preset){const e=document.getElementById("gradmap-shadow"),t=document.getElementById("gradmap-highlight");e&&(e.value=preset[0]),t&&(t.value=preset[1])}})),document.getElementById("btn-apply-gradmap")?.addEventListener("click",(()=>{const e=document.getElementById("gradmap-shadow").value,t=document.getElementById("gradmap-highlight").value,a=parseInt(document.getElementById("gradmap-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];if(!i)return announce("Seleziona un livello prima","assertive");const converted=window.convertLayerToImage(i);converted&&AdvancedEffects.applyGradientMap(converted,e,t,a)}));
 
 console.log("✅ Effetti Avanzati v41.1 COMPLETO - 17 Effetti (+ Clarity, Denoise, Gradient Map)");
 
@@ -23882,6 +24052,63 @@ function copyPromptToClipboard() {
         }
     }
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+// 🔧 FIX ACCESSIBILITÀ SELECT (Combo Box)
+// ═══════════════════════════════════════════════════════════════════════
+
+// Aggiungi aria-label a tutte le select che non ce l'hanno
+document.addEventListener('DOMContentLoaded', () => {
+    const allSelects = document.querySelectorAll('select');
+    
+    allSelects.forEach(select => {
+        // Se non ha già aria-label, aggiungilo
+        if (!select.hasAttribute('aria-label')) {
+            // Cerca una label associata
+            let labelText = '';
+            
+            // Metodo 1: label con for=""
+            const associatedLabel = document.querySelector(`label[for="${select.id}"]`);
+            if (associatedLabel) {
+                labelText = associatedLabel.textContent.trim();
+            }
+            
+            // Metodo 2: label genitore
+            if (!labelText) {
+                const parentLabel = select.closest('label');
+                if (parentLabel) {
+                    labelText = parentLabel.textContent.replace(select.textContent, '').trim();
+                }
+            }
+            
+            // Metodo 3: usa l'ID come fallback
+            if (!labelText && select.id) {
+                labelText = select.id.replace(/-/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+                labelText = labelText.charAt(0).toUpperCase() + labelText.slice(1);
+            }
+            
+            // Aggiungi aria-label con istruzioni
+            if (labelText) {
+                select.setAttribute('aria-label', `${labelText}. Usa frecce su/giù per cambiare opzione, Invio per aprire menu`);
+            } else {
+                select.setAttribute('aria-label', 'Menu a discesa. Usa frecce su/giù per cambiare opzione, Invio per aprire menu');
+            }
+        }
+        
+        // Assicurati che sia focusable
+        if (!select.hasAttribute('tabindex') && select.tabIndex === -1) {
+            select.tabIndex = 0;
+        }
+    });
+    
+    // Annuncia all'utente come usare le select con NVDA
+    announce(
+        'SUGGERIMENTO: Per usare i menu a discesa con NVDA, premi NVDA+Spazio per attivare modalità focus, ' +
+        'poi usa le frecce su/giù per cambiare opzione. Premi di nuovo NVDA+Spazio per tornare alla modalità navigazione.',
+        'polite'
+    );
+});
+
 </script>
 </body>
 </html>
