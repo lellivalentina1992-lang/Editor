@@ -21912,6 +21912,71 @@ window.ImageMemoryManager={config:{maxLoadedImages:50,unloadDelay:5000,enableDeb
  * Converte un layer (forma, testo, poligono) in immagine usando Promises
  * Gestisce correttamente il timing asincrono e gli errori
  */
+/**
+ * Applica un effetto GPU a un layer specifico (non all'intero canvas)
+ * @param {Object} layer - Layer da modificare (deve essere o diventare un'immagine)
+ * @param {Function} gpuEffectFunction - Funzione GpuEffects da applicare (es: GpuEffects.applyCurves)
+ * @param {Array} effectArgs - Argomenti per la funzione effetto (escluso il canvas che viene gestito automaticamente)
+ * @returns {Promise<boolean>} - true se l'effetto è stato applicato con successo
+ */
+async function applyGpuEffectToLayer(layer, gpuEffectFunction, effectArgs = []) {
+    try {
+        if (!layer) {
+            throw new Error('Layer non valido');
+        }
+        
+        // Step 1: Converti in immagine se necessario
+        if (layer.type === 'shape' || layer.type === 'text' || layer.type === 'vector') {
+            announceGemini('Conversione automatica in immagine per effetto GPU...', 'polite');
+            await convertLayerToImage(layer);
+        }
+        
+        // Verifica che ora sia un'immagine
+        if (layer.type !== 'image' || !layer.imageElement) {
+            throw new Error('Il layer deve essere un\'immagine per applicare effetti GPU');
+        }
+        
+        // Step 2: Crea un canvas temporaneo con l'immagine del layer
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = layer.imageElement.width;
+        tempCanvas.height = layer.imageElement.height;
+        
+        // Disegna l'immagine del layer sul canvas temporaneo
+        tempCtx.drawImage(layer.imageElement, 0, 0);
+        
+        // Step 3: Applica l'effetto GPU al canvas temporaneo
+        const success = gpuEffectFunction(tempCanvas, ...effectArgs);
+        
+        if (!success) {
+            throw new Error('Applicazione effetto GPU fallita');
+        }
+        
+        // Step 4: Salva il risultato nel layer
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                layer.imageElement = img;
+                layer.imageData = tempCanvas.toDataURL();
+                
+                // Aggiorna dimensioni se cambiate
+                layer.width = tempCanvas.width;
+                layer.height = tempCanvas.height;
+                
+                console.log(`✅ Effetto GPU applicato al layer "${layer.name}"`);
+                resolve(true);
+            };
+            img.onerror = () => reject(new Error('Errore caricamento immagine risultato'));
+            img.src = tempCanvas.toDataURL();
+        });
+        
+    } catch (error) {
+        console.error('❌ Errore applicazione effetto GPU al layer:', error);
+        announceGemini('Errore: ' + error.message, 'assertive');
+        return false;
+    }
+}
+
 function convertLayerToImage(layer) {
     return new Promise((resolve, reject) => {
         if (!layer) {
@@ -22829,33 +22894,52 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
             });
         }
         
-        // Button listeners
+        // Button listeners - VERSIONE CORRETTA con supporto multi-layer
         if (document.getElementById('btn-apply-curves')) {
-            document.getElementById('btn-apply-curves').addEventListener('click', () => {
+            document.getElementById('btn-apply-curves').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const preset = document.getElementById('curves-preset').value;
-                // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
-                // RIMOSSO (ridondante): announceGemini('Applicazione effetto Curves Pro in corso...', 'assertive');
-                const success = GpuEffects.applyCurves(canvas, preset);
+                
+                // Applica l'effetto GPU al layer specifico (con conversione automatica)
+                const success = await applyGpuEffectToLayer(
+                    layer,
+                    GpuEffects.applyCurves.bind(GpuEffects),
+                    [preset]
+                );
+                
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Curves Pro applicato (${preset})`);
-                    // RIMOSSO (ridondante): announceGemini(`Effetto Curves Pro applicato con successo. Preset: ${preset}`, 'polite');
                 } else {
-                    // RIMOSSO (ridondante): announce('❌ Errore applicando Curves Pro');
                     announceGemini('Errore durante l\'applicazione di Curves Pro', 'assertive');
                 }
             });
         }
         
         if (document.getElementById('btn-apply-color-balance')) {
-            document.getElementById('btn-apply-color-balance').addEventListener('click', () => {
+            document.getElementById('btn-apply-color-balance').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const shadows = parseInt(document.getElementById('balance-shadows').value);
                 const highlights = parseInt(document.getElementById('balance-highlights').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Color Balance in corso...', 'assertive');
-                const success = GpuEffects.applyColorBalance(canvas, shadows, highlights);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyColorBalance.bind(GpuEffects), [shadows, highlights]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce('Color Balance Pro applicato');
                     // RIMOSSO (ridondante): announceGemini('Effetto Color Balance applicato con successo', 'polite');
                 } else {
@@ -22866,13 +22950,21 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         }
         
         if (document.getElementById('btn-apply-gpu-blur')) {
-            document.getElementById('btn-apply-gpu-blur').addEventListener('click', () => {
+            document.getElementById('btn-apply-gpu-blur').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const radius = parseInt(document.getElementById('gpu-blur-radius').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Blur Pro in corso...', 'assertive');
-                const success = GpuEffects.applyBlurPro(canvas, radius);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyBlurPro.bind(GpuEffects), [radius]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Blur Pro applicato (${radius}px)`);
                     // RIMOSSO (ridondante): announceGemini(`Effetto Blur Pro applicato con successo. Raggio: ${radius} pixel`, 'polite');
                 } else {
@@ -22883,14 +22975,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         }
         
         if (document.getElementById('btn-apply-bloom')) {
-            document.getElementById('btn-apply-bloom').addEventListener('click', () => {
+            document.getElementById('btn-apply-bloom').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const threshold = parseInt(document.getElementById('bloom-threshold').value);
                 const intensity = parseInt(document.getElementById('bloom-intensity').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Bloom in corso...', 'assertive');
-                const success = GpuEffects.applyBloom(canvas, threshold, intensity);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyBloom.bind(GpuEffects), [threshold, intensity]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce('Bloom Pro applicato');
                     // RIMOSSO (ridondante): announceGemini('Effetto Bloom applicato con successo', 'polite');
                 } else {
@@ -22901,13 +23001,21 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         }
         
         if (document.getElementById('btn-apply-vibrance')) {
-            document.getElementById('btn-apply-vibrance').addEventListener('click', () => {
+            document.getElementById('btn-apply-vibrance').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const amount = parseInt(document.getElementById('vibrance-amount').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Vibrance in corso...', 'assertive');
-                const success = GpuEffects.applyVibrance(canvas, amount);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyVibrance.bind(GpuEffects), [amount]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Vibrance applicato (${amount})`);
                     // RIMOSSO (ridondante): announceGemini('Effetto Vibrance applicato con successo', 'polite');
                 } else {
@@ -22918,14 +23026,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         }
         
         if (document.getElementById('btn-apply-white-balance')) {
-            document.getElementById('btn-apply-white-balance').addEventListener('click', () => {
+            document.getElementById('btn-apply-white-balance').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const temperature = parseInt(document.getElementById('wb-temperature').value);
                 const tint = parseInt(document.getElementById('wb-tint').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto White Balance in corso...', 'assertive');
-                const success = GpuEffects.applyWhiteBalance(canvas, temperature, tint);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyWhiteBalance.bind(GpuEffects), [temperature, tint]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce('White Balance Pro applicato');
                     // RIMOSSO (ridondante): announceGemini('Effetto White Balance applicato con successo', 'polite');
                 } else {
@@ -22936,14 +23052,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         }
         
         if (document.getElementById('btn-apply-highlights-shadows')) {
-            document.getElementById('btn-apply-highlights-shadows').addEventListener('click', () => {
+            document.getElementById('btn-apply-highlights-shadows').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const shadows = parseInt(document.getElementById('hs-shadows').value);
                 const highlights = parseInt(document.getElementById('hs-highlights').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Highlights & Shadows in corso...', 'assertive');
-                const success = GpuEffects.applyHighlightsShadows(canvas, shadows, highlights);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyHighlightsShadows.bind(GpuEffects), [shadows, highlights]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce('Highlights & Shadows applicato');
                     // RIMOSSO (ridondante): announceGemini('Effetto Highlights & Shadows applicato con successo', 'polite');
                 } else {
@@ -22955,14 +23079,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v43.0 - MOTION BLUR
         if (document.getElementById('btn-apply-motionblur')) {
-            document.getElementById('btn-apply-motionblur').addEventListener('click', () => {
+            document.getElementById('btn-apply-motionblur').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const distance = parseInt(document.getElementById('motionblur-distance').value);
                 const angle = parseInt(document.getElementById('motionblur-angle').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Motion Blur in corso...', 'assertive');
-                const success = GpuEffects.applyMotionBlur(canvas, distance, angle);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyMotionBlur.bind(GpuEffects), [distance, angle]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Motion Blur applicato (${distance}px @ ${angle}°)`);
                     // RIMOSSO (ridondante): announceGemini('Motion Blur applicato', 'polite');
                 } else {
@@ -22974,14 +23106,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v43.0 - TILT-SHIFT
         if (document.getElementById('btn-apply-tiltshift')) {
-            document.getElementById('btn-apply-tiltshift').addEventListener('click', () => {
+            document.getElementById('btn-apply-tiltshift').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const blur = parseInt(document.getElementById('tiltshift-blur').value);
                 const gradient = parseInt(document.getElementById('tiltshift-gradient').value);
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Tilt-Shift in corso...', 'assertive');
-                const success = GpuEffects.applyTiltShift(canvas, blur, gradient);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyTiltShift.bind(GpuEffects), [blur, gradient]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Tilt-Shift applicato (blur ${blur}, focus ${gradient}%)`);
                     // RIMOSSO (ridondante): announceGemini('Tilt-Shift applicato', 'polite');
                 } else {
@@ -22993,14 +23133,22 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v43.0 - GAUSSIAN BLUR PRO
         if (document.getElementById('btn-apply-gaussianblur')) {
-            document.getElementById('btn-apply-gaussianblur').addEventListener('click', () => {
+            document.getElementById('btn-apply-gaussianblur').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const radius = parseInt(document.getElementById('gaussianblur-radius').value);
                 const quality = document.getElementById('gaussianblur-quality').value;
                 // RIMOSSO (ridondante): // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Gaussian Blur in corso...', 'assertive');
-                const success = GpuEffects.applyGaussianBlur(canvas, radius, quality);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyGaussianBlur.bind(GpuEffects), [radius, quality]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     announce(`Gaussian Blur applicato (${radius}px, ${quality})`);
                     // RIMOSSO (ridondante): announceGemini('Gaussian Blur applicato', 'polite');
                 } else {
@@ -23038,9 +23186,11 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                 
                 // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Chromatic Shift in corso...', 'assertive');
-                const success = GpuEffects.applyChromatic(canvas, intensity, angle);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyChromatic.bind(GpuEffects), [intensity, angle]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     // RIMOSSO (ridondante): announce(`Chromatic Shift applicato (${intensity}px @ ${angle}°)`);
                     announceGemini('Chromatic Shift applicato', 'polite');
                 } else {
@@ -23074,9 +23224,11 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                 
                 // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Glitch in corso...', 'assertive');
-                const success = GpuEffects.applyGlitch(canvas, intensity, blocks);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyGlitch.bind(GpuEffects), [intensity, blocks]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     // RIMOSSO (ridondante): announce(`Glitch applicato (intensità ${intensity}, ${blocks} blocchi)`);
                     announceGemini('Effetto Glitch applicato', 'polite');
                 } else {
@@ -23110,9 +23262,11 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                 
                 // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto VHS Light in corso...', 'assertive');
-                const success = GpuEffects.applyVHS(canvas, intensity, lines);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyVHS.bind(GpuEffects), [intensity, lines]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     // RIMOSSO (ridondante): announce(`VHS Light applicato (disturbo ${intensity}, ${lines} righe scan)`);
                     announceGemini('Effetto VHS applicato', 'polite');
                 } else {
@@ -23150,9 +23304,11 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                 
                 // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
                 // RIMOSSO (ridondante): announceGemini('Applicazione effetto Dehaze in corso. Rimozione foschia e nebbia...', 'assertive');
-                const success = GpuEffects.applyDehaze(canvas, strength, saturation);
+                const success = await applyGpuEffectToLayer(layer, GpuEffects.applyDehaze.bind(GpuEffects), [strength, saturation]);
                 if (success) {
                     saveHistory();
+                    scheduleRender();
+                    updateUI();
                     // RIMOSSO (ridondante): announce(`Dehaze applicato (intensità ${strength}, recupero sat ${saturation})`);
                     announceGemini('Effetto Dehaze applicato', 'polite');
                 } else {
@@ -23164,7 +23320,13 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v44.1 - BLOOM SOFT
         if (document.getElementById('btn-apply-bloomsoft')) {
-            document.getElementById('btn-apply-bloomsoft').addEventListener('click', () => {
+            document.getElementById('btn-apply-bloomsoft').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const threshold = parseInt(document.getElementById('bloomsoft-threshold').value);
                 const intensity = parseInt(document.getElementById('bloomsoft-intensity').value);
                 const radius = parseInt(document.getElementById('bloomsoft-radius').value);
@@ -23179,7 +23341,6 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                     return;
                 }
                 if (isNaN(radius) || radius < 2 || radius > 20) {
-                    // RIMOSSO (ridondante): announce('❌ Errore: raggio diffusione non valido (2-20)');
                     announceGemini('Errore: valore raggio diffusione non valido. Inserire un numero tra 2 e 20', 'assertive');
                     return;
                 }
@@ -23190,15 +23351,19 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
                     return;
                 }
                 
-                // RIMOSSO (ridondante - già c'è annuncio completamento): announce('Applicando...');
-                // RIMOSSO (ridondante): announceGemini('Applicazione effetto Bloom Soft in corso. Creazione bagliore morbido...', 'assertive');
-                const success = GpuEffects.applyBloomSoft(canvas, threshold, intensity, radius);
+                // Applica l'effetto GPU al layer specifico (con conversione automatica)
+                const success = await applyGpuEffectToLayer(
+                    layer,
+                    GpuEffects.applyBloomSoft.bind(GpuEffects),
+                    [threshold, intensity, radius]
+                );
+                
                 if (success) {
                     saveHistory();
-                    // RIMOSSO (ridondante): announce(`Bloom Soft applicato (soglia ${threshold}, int ${intensity}, rad ${radius}px)`);
+                    scheduleRender();
+                    updateUI();
                     announceGemini(`Effetto Bloom Soft applicato con successo. Bagliore morbido con soglia ${threshold}, intensità ${intensity}, raggio ${radius} pixel`, 'polite');
                 } else {
-                    // RIMOSSO (ridondante): announce('❌ Errore applicando Bloom Soft');
                     announceGemini('Errore durante l\'applicazione di Bloom Soft', 'assertive');
                 }
             });
