@@ -624,6 +624,22 @@ label {
     font-family: inherit;
     font-size: 14px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   PULSANTI SEMPRE UNO SOTTO L'ALTRO
+   ═══════════════════════════════════════════════════════════ */
+.btn-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+.btn-group button,
+.btn-group .btn {
+    width: 100% !important;
+    margin: 0 !important;
+}
     </style>
     
     <!-- glfx.js WebGL Library - Inline Implementation with Fallback System -->
@@ -9207,6 +9223,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
         window.canvas = canvas;
         window.state = state;
         
+        // Esponi le funzioni di rendering per la conversione layer→immagine
+        window.renderShape = renderShape;
+        window.renderText = renderText;
+        window.renderPolygon = renderPolygon;
+        
         function addVectorPoint() {
             if (!state.vectorDrawMode) return;
             
@@ -9626,17 +9647,29 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             updateLayerColorPreview(layerColor);
             
             document.getElementById('use-gradient').checked = layer.useGradient || false;
-            document.getElementById('gradient-controls').style.display = layer.useGradient ? 'block' : 'none';
+            const gradientControls = document.getElementById('gradient-controls');
+            if (layer.useGradient) {
+                gradientControls.classList.remove('hidden');
+            } else {
+                gradientControls.classList.add('hidden');
+            }
             if (layer.gradient) {
                 document.getElementById('gradient-type').value = layer.gradient.type;
                 document.getElementById('gradient-color1').value = layer.gradient.color1;
                 document.getElementById('gradient-color2').value = layer.gradient.color2;
+                document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
+                document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
                 document.getElementById('gradient-angle').value = layer.gradient.angle;
                 document.getElementById('gradient-angle-value').textContent = layer.gradient.angle + '°';
                 updateGradientPreview();
             }
             document.getElementById('use-stroke').checked = layer.useStroke || false;
-            document.getElementById('stroke-controls').style.display = layer.useStroke ? 'block' : 'none';
+            const strokeControls = document.getElementById('stroke-controls');
+            if (layer.useStroke) {
+                strokeControls.classList.remove('hidden');
+            } else {
+                strokeControls.classList.add('hidden');
+            }
             if (layer.stroke) {
                 document.getElementById('stroke-color').value = layer.stroke.color;
                 document.getElementById('stroke-width').value = layer.stroke.width;
@@ -11261,6 +11294,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     x: 50, y: 50, width: 200, height: 150,
                     color: '#3b82f6', rotation: 0, opacity: 100
                 });
+                // Mostra il controllo corner radius per i rettangoli
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'block';
             });
             
             document.getElementById('btn-add-circle').addEventListener('click', () => {
@@ -11268,6 +11304,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     x: 50, y: 50, width: 150, height: 150,
                     color: '#10b981', rotation: 0, opacity: 100
                 });
+                // Nascondi corner radius per cerchi
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
             });
             
             document.getElementById('btn-add-triangle').addEventListener('click', () => {
@@ -11275,6 +11314,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     x: 50, y: 50, width: 150, height: 150,
                     color: '#f59e0b', rotation: 0, opacity: 100
                 });
+                // Nascondi corner radius per triangoli
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
             });
             
             document.getElementById('btn-add-star').addEventListener('click', () => {
@@ -11282,6 +11324,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     x: 50, y: 50, width: 150, height: 150,
                     color: '#eab308', rotation: 0, opacity: 100
                 });
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
             });
             
             document.getElementById('btn-add-line').addEventListener('click', () => {
@@ -11290,6 +11334,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     color: '#0f172a', rotation: 0, opacity: 100,
                     useStroke: true, stroke: {width: 5, color: '#0f172a'}
                 });
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
             });
             
             document.getElementById('btn-add-hexagon').addEventListener('click', () => {
@@ -11297,6 +11343,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     x: 50, y: 50, width: 150, height: 130,
                     color: '#8b5cf6', rotation: 0, opacity: 100
                 });
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
             });
             
             document.getElementById('btn-add-arrow').addEventListener('click', () => {
@@ -11305,6 +11353,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     color: '#06b6d4', rotation: 0, opacity: 100,
                     locked: false
                 });
+                const cornerGroup = document.getElementById('new-rect-corner-group');
+                if (cornerGroup) cornerGroup.style.display = 'none';
                 announceGemini('Freccia aggiunta! Usa i controlli per modificarla.', 'polite');
             });
             
@@ -11503,11 +11553,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 document.getElementById('new-corner-radius-value').textContent = e.target.value + '%';
             });
             
-            // Mostra corner radius solo quando si clicca su rettangolo
-            document.getElementById('btn-add-rect').addEventListener('click', () => {
-                document.getElementById('new-rect-corner-group').style.display = 'block';
-            });
-            // Nascondi per altre forme
+            // Nascondi corner radius per forme diverse dal rettangolo
             ['circle', 'triangle', 'star', 'star8', 'heart', 'speech', 'line', 'hexagon', 'arrow'].forEach(shape => {
                 const btn = document.getElementById(`btn-add-${shape}`);
                 if (btn) {
@@ -12267,6 +12313,22 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     if (layer.useGradient && !layer.gradient) {
                         layer.gradient = { type: 'linear', color1: '#ff0000', color2: '#0000ff', angle: 0 };
                     }
+                    // Aggiorna subito la visibilità dei controlli gradiente - RIMUOVI/AGGIUNGI classe hidden
+                    const gradientControls = document.getElementById('gradient-controls');
+                    if (layer.useGradient) {
+                        gradientControls.classList.remove('hidden');
+                        // Popola i campi con i valori correnti
+                        document.getElementById('gradient-type').value = layer.gradient.type;
+                        document.getElementById('gradient-color1').value = layer.gradient.color1;
+                        document.getElementById('gradient-color2').value = layer.gradient.color2;
+                        document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
+                        document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
+                        document.getElementById('gradient-angle').value = layer.gradient.angle;
+                        document.getElementById('gradient-angle-value').textContent = layer.gradient.angle + '°';
+                        updateGradientPreview();
+                    } else {
+                        gradientControls.classList.add('hidden');
+                    }
                     saveState('Gradiente');
                     scheduleRender();
                     updateUI();
@@ -12299,11 +12361,49 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     if (layer && layer.gradient) {
                         layer.gradient.color1 = document.getElementById('gradient-color1').value;
                         layer.gradient.color2 = document.getElementById('gradient-color2').value;
+                        // Sincronizza i campi HEX
+                        document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
+                        document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
                         saveState('Colori gradiente modificati');
                         scheduleRender();
-                        updateUI();
+                        updateGradientPreview();
                     }
                 });
+            });
+            
+            // Listener per i campi HEX del gradiente
+            document.getElementById('gradient-color1-hex').addEventListener('input', e => {
+                const value = e.target.value;
+                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                    const layer = getSelectedLayer();
+                    if (layer && layer.gradient) {
+                        layer.gradient.color1 = value;
+                        document.getElementById('gradient-color1').value = value;
+                        scheduleRender();
+                        updateGradientPreview();
+                    }
+                }
+            });
+            
+            document.getElementById('gradient-color1-hex').addEventListener('change', () => {
+                saveState('Colore 1 gradiente modificato');
+            });
+            
+            document.getElementById('gradient-color2-hex').addEventListener('input', e => {
+                const value = e.target.value;
+                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                    const layer = getSelectedLayer();
+                    if (layer && layer.gradient) {
+                        layer.gradient.color2 = value;
+                        document.getElementById('gradient-color2').value = value;
+                        scheduleRender();
+                        updateGradientPreview();
+                    }
+                }
+            });
+            
+            document.getElementById('gradient-color2-hex').addEventListener('change', () => {
+                saveState('Colore 2 gradiente modificato');
             });
             
             document.getElementById('gradient-angle').addEventListener('input', e => {
@@ -21804,6 +21904,411 @@ window.ImageMemoryManager={config:{maxLoadedImages:50,unloadDelay:5000,enableDeb
 // ════════════════════════════════════════════════════════════════════
 // ✨ EFFETTI AVANZATI v34.1
 // ════════════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════════════
+// 🔄 CONVERSIONE AUTOMATICA LAYER → IMMAGINE (VERSIONE ROBUSTA)
+// ════════════════════════════════════════════════════════════════════
+/**
+ * Converte un layer (forma, testo, poligono) in immagine usando Promises
+ * Gestisce correttamente il timing asincrono e gli errori
+ */
+function convertLayerToImage(layer) {
+    return new Promise((resolve, reject) => {
+        if (!layer) {
+            reject(new Error('Layer non valido'));
+            return;
+        }
+        
+        // Verifica preventiva che le funzioni di rendering siano disponibili
+        const renderFunctionsReady = 
+            typeof window.renderShape === 'function' &&
+            typeof window.renderText === 'function' &&
+            typeof window.renderPolygon === 'function';
+        
+        if (!renderFunctionsReady) {
+            reject(new Error('Funzioni di rendering non ancora disponibili. Attendi che l\'app sia completamente caricata.'));
+            return;
+        }
+        
+        // Se è già un'immagine, non fare nulla
+        if (layer.type === 'image' && layer.imageElement) {
+            resolve(layer);
+            return;
+        }
+        
+        // Se è una forma, testo o poligono, convertilo
+        if (layer.type === 'shape' || layer.type === 'text' || layer.type === 'polygon') {
+            try {
+                // Salva il tipo originale
+                const originalType = layer.type;
+                const originalName = layer.name;
+                
+                // Crea un canvas temporaneo con padding generoso
+                const padding = 100; // Padding extra per rotazioni/trasformazioni
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                // Calcola dimensioni con padding
+                const canvasWidth = Math.ceil(layer.width || 200) + padding * 2;
+                const canvasHeight = Math.ceil(layer.height || 150) + padding * 2;
+                
+                tempCanvas.width = canvasWidth;
+                tempCanvas.height = canvasHeight;
+                
+                // Salva i contesti globali originali
+                const originalCtx = window.ctx;
+                const originalCanvas = window.canvas;
+                
+                try {
+                    // Sostituisci temporaneamente con il nostro context
+                    window.ctx = tempCtx;
+                    window.canvas = tempCanvas;
+                    
+                    // Salva lo stato del contesto
+                    tempCtx.save();
+                    
+                    // Sposta l'origine al centro del padding
+                    tempCtx.translate(padding, padding);
+                    
+                    // Crea un layer temporaneo CON COPIA MANUALE (non JSON.parse)
+                    // per evitare problemi con riferimenti circolari
+                    const tempLayer = {
+                        // Proprietà comuni a tutti i layer
+                        type: layer.type,
+                        x: 0,
+                        y: 0,
+                        width: layer.width,
+                        height: layer.height,
+                        name: layer.name,
+                        visible: layer.visible,
+                        locked: layer.locked,
+                        opacity: layer.opacity,
+                        rotation: layer.rotation,
+                        flipH: layer.flipH,
+                        flipV: layer.flipV,
+                        scale: layer.scale,
+                        id: layer.id,
+                        
+                        // Proprietà shape
+                        shape: layer.shape,  // rect, circle, triangle, star, star8, heart, speech, line, hexagon, arrow
+                        cornerRadius: layer.cornerRadius,
+                        color: layer.color,
+                        
+                        // Gradiente
+                        useGradient: layer.useGradient,
+                        gradient: layer.gradient ? {
+                            type: layer.gradient.type,
+                            color1: layer.gradient.color1,
+                            color2: layer.gradient.color2,
+                            angle: layer.gradient.angle
+                        } : null,
+                        
+                        // Bordo/Stroke
+                        useStroke: layer.useStroke,
+                        stroke: layer.stroke ? {
+                            color: layer.stroke.color,
+                            width: layer.stroke.width,
+                            style: layer.stroke.style
+                        } : null,
+                        
+                        // Proprietà testo
+                        text: layer.text,
+                        fontFamily: layer.fontFamily,
+                        fontSize: layer.fontSize,
+                        fontWeight: layer.fontWeight,
+                        fontStyle: layer.fontStyle,
+                        textAlign: layer.textAlign,
+                        textDecoration: layer.textDecoration,
+                        letterSpacing: layer.letterSpacing,
+                        lineHeight: layer.lineHeight,
+                        // Stili testo legacy (ancora usati)
+                        bold: layer.bold,
+                        italic: layer.italic,
+                        underline: layer.underline,
+                        lineThrough: layer.lineThrough,
+                        
+                        // Proprietà poligono
+                        points: layer.points ? [...layer.points] : null,
+                        polygonPoints: layer.polygonPoints ? [...layer.polygonPoints] : null,
+                        closePath: layer.closePath,
+                        
+                        // Ombra (dropShadow)
+                        dropShadow: layer.dropShadow ? {
+                            enabled: layer.dropShadow.enabled,
+                            color: layer.dropShadow.color,
+                            blur: layer.dropShadow.blur,
+                            x: layer.dropShadow.x,
+                            y: layer.dropShadow.y
+                        } : null,
+                        
+                        // Filtri
+                        filters: layer.filters ? {
+                            preset: layer.filters.preset,
+                            brightness: layer.filters.brightness,
+                            contrast: layer.filters.contrast,
+                            saturation: layer.filters.saturation,
+                            hue: layer.filters.hue,
+                            sepia: layer.filters.sepia,
+                            blur: layer.filters.blur
+                        } : null,
+                        
+                        // Maschera
+                        mask: layer.mask,
+                        maskShape: layer.maskShape,
+                        
+                        // Altre proprietà che potrebbero essere usate
+                        blendMode: layer.blendMode,
+                        clipPath: layer.clipPath
+                    };
+                    
+                    // Applica trasformazioni se presenti
+                    if (tempLayer.rotation) {
+                        const centerX = tempLayer.width / 2;
+                        const centerY = tempLayer.height / 2;
+                        tempCtx.translate(centerX, centerY);
+                        tempCtx.rotate((tempLayer.rotation * Math.PI) / 180);
+                        tempCtx.translate(-centerX, -centerY);
+                    }
+                    
+                    if (tempLayer.flipH) {
+                        tempCtx.translate(tempLayer.width, 0);
+                        tempCtx.scale(-1, 1);
+                    }
+                    
+                    if (tempLayer.flipV) {
+                        tempCtx.translate(0, tempLayer.height);
+                        tempCtx.scale(1, -1);
+                    }
+                    
+                    // Opacità
+                    if (tempLayer.opacity !== undefined && tempLayer.opacity < 100) {
+                        tempCtx.globalAlpha = tempLayer.opacity / 100;
+                    }
+                    
+                    // Disegna il layer usando le funzioni di render
+                    // Verifica robusta che le funzioni esistano
+                    if (tempLayer.type === 'shape') {
+                        if (typeof window.renderShape !== 'function') {
+                            throw new Error('Funzione renderShape non disponibile. L\'app potrebbe non essere completamente caricata.');
+                        }
+                        window.renderShape(tempLayer);
+                    } else if (tempLayer.type === 'text') {
+                        if (typeof window.renderText !== 'function') {
+                            throw new Error('Funzione renderText non disponibile. L\'app potrebbe non essere completamente caricata.');
+                        }
+                        window.renderText(tempLayer);
+                    } else if (tempLayer.type === 'polygon') {
+                        if (typeof window.renderPolygon !== 'function') {
+                            throw new Error('Funzione renderPolygon non disponibile. L\'app potrebbe non essere completamente caricata.');
+                        }
+                        window.renderPolygon(tempLayer);
+                    } else {
+                        throw new Error(`Tipo layer non supportato per conversione: ${tempLayer.type}`);
+                    }
+                    
+                    tempCtx.restore();
+                    
+                } finally {
+                    // SEMPRE ripristina i contesti originali (anche in caso di errore)
+                    window.ctx = originalCtx;
+                    window.canvas = originalCanvas;
+                }
+                
+                // Converti il canvas in immagine
+                const dataURL = tempCanvas.toDataURL('image/png');
+                const img = new Image();
+                
+                // Gestisci caricamento immagine
+                img.onload = () => {
+                    try {
+                        // Converti il layer originale in tipo image
+                        layer.type = 'image';
+                        layer.imageElement = img;
+                        layer.imageData = dataURL;
+                        
+                        // Salva posizione originale
+                        const oldX = layer.x;
+                        const oldY = layer.y;
+                        
+                        // Aggiorna dimensioni
+                        layer.width = canvasWidth;
+                        layer.height = canvasHeight;
+                        
+                        // Aggiusta posizione per compensare il padding
+                        layer.x = oldX - padding;
+                        layer.y = oldY - padding;
+                        
+                        // Reset trasformazioni (sono già applicate nell'immagine)
+                        layer.rotation = 0;
+                        layer.flipH = false;
+                        layer.flipV = false;
+                        
+                        // Aggiorna nome
+                        if (!layer.name.includes('(Convertito)')) {
+                            layer.name = `${originalName} (Convertito da ${originalType})`;
+                        }
+                        
+                        console.log(`✅ Layer "${layer.name}" convertito in immagine (${canvasWidth}x${canvasHeight})`);
+                        
+                        // Aggiorna UI
+                        if (window.scheduleRender) window.scheduleRender();
+                        if (window.updateUI) window.updateUI();
+                        
+                        resolve(layer);
+                        
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                
+                img.onerror = () => {
+                    reject(new Error('Errore caricamento immagine convertita'));
+                };
+                
+                img.src = dataURL;
+                
+            } catch (error) {
+                console.error('❌ Errore conversione layer:', error);
+                reject(error);
+            }
+        } else {
+            reject(new Error(`Tipo layer non convertibile: ${layer.type}`));
+        }
+    });
+}
+
+// Esporta per uso globale
+window.convertLayerToImage = convertLayerToImage;
+
+// ════════════════════════════════════════════════════════════════════
+// 🔁 WRAPPER AUTOMATICO PER TUTTI GLI EFFETTI (VERSIONE ROBUSTA)
+// ════════════════════════════════════════════════════════════════════
+/**
+ * Wrappa tutti i metodi di AdvancedEffects per convertire automaticamente
+ * forme/testo in immagini prima di applicare gli effetti
+ */
+(function initEffectsWrapper() {
+    // Aspetta che TUTTO sia pronto: AdvancedEffects E le funzioni di rendering
+    const checkInterval = setInterval(() => {
+        // Controlla AdvancedEffects
+        if (typeof AdvancedEffects === 'undefined') {
+            return; // Continua ad aspettare
+        }
+        
+        // Controlla che le funzioni di rendering siano disponibili
+        const renderFunctionsReady = 
+            typeof window.renderShape === 'function' &&
+            typeof window.renderText === 'function' &&
+            typeof window.renderPolygon === 'function';
+        
+        if (!renderFunctionsReady) {
+            // Continua ad aspettare anche le funzioni di rendering
+            return;
+        }
+        
+        // TUTTO è pronto, procedi
+        clearInterval(checkInterval);
+        
+        console.log('🔄 Inizializzazione wrapper effetti con conversione automatica...');
+        console.log('✅ AdvancedEffects disponibile');
+        console.log('✅ Funzioni di rendering disponibili (renderShape, renderText, renderPolygon)');
+        
+        // Lista dei metodi da wrappare (escludi createGradientText che crea un nuovo layer)
+        const effectMethods = Object.keys(AdvancedEffects).filter(key => 
+            typeof AdvancedEffects[key] === 'function' && key !== 'createGradientText'
+        );
+        
+        // Wrappo ogni metodo
+        effectMethods.forEach(methodName => {
+            const originalMethod = AdvancedEffects[methodName];
+            
+            // Sostituisci con versione wrappata (NON async, ma gestisce Promise internamente)
+            AdvancedEffects[methodName] = function(layer, ...args) {
+                // Se il layer non esiste, fallisci subito
+                if (!layer) {
+                    announceExtraAI('Nessun layer selezionato', 'assertive');
+                    return false;
+                }
+                
+                // Se è già un'immagine, applica direttamente (comportamento originale)
+                if (layer.type === 'image' && layer.imageElement) {
+                    return originalMethod.call(AdvancedEffects, layer, ...args);
+                }
+                
+                // PROTEZIONE RACE CONDITION: Se il layer è già in conversione, blocca
+                if (layer._isConverting) {
+                    console.warn(`⚠️ [${methodName}] Layer "${layer.name}" già in conversione, attendi...`);
+                    announceExtraAI('Attendi il completamento della conversione in corso', 'polite');
+                    return false;
+                }
+                
+                // Se il layer non è un'immagine, convertilo PRIMA (operazione asincrona)
+                console.log(`🔄 [${methodName}] Conversione ${layer.type} "${layer.name}" in immagine...`);
+                
+                // Verifica che le funzioni di rendering siano disponibili
+                const renderFunctionsReady = 
+                    typeof window.renderShape === 'function' &&
+                    typeof window.renderText === 'function' &&
+                    typeof window.renderPolygon === 'function';
+                
+                if (!renderFunctionsReady) {
+                    console.error(`❌ [${methodName}] Funzioni di rendering non disponibili`);
+                    announceExtraAI('Errore: app non completamente caricata. Riprova tra qualche secondo.', 'assertive');
+                    return false;
+                }
+                
+                announceExtraAI(`Conversione ${layer.type} in immagine...`, 'polite');
+                
+                // Marca il layer come "in conversione" per prevenire race conditions
+                layer._isConverting = true;
+                
+                // Avvia la conversione e applica l'effetto quando completa
+                // Restituisci true immediatamente (operazione in background)
+                convertLayerToImage(layer)
+                    .then(() => {
+                        console.log(`✅ [${methodName}] Conversione completata, applico effetto`);
+                        
+                        // Rimuovi il flag di conversione
+                        delete layer._isConverting;
+                        
+                        // Ora applica l'effetto (il layer è stato modificato in-place)
+                        const result = originalMethod.call(AdvancedEffects, layer, ...args);
+                        
+                        // Log del risultato per debugging
+                        if (result === false) {
+                            console.warn(`⚠️ [${methodName}] L'effetto ha restituito false`);
+                        }
+                        
+                        return result;
+                    })
+                    .catch(error => {
+                        console.error(`❌ [${methodName}] Errore conversione:`, error);
+                        
+                        // Rimuovi il flag anche in caso di errore
+                        delete layer._isConverting;
+                        
+                        announceExtraAI(`Errore: ${error.message || 'Conversione fallita'}`, 'assertive');
+                    });
+                
+                // Restituisci true per indicare che l'operazione è stata avviata
+                // (il chiamante non aspetta il completamento - fire and forget)
+                return true;
+            };
+        });
+        
+        console.log(`✅ ${effectMethods.length} effetti wrappati con conversione automatica`);
+        console.log(`📋 Effetti disponibili:`, effectMethods.join(', '));
+        
+    }, 50); // Controlla ogni 50ms
+    
+    // Timeout di sicurezza (10 secondi)
+    setTimeout(() => {
+        clearInterval(checkInterval);
+        if (typeof AdvancedEffects === 'undefined') {
+            console.error('❌ Timeout: AdvancedEffects non trovato dopo 10 secondi');
+        }
+    }, 10000);
+})();
 
 const AdvancedEffects={applyPixelate(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=Math.ceil(a.width/t),s=Math.ceil(a.height/t),l=document.createElement("canvas"),c=l.getContext("2d");l.width=o,l.height=s,c.drawImage(i,0,0,o,s),n.imageSmoothingEnabled=!1,n.drawImage(l,0,0,o,s,0,0,a.width,a.height);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Pixelate applicato (${t}px blocchi)`,"polite")},r.src=i.toDataURL(),!0},applyGlow(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d"),s=Math.ceil(t);n.width=i.width+2*s,n.height=i.height+2*s,o.shadowColor=a,o.shadowBlur=t,o.shadowOffsetX=0,o.shadowOffsetY=0,o.drawImage(i,s,s);const l=Math.ceil(t/30);for(let e=0;e<l;e++)o.drawImage(i,s,s);const c=new Image;return c.onload=()=>{e.imageElement=c,e.imageData=n.toDataURL(),e.width=n.width,e.height=n.height,window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Glow applicato (intensità ${t})`,"polite")},c.src=n.toDataURL(),!0},applyVignette(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=i.width/2,l=i.height/2,c=Math.sqrt(s*s+l*l),r=c*a/100,d=o.createRadialGradient(s,l,r,s,l,c);d.addColorStop(0,"rgba(0,0,0,0)"),d.addColorStop(1,`rgba(0,0,0,${t/100})`),o.fillStyle=d,o.fillRect(0,0,i.width,i.height);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Vignette applicato (int ${t}, size ${a})`,"polite")},m.src=n.toDataURL(),!0},applySharpen(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=[0,-1,0,-1,5,-1,0,-1,0],c=t/100,r=new Uint8ClampedArray(s),d=a.width,m=a.height;for(let e=1;e<m-1;e++)for(let t=1;t<d-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const c=(e+n)*d+(t+o),r=3*(n+1)+(o+1);i+=s[4*c+a]*l[r]}const n=4*(e*d+t)+a,o=s[n];r[n]=o+(i-o)*c}for(let e=0;e<s.length;e++)s[e]=r[e];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Sharpen applicato (amount ${t})`,"polite")},g.src=i.toDataURL(),!0},applyAutoLevels(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data;let l=255,c=0,r=255,d=0,m=255,g=0;for(let e=0;e<s.length;e+=4){const t=s[e],a=s[e+1],i=s[e+2];t<l&&(l=t),t>c&&(c=t),a<r&&(r=a),a>d&&(d=a),i<m&&(m=i),i>g&&(g=i)}const u=t/100;for(let e=0;e<s.length;e+=4){const t=c-l>0?255*(s[e]-l)/(c-l):s[e],a=d-r>0?255*(s[e+1]-r)/(d-r):s[e+1],i=g-m>0?255*(s[e+2]-m)/(g-m):s[e+2];s[e]=Math.min(255,Math.max(0,s[e]+(t-s[e])*u)),s[e+1]=Math.min(255,Math.max(0,s[e+1]+(a-s[e+1])*u)),s[e+2]=Math.min(255,Math.max(0,s[e+2]+(i-s[e+2])*u))}n.putImageData(o,0,0);const h=new Image;return h.onload=()=>{e.imageElement=h,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Auto Levels applicato (strength ${t})`,"polite")},h.src=i.toDataURL(),!0},applyNoise(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100*255;for(let e=0;e<l.length;e+=4)if("mono"===a){const t=(Math.random()-.5)*c;l[e]+=t,l[e+1]+=t,l[e+2]+=t}else l[e]+=(Math.random()-.5)*c,l[e+1]+=(Math.random()-.5)*c,l[e+2]+=(Math.random()-.5)*c;o.putImageData(s,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Noise/Grain applicato (${a}, amount ${t})`,"polite")},r.src=n.toDataURL(),!0},applyTemperature(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100,r=a/100;for(let e=0;e<l.length;e+=4){const t=c>0?c*20:c*15,a=c>0?-c*10:c*20;l[e]=Math.min(255,Math.max(0,l[e]+t)),l[e+2]=Math.min(255,Math.max(0,l[e+2]+a));const i=r>0?r*15:-r*15,n=r>0?-r*15:r*15;l[e]=Math.min(255,Math.max(0,l[e]+i)),l[e+1]=Math.min(255,Math.max(0,l[e+1]+n))}o.putImageData(s,0,0);const d=new Image;return d.onload=()=>{e.imageElement=d,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Temperature applicato (temp ${t}, tint ${a})`,"polite")},d.src=n.toDataURL(),!0},createGradientText(text,t,a,i,n){const o=document.createElement("canvas"),s=o.getContext("2d");s.font=`bold ${n}px Arial`;const l=s.measureText(text);o.width=Math.ceil(l.width)+20,o.height=n+40,s.font=`bold ${n}px Arial`,s.textBaseline="middle";const c=s.createLinearGradient(0,0,Math.cos(i*Math.PI/180)*o.width,Math.sin(i*Math.PI/180)*o.height);c.addColorStop(0,t),c.addColorStop(1,a),s.fillStyle=c,s.fillText(text,10,o.height/2);const r=new Image;return r.onload=()=>{const newLayer={type:"image",imageElement:r,imageData:o.toDataURL(),x:100,y:100,width:o.width,height:o.height,name:`Gradient Text: ${text.substring(0,15)}...`,visible:!0,locked:!1};window.state&&window.state.layers&&(window.state.layers.push(newLayer),window.state.currentLayerIndex=window.state.layers.length-1,window.updateLayersList&&window.updateLayersList(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Testo gradient creato: "${text}"`,"polite"))},r.src=o.toDataURL(),!0},applyDuotone(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;const r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=c[e]*(1-p)+p*(r+a*(g-r)),n=c[e+1]*(1-p)+p*(d+a*(u-d)),o=c[e+2]*(1-p)+p*(m+a*(h-m));c[e]=Math.min(255,Math.max(0,i)),c[e+1]=Math.min(255,Math.max(0,n)),c[e+2]=Math.min(255,Math.max(0,o))}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Duotone applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0},applyHSLShift(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;function rgbToHsl(e,t,a){e/=255,t/=255,a/=255;const i=Math.max(e,t,a),n=Math.min(e,t,a);let o,s,l=(i+n)/2;if(i===n)o=s=0;else{const c=i-n;s=l>.5?c/(2-i-n):c/(i+n),o=i===e?(t-a)/c+(t<a?6:0):i===t?(a-e)/c+2:(e-t)/c+4,o/=6}return[o,s,l]}function hslToRgb(e,t,a){let i,n,o;if(0===t)i=n=o=a;else{const s=(e,t,a)=>(a<0&&(a+=1),a>1&&(a-=1),a<1/6?e+6*(t-e)*a:a<.5?t:a<2/3?e+(t-e)*(2/3-a)*6:e),l=a<.5?a*(1+t):a+t-a*t,c=2*a-l;i=s(c,l,e+1/3),n=s(c,l,e),o=s(c,l,e-1/3)}return[Math.round(255*i),Math.round(255*n),Math.round(255*o)]}for(let e=0;e<c.length;e+=4){let[n,o,s]=rgbToHsl(c[e],c[e+1],c[e+2]);n=(n+t/360+1)%1,o=Math.min(1,Math.max(0,o+a/100)),s=Math.min(1,Math.max(0,s+i/100));const[l,r,d]=hslToRgb(n,o,s);c[e]=l,c[e+1]=r,c[e+2]=d}s.putImageData(l,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`HSL Shift applicato (H:${t} S:${a} L:${i})`,"polite")},r.src=o.toDataURL(),!0},applyOilPainting(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(l),r=i.width,d=i.height;for(let e=0;e<a;e++)for(let e=t;e<d-t;e++)for(let a=t;a<r-t;a++){const i=[];for(let n=-t;n<=t;n++)for(let t=-t;t<=t;t++){const o=4*((e+n)*r+(a+t));i.push([l[o],l[o+1],l[o+2]])}i.sort(((e,t)=>{const a=.299*e[0]+.587*e[1]+.114*e[2],i=.299*t[0]+.587*t[1]+.114*t[2];return a-i}));const n=i[Math.floor(i.length/2)],o=4*(e*r+a);c[o]=n[0],c[o+1]=n[1],c[o+2]=n[2]}for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Oil Painting applicato (brush ${t}, int ${a})`,"polite")},m.src=n.toDataURL(),!0},applyBlur(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.filter=`blur(${t}px)`,n.drawImage(a,0,0);const o=new Image;return o.onload=()=>{e.imageElement=o,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Blur applicato (radius ${t})`,"polite")},o.src=i.toDataURL(),!0},applyEmboss(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=new Uint8ClampedArray(s),c=a.width,r=a.height,d=[-2,-1,0,-1,1,1,0,1,2],m=t/100;for(let e=1;e<r-1;e++)for(let t=1;t<c-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const l=(e+n)*c+(t+o),r=3*(n+1)+(o+1);i+=s[4*l+a]*d[r]}const n=4*(e*c+t)+a;l[n]=Math.min(255,Math.max(0,128+i*m))}for(let e=0;e<s.length;e+=4)s[e]=l[e],s[e+1]=l[e+1],s[e+2]=l[e+2];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Emboss applicato (strength ${t})`,"polite")},g.src=i.toDataURL(),!0},applyEdgeDetect(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(s),r=i.width,d=i.height,m=[-1,-1,-1,-1,8,-1,-1,-1,-1],g=t/100*255;for(let e=1;e<d-1;e++)for(let t=1;t<r-1;t++){let a=0;for(let i=-1;i<=1;i++)for(let n=-1;n<=1;n++){const o=4*((e+i)*r+(t+n)),s=3*(i+1)+(n+1),c=.299*l[o]+.587*l[o+1]+.114*l[o+2];a+=c*m[s]}const i=4*(e*r+t),n=Math.abs(a)>g?255:0;c[i]=n,c[i+1]=n,c[i+2]=n,c[i+3]=255}if("true"===a)for(let e=0;e<c.length;e+=4)c[e]=255-c[e],c[e+1]=255-c[e+1],c[e+2]=255-c[e+2];for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Edge Detect applicato (threshold ${t}, ${"true"===a?"invertito":"normale"})`,"polite")},u.src=n.toDataURL(),!0},applyClarity(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height);const l=document.createElement("canvas"),c=l.getContext("2d");l.width=i.width,l.height=i.height,c.filter=`blur(${a}px)`,c.drawImage(i,0,0);const r=c.getImageData(0,0,i.width,i.height),d=s.data,m=r.data,g=t/100;for(let e=0;e<d.length;e+=4){for(let t=0;t<3;t++){const a=e+t,i=d[a]-m[a];d[a]=Math.min(255,Math.max(0,d[a]+i*g))}}o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Clarity applicato (amount ${t}, radius ${a})`,"polite")},u.src=n.toDataURL(),!0},applyDenoise(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=n.width,d=n.height,m=Math.ceil(t/20)+1,g=a/100,u=t/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2];c[e]=t,c[e+1]=t,c[e+2]=t}const h=new Uint8ClampedArray(c);for(let e=m;e<d-m;e++)for(let t=m;t<r-m;t++){let a=0,i=0;for(let n=-m;n<=m;n++)for(let o=-m;o<=m;o++){const s=4*((e+n)*r+(t+o));a+=c[s],i++}const n=4*(e*r+t),o=a/i,s=c[n];h[n]=s+(o-s)*u,h[n+1]=h[n],h[n+2]=h[n]}s.drawImage(n,0,0);const p=s.getImageData(0,0,n.width,n.height),f=p.data;for(let e=0;e<f.length;e+=4){const t=h[e],a=f[e]-t,n=f[e+1]-t,o=f[e+2]-t,s=1-g;f[e]=Math.min(255,Math.max(0,t+a*s)),f[e+1]=Math.min(255,Math.max(0,t+n*s)),f[e+2]=Math.min(255,Math.max(0,t+o*s))}const y=i/100;for(let e=0;e<f.length;e+=4){const t=f[e]-h[e],a=f[e+1]-h[e+1],i=f[e+2]-h[e+2];f[e]=Math.min(255,Math.max(0,f[e]+t*y)),f[e+1]=Math.min(255,Math.max(0,f[e+1]+a*y)),f[e+2]=Math.min(255,Math.max(0,f[e+2]+i*y))}s.putImageData(p,0,0);const b=new Image;return b.onload=()=>{e.imageElement=b,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Denoise applicato (luma ${t}, color ${a}, sharp ${i})`,"polite")},b.src=o.toDataURL(),!0},applyGradientMap(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=r+a*(g-r),n=d+a*(u-d),o=m+a*(h-m);c[e]=c[e]*(1-p)+i*p,c[e+1]=c[e+1]*(1-p)+n*p,c[e+2]=c[e+2]*(1-p)+o*p}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Gradient Map applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0}};
 
