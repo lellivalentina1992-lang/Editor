@@ -1745,266 +1745,6 @@ label {
 
 </head>
 <body>
-
-<!-- 
-╔════════════════════════════════════════════════════════════╗
-║                   🐛 DEBUG VERSION v45.0                   ║
-║                                                            ║
-║  Questa versione include:                                  ║
-║  • Error logging esteso con stack trace                    ║
-║  • Checkpoint di esecuzione                                ║
-║  • Logging funzioni critiche                               ║
-║  • Contatore errori in tempo reale                         ║
-║  • PULSANTE DEBUG REPORT (copia negli appunti)             ║
-║                                                            ║
-║  Clicca il pulsante rosso "🐛 DEBUG REPORT" in alto       ║
-╚════════════════════════════════════════════════════════════╝
--->
-
-<!-- 🐛 PULSANTE DEBUG REPORT -->
-<div style="position: fixed; top: 10px; right: 10px; z-index: 999999;">
-    <button id="debug-report-btn" style="
-        background: #e74c3c;
-        color: white;
-        border: none;
-        padding: 15px 25px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        font-family: monospace;
-    ">
-        🐛 DEBUG REPORT
-    </button>
-    <div id="debug-status" style="
-        margin-top: 10px;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        padding: 10px;
-        border-radius: 4px;
-        font-family: monospace;
-        font-size: 12px;
-        display: none;
-        max-width: 300px;
-    "></div>
-</div>
-
-<script>
-// 🐛 DEBUG MODE - LOGGING ESTESO
-console.log("════════════════════════════════════════════════════════════");
-console.log("🐛 DEBUG MODE ENABLED - v45.0");
-console.log("════════════════════════════════════════════════════════════");
-
-// Contatore errori globale
-window.errorCount = 0;
-window.errorLog = [];
-window.checkpointLog = [];
-
-// 1. Intercetta TUTTI gli errori JavaScript
-window.addEventListener("error", function(e) {
-    window.errorCount++;
-    
-    const errorInfo = {
-        timestamp: new Date().toISOString(),
-        count: window.errorCount,
-        message: e.message,
-        filename: e.filename ? e.filename.split('/').pop() : 'unknown',
-        lineno: e.lineno,
-        colno: e.colno,
-        stack: e.error && e.error.stack ? e.error.stack : 'No stack available'
-    };
-    
-    window.errorLog.push(errorInfo);
-    
-    console.error("════════════════════════════════════════════════════════════");
-    console.error("❌ ERRORE GLOBALE #" + window.errorCount);
-    console.error("════════════════════════════════════════════════════════════");
-    console.error("⏰ Timestamp:", errorInfo.timestamp);
-    console.error("📝 Messaggio:", errorInfo.message);
-    console.error("📄 File:", errorInfo.filename);
-    console.error("📍 Riga:", errorInfo.lineno, "Colonna:", errorInfo.colno);
-    console.error("📚 Stack trace:");
-    console.error(errorInfo.stack);
-    console.error("════════════════════════════════════════════════════════════");
-    
-    // Aggiorna badge pulsante
-    updateDebugBadge();
-    
-    return false;
-});
-
-// 2. Intercetta promise rejections
-window.addEventListener("unhandledrejection", function(e) {
-    window.errorCount++;
-    
-    const errorInfo = {
-        timestamp: new Date().toISOString(),
-        count: window.errorCount,
-        type: 'Promise Rejection',
-        reason: e.reason,
-        stack: e.reason && e.reason.stack ? e.reason.stack : 'No stack available'
-    };
-    
-    window.errorLog.push(errorInfo);
-    
-    console.error("════════════════════════════════════════════════════════════");
-    console.error("❌ PROMISE REJECTION #" + window.errorCount);
-    console.error("════════════════════════════════════════════════════════════");
-    console.error("⏰ Timestamp:", errorInfo.timestamp);
-    console.error("📝 Reason:", errorInfo.reason);
-    console.error("📚 Stack trace:");
-    console.error(errorInfo.stack);
-    console.error("════════════════════════════════════════════════════════════");
-    
-    updateDebugBadge();
-});
-
-// 3. Checkpoint function
-window.debugCheckpoint = function(name, data) {
-    const checkpoint = {
-        timestamp: new Date().toISOString(),
-        name: name,
-        data: data || null
-    };
-    window.checkpointLog.push(checkpoint);
-    console.log("🔵 CHECKPOINT:", name, "at", checkpoint.timestamp);
-    if (data) console.log("   Data:", data);
-};
-
-// 4. Aggiorna badge pulsante
-function updateDebugBadge() {
-    const btn = document.getElementById('debug-report-btn');
-    if (btn) {
-        btn.textContent = `🐛 DEBUG REPORT (${window.errorCount} errori)`;
-        if (window.errorCount > 0) {
-            btn.style.animation = 'pulse 1s infinite';
-        }
-    }
-}
-
-// 5. Genera report completo
-function generateDebugReport() {
-    const report = [];
-    
-    report.push("╔════════════════════════════════════════════════════════════╗");
-    report.push("║              🐛 DEBUG REPORT - Editor Grafico v45.0        ║");
-    report.push("╚════════════════════════════════════════════════════════════╝");
-    report.push("");
-    report.push("📅 Data: " + new Date().toLocaleString('it-IT'));
-    report.push("🌐 Browser: " + navigator.userAgent);
-    report.push("🖥️  Viewport: " + window.innerWidth + "x" + window.innerHeight);
-    report.push("");
-    
-    report.push("════════════════════════════════════════════════════════════");
-    report.push("📊 STATISTICHE");
-    report.push("════════════════════════════════════════════════════════════");
-    report.push("Totale errori: " + window.errorCount);
-    report.push("Checkpoint registrati: " + window.checkpointLog.length);
-    report.push("");
-    
-    if (window.checkpointLog.length > 0) {
-        report.push("════════════════════════════════════════════════════════════");
-        report.push("🔵 CHECKPOINT DI ESECUZIONE");
-        report.push("════════════════════════════════════════════════════════════");
-        window.checkpointLog.forEach((cp, i) => {
-            report.push(`${i + 1}. ${cp.name} - ${cp.timestamp}`);
-            if (cp.data) {
-                report.push(`   Data: ${JSON.stringify(cp.data)}`);
-            }
-        });
-        report.push("");
-    }
-    
-    if (window.errorLog.length > 0) {
-        report.push("════════════════════════════════════════════════════════════");
-        report.push("❌ ERRORI DETTAGLIATI");
-        report.push("════════════════════════════════════════════════════════════");
-        window.errorLog.forEach((err, i) => {
-            report.push("");
-            report.push(`▼ ERRORE #${i + 1}`);
-            report.push("─────────────────────────────────────────────────────────");
-            report.push("⏰ Timestamp: " + err.timestamp);
-            report.push("📝 Messaggio: " + err.message);
-            if (err.type) report.push("🏷️  Tipo: " + err.type);
-            if (err.filename) report.push("📄 File: " + err.filename);
-            if (err.lineno) report.push("📍 Riga: " + err.lineno + ", Colonna: " + (err.colno || 'N/A'));
-            if (err.reason) report.push("❗ Reason: " + err.reason);
-            report.push("");
-            report.push("📚 STACK TRACE:");
-            report.push(err.stack);
-            report.push("─────────────────────────────────────────────────────────");
-        });
-        report.push("");
-    } else {
-        report.push("════════════════════════════════════════════════════════════");
-        report.push("✅ NESSUN ERRORE RILEVATO!");
-        report.push("════════════════════════════════════════════════════════════");
-        report.push("");
-    }
-    
-    report.push("════════════════════════════════════════════════════════════");
-    report.push("📋 FINE REPORT");
-    report.push("════════════════════════════════════════════════════════════");
-    
-    return report.join('\n');
-}
-
-// 6. Copia report negli appunti
-async function copyReportToClipboard() {
-    const report = generateDebugReport();
-    const statusDiv = document.getElementById('debug-status');
-    
-    try {
-        await navigator.clipboard.writeText(report);
-        statusDiv.textContent = '✅ Report copiato negli appunti!\nErrori trovati: ' + window.errorCount;
-        statusDiv.style.display = 'block';
-        statusDiv.style.background = '#27ae60';
-        
-        // Anche in console
-        console.log(report);
-        
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 3000);
-    } catch (err) {
-        statusDiv.textContent = '❌ Errore copia: ' + err.message + '\nVedi console per report';
-        statusDiv.style.display = 'block';
-        statusDiv.style.background = '#e74c3c';
-        console.log(report);
-        
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 5000);
-    }
-}
-
-// 7. Aggiungi evento al pulsante
-document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('debug-report-btn');
-    if (btn) {
-        btn.addEventListener('click', copyReportToClipboard);
-        
-        // Aggiungi animazione CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-            }
-            #debug-report-btn:hover {
-                background: #c0392b;
-                transform: scale(1.05);
-            }
-        `;
-        document.head.appendChild(style);
-    }
-});
-
-console.log("✅ Debug handlers installati");
-console.log("🔴 Clicca il pulsante rosso in alto a destra per il report");
-console.log("════════════════════════════════════════════════════════════");
-</script>
     
     <!-- ♿ Skip Navigation Links -->
     <nav class="skip-links" aria-label="Collegamenti di navigazione rapida">
@@ -7566,12 +7306,14 @@ const state = window.state = {
         setInterval(() => {
             const cleanedCount = cleanupAndValidateState();
             if (cleanedCount > 0) {
-                announce(`Pulizia automatica: ${cleanedCount} problemi risolti`, 'polite');
+                announceGemini(`Pulizia automatica: ${cleanedCount} problemi risolti`, 'polite');
             }
         }, 120000); // 2 minuti
         
         // ---- Gestione Livelli (Aggiungi, Seleziona, Muovi) ----
         function addLayer(layer) {
+            console.log('🔷 [DEBUG] addLayer chiamata con:', layer.type, layer.shape || layer.text);
+            
             // VALIDAZIONE INPUT ROBUSTA
             if (!layer || typeof layer !== 'object') {
                 logError('addLayer', new Error('Layer non valido'), 'Layer deve essere un oggetto');
@@ -7705,464 +7447,6 @@ const state = window.state = {
             
             return state.layers.filter(l => state.selectedIds.includes(l.id));
         }
-        
-        /**
-         * Ottieni il primo layer selezionato (o null se nessuno)
-         * Usa selectedIds come unica fonte di verità
-         * Gestisce cleanup automatico di ID orfani
-         */
-        function getPrimarySelectedLayer() {
-            // Validazione base
-            if (!state.selectedIds || state.selectedIds.length === 0) {
-                return null;
-            }
-            
-            // Ottieni primo ID selezionato
-            const primaryId = state.selectedIds[0];
-            const layer = state.layers.find(l => l.id === primaryId);
-            
-            // Cleanup automatico: rimuovi ID orfani (layer eliminati)
-            if (!layer && state.selectedIds.length > 0) {
-                console.warn('Cleanup: rimossi ID orfani da selectedIds');
-                state.selectedIds = state.selectedIds.filter(id => 
-                    state.layers.find(l => l.id === id)
-                );
-            }
-            
-            return layer;
-        }
-        
-        window.getPrimarySelectedLayer = getPrimarySelectedLayer;
-        
-        /**
-         * Applica effetto standard in modo centralizzato
-         * Gestisce automaticamente image vs text/shape/polygon
-         */
-        function applyStandardEffect(effectName, params) {
-            const layer = getPrimarySelectedLayer();
-            
-            if (!layer) {
-                announceExtraAI('Nessun layer selezionato', 'assertive');
-                return false;
-            }
-            
-            // Layer immagine: applica direttamente (distruttivo)
-            if (layer.type === 'image') {
-                return AdvancedEffects[effectName](layer, ...params);
-            }
-            // Layer text/shape/polygon: applica tramite FX layer (non-distruttivo)
-            else if (layer.type === 'text' || layer.type === 'shape' || layer.type === 'polygon') {
-                // Chiama async function ma non blocca (fire-and-forget)
-                applyEffectNonDestructive(layer, effectName, params);
-                return true; // Ritorna subito true
-            }
-            else {
-                announceExtraAI('Tipo layer non supportato per effetti', 'assertive');
-                return false;
-            }
-        }
-        
-        window.applyStandardEffect = applyStandardEffect;
-        
-        /**
-         * Renderizza un layer (text/shape/polygon) in un bitmap offscreen
-         * CON padding per gestire rotazioni/effetti
-         */
-        async function renderLayerToOffscreenBitmap(layer) {
-            return new Promise((resolve, reject) => {
-                try {
-                    // VALIDAZIONE INPUT
-                    if (!layer) {
-                        reject(new Error('Layer non valido'));
-                        return;
-                    }
-                    
-                    if (!layer.width || !layer.height || layer.width <= 0 || layer.height <= 0) {
-                        reject(new Error('Dimensioni layer non valide'));
-                        return;
-                    }
-                    
-                    if (!['text', 'shape', 'polygon'].includes(layer.type)) {
-                        reject(new Error('Tipo layer non supportato per rendering offscreen'));
-                        return;
-                    }
-                    
-                    // VALIDAZIONE SPECIFICA POLYGON
-                    if (layer.type === 'polygon') {
-                        if (!layer.vectorData || !Array.isArray(layer.vectorData) || layer.vectorData.length < 2) {
-                            reject(new Error('vectorData non valido per polygon (serve almeno 2 punti)'));
-                            return;
-                        }
-                    }
-                    
-                    const padding = 100;
-                    const canvasWidth = layer.width + (padding * 2);
-                    const canvasHeight = layer.height + (padding * 2);
-                    
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = canvasWidth;
-                    tempCanvas.height = canvasHeight;
-                    const tempCtx = tempCanvas.getContext('2d');
-                    
-                    tempCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-                    tempCtx.save();
-                    tempCtx.translate(padding, padding);
-                    
-                    if (layer.rotation) {
-                        tempCtx.translate(layer.width / 2, layer.height / 2);
-                        tempCtx.rotate(layer.rotation * Math.PI / 180);
-                        tempCtx.translate(-layer.width / 2, -layer.height / 2);
-                    }
-                    
-                    if (layer.flipH) {
-                        tempCtx.translate(layer.width, 0);
-                        tempCtx.scale(-1, 1);
-                    }
-                    
-                    if (layer.flipV) {
-                        tempCtx.translate(0, layer.height);
-                        tempCtx.scale(1, -1);
-                    }
-                    
-                    if (layer.type === 'text') {
-                        tempCtx.font = `${layer.fontWeight || '400'} ${layer.fontSize}px ${layer.fontFamily}`;
-                        tempCtx.fillStyle = layer.color || '#000000';
-                        tempCtx.textBaseline = 'top';
-                        
-                        if (layer.textAlign) {
-                            tempCtx.textAlign = layer.textAlign;
-                        }
-                        
-                        const lines = (layer.text || '').split('\n');
-                        const lineHeight = layer.fontSize * (layer.lineHeight || 1.2);
-                        
-                        lines.forEach((line, index) => {
-                            const y = index * lineHeight;
-                            
-                            if (layer.strokeWidth && layer.strokeColor) {
-                                tempCtx.strokeStyle = layer.strokeColor;
-                                tempCtx.lineWidth = layer.strokeWidth;
-                                tempCtx.strokeText(line, 0, y);
-                            }
-                            
-                            tempCtx.fillText(line, 0, y);
-                        });
-                        
-                    } else if (layer.type === 'shape') {
-                        tempCtx.fillStyle = layer.color || '#000000';
-                        
-                        if (layer.shape === 'rectangle') {
-                            tempCtx.fillRect(0, 0, layer.width, layer.height);
-                        } else if (layer.shape === 'circle') {
-                            const radius = Math.min(layer.width, layer.height) / 2;
-                            tempCtx.beginPath();
-                            tempCtx.arc(layer.width / 2, layer.height / 2, radius, 0, 2 * Math.PI);
-                            tempCtx.fill();
-                        } else if (layer.shape === 'triangle') {
-                            tempCtx.beginPath();
-                            tempCtx.moveTo(layer.width / 2, 0);
-                            tempCtx.lineTo(layer.width, layer.height);
-                            tempCtx.lineTo(0, layer.height);
-                            tempCtx.closePath();
-                            tempCtx.fill();
-                        }
-                        
-                    } else if (layer.type === 'polygon' && layer.vectorData) {
-                        tempCtx.fillStyle = layer.color || '#000000';
-                        tempCtx.beginPath();
-                        
-                        layer.vectorData.forEach((point, index) => {
-                            if (index === 0) {
-                                tempCtx.moveTo(point.x, point.y);
-                            } else {
-                                tempCtx.lineTo(point.x, point.y);
-                            }
-                        });
-                        
-                        tempCtx.closePath();
-                        tempCtx.fill();
-                    }
-                    
-                    tempCtx.restore();
-                    
-                    const dataURL = tempCanvas.toDataURL('image/png');
-                    const img = new Image();
-                    
-                    img.onload = () => {
-                        resolve({
-                            imageElement: img,
-                            imageData: dataURL,
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            offsetX: padding,
-                            offsetY: padding
-                        });
-                    };
-                    
-                    img.onerror = () => {
-                        reject(new Error('Errore caricamento immagine renderizzata'));
-                    };
-                    
-                    img.src = dataURL;
-                    
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        }
-        
-        window.renderLayerToOffscreenBitmap = renderLayerToOffscreenBitmap;
-        
-        /**
-         * ════════════════════════════════════════════════════════════════
-         * STEP 7: GESTIONE VISIBILITÀ FX LAYER
-         * ════════════════════════════════════════════════════════════════
-         */
-        
-        function findFXLayerForSource(sourceId) {
-            return state.layers.find(l => 
-                l.fxSourceId === sourceId && l.fxKind === 'standard'
-            );
-        }
-        
-        function findSourceLayerForFX(fxLayerId) {
-            const fxLayer = state.layers.find(l => l.id === fxLayerId);
-            if (!fxLayer || !fxLayer.fxSourceId) return null;
-            return state.layers.find(l => l.id === fxLayer.fxSourceId);
-        }
-        
-        function setPreviewMode(sourceId) {
-            const sourceLayer = state.layers.find(l => l.id === sourceId);
-            const fxLayer = findFXLayerForSource(sourceId);
-            
-            if (!sourceLayer) return;
-            
-            if (fxLayer) {
-                sourceLayer.visible = false;
-                fxLayer.visible = true;
-                console.log(`🖼️  Preview mode: "${sourceLayer.name}"`);
-            } else {
-                sourceLayer.visible = true;
-            }
-        }
-        
-        function setEditMode(sourceId) {
-            const sourceLayer = state.layers.find(l => l.id === sourceId);
-            const fxLayer = findFXLayerForSource(sourceId);
-            
-            if (!sourceLayer) return;
-            
-            sourceLayer.visible = true;
-            if (fxLayer) {
-                fxLayer.visible = false;
-                console.log(`✏️  Edit mode: "${sourceLayer.name}"`);
-            }
-        }
-        
-        async function regenerateFXIfNeeded(sourceId) {
-            const fxLayer = findFXLayerForSource(sourceId);
-            if (!fxLayer) return;
-            
-            const sourceLayer = state.layers.find(l => l.id === sourceId);
-            if (!sourceLayer) return;
-            
-            console.log(`♻️  Rigenerando FX per "${sourceLayer.name}"...`);
-            
-            const fxStack = fxLayer.fxStack;
-            if (!fxStack || fxStack.length === 0) {
-                console.warn('Nessun effetto nello stack');
-                return;
-            }
-            
-            try {
-                const bitmap = await renderLayerToOffscreenBitmap(sourceLayer);
-                
-                let tempImageLayer = {
-                    type: 'image',
-                    imageElement: bitmap.imageElement,
-                    imageData: bitmap.imageData,
-                    width: bitmap.width,
-                    height: bitmap.height,
-                    x: 0,
-                    y: 0
-                };
-                
-                for (const effect of fxStack) {
-                    const effectName = effect.name;
-                    const params = effect.params || [];
-                    
-                    if (!AdvancedEffects[effectName]) {
-                        console.warn(`Effetto "${effectName}" non trovato`);
-                        continue;
-                    }
-                    
-                    AdvancedEffects[effectName](tempImageLayer, ...params);
-                }
-                
-                fxLayer.imageElement = tempImageLayer.imageElement;
-                fxLayer.imageData = tempImageLayer.imageData;
-                fxLayer.width = tempImageLayer.width;
-                fxLayer.height = tempImageLayer.height;
-                fxLayer.x = sourceLayer.x - bitmap.offsetX;
-                fxLayer.y = sourceLayer.y - bitmap.offsetY;
-                
-                console.log(`✅ FX rigenerato`);
-                setPreviewMode(sourceId);
-                if (window.scheduleRender) window.scheduleRender();
-                
-            } catch (error) {
-                console.error('❌ Errore rigenerazione FX:', error);
-            }
-        }
-        
-        async function regenerateAllFXLayers() {
-            console.log('🔄 Rigenerando tutti gli FX layer...');
-            
-            const sourcesWithFX = [];
-            
-            for (const layer of state.layers) {
-                if (layer.fxSourceId && layer.fxKind === 'standard') {
-                    const sourceLayer = state.layers.find(l => l.id === layer.fxSourceId);
-                    if (sourceLayer && !sourcesWithFX.includes(sourceLayer.id)) {
-                        sourcesWithFX.push(sourceLayer.id);
-                    }
-                }
-            }
-            
-            console.log(`   Trovati ${sourcesWithFX.length} layer con FX`);
-            
-            for (const sourceId of sourcesWithFX) {
-                try {
-                    await regenerateFXIfNeeded(sourceId);
-                } catch (error) {
-                    console.error(`❌ Errore rigenerazione:`, error);
-                }
-            }
-            
-            console.log('✅ Rigenerazione completata');
-        }
-        
-        window.findFXLayerForSource = findFXLayerForSource;
-        window.findSourceLayerForFX = findSourceLayerForFX;
-        window.setPreviewMode = setPreviewMode;
-        window.setEditMode = setEditMode;
-        window.regenerateFXIfNeeded = regenerateFXIfNeeded;
-        window.regenerateAllFXLayers = regenerateAllFXLayers;
-        
-        function generateUniqueId() {
-            if (state.nextId !== undefined) {
-                const id = state.nextId++;
-                if (state.usedIds) {
-                    state.usedIds.add(id);
-                }
-                return id;
-            }
-            return Date.now() + Math.floor(Math.random() * 1000);
-        }
-        
-        /**
-         * ════════════════════════════════════════════════════════════════
-         * STEP 6: APPLICAZIONE EFFETTI NON DISTRUTTIVA
-         * ════════════════════════════════════════════════════════════════
-         */
-        async function applyEffectNonDestructive(sourceLayer, effectName, params) {
-            try {
-                console.log(`🎨 Rendering di "${sourceLayer.name}"...`);
-                
-                const bitmap = await renderLayerToOffscreenBitmap(sourceLayer);
-                
-                const tempImageLayer = {
-                    type: 'image',
-                    imageElement: bitmap.imageElement,
-                    imageData: bitmap.imageData,
-                    width: bitmap.width,
-                    height: bitmap.height,
-                    x: 0,
-                    y: 0
-                };
-                
-                console.log(`✨ Applicando ${effectName}...`);
-                const effectResult = AdvancedEffects[effectName](tempImageLayer, ...params);
-                
-                if (effectResult === false) {
-                    announceExtraAI(`Errore ${effectName}`, 'assertive');
-                    return false;
-                }
-                
-                const existingFXLayer = state.layers.find(l => 
-                    l.fxSourceId === sourceLayer.id && l.fxKind === 'standard'
-                );
-                
-                if (existingFXLayer) {
-                    console.log(`🔄 Aggiornando FX esistente...`);
-                    
-                    existingFXLayer.imageElement = tempImageLayer.imageElement;
-                    existingFXLayer.imageData = tempImageLayer.imageData;
-                    existingFXLayer.width = tempImageLayer.width;
-                    existingFXLayer.height = tempImageLayer.height;
-                    existingFXLayer.x = sourceLayer.x - bitmap.offsetX;
-                    existingFXLayer.y = sourceLayer.y - bitmap.offsetY;
-                    existingFXLayer.fxStack = [{
-                        name: effectName,
-                        params: params
-                    }];
-                    existingFXLayer.name = `FX: ${sourceLayer.name} (${effectName})`;
-                    
-                } else {
-                    console.log(`✨ Creando nuovo FX layer...`);
-                    
-                    const fxLayer = {
-                        type: 'image',
-                        id: generateUniqueId(),
-                        name: `FX: ${sourceLayer.name} (${effectName})`,
-                        fxSourceId: sourceLayer.id,
-                        fxKind: 'standard',
-                        fxStack: [{
-                            name: effectName,
-                            params: params
-                        }],
-                        imageElement: tempImageLayer.imageElement,
-                        imageData: tempImageLayer.imageData,
-                        width: tempImageLayer.width,
-                        height: tempImageLayer.height,
-                        x: sourceLayer.x - bitmap.offsetX,
-                        y: sourceLayer.y - bitmap.offsetY,
-                        visible: true,
-                        opacity: sourceLayer.opacity || 100,
-                        rotation: 0,
-                        flipH: false,
-                        flipV: false,
-                        locked: false
-                    };
-                    
-                    const sourceIndex = state.layers.findIndex(l => l.id === sourceLayer.id);
-                    
-                    if (sourceIndex === -1) {
-                        console.error('❌ Source layer non trovato in state.layers');
-                        throw new Error('Source layer rimosso durante applicazione effetto');
-                    }
-                    
-                    state.layers.splice(sourceIndex + 1, 0, fxLayer);
-                    
-                    console.log(`✅ FX layer creato (id: ${fxLayer.id})`);
-                }
-                
-                setPreviewMode(sourceLayer.id);
-                saveState(`${effectName} applicato`);
-                scheduleRender();
-                updateUI();
-                announceExtraAI(`${effectName} applicato`, 'polite');
-                
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Errore:', error);
-                announceExtraAI('Errore applicazione effetto', 'assertive');
-                return false;
-            }
-        }
-        
-        window.applyEffectNonDestructive = applyEffectNonDestructive;
         
         // NUOVA: Selezione multipla sicura (Ctrl+Click)
         function toggleLayerSelection(layerId, multiselect = false) {
@@ -8528,14 +7812,9 @@ const state = window.state = {
                 
                 // Assegna layers validati
                 state.layers = newLayers.filter(layer => {
-                    // Keep FX layers even without imageElement (will be regenerated)
-                    if (layer.type === 'image' && layer.fxSourceId && layer.fxKind === 'standard') {
-                        return true;
-                    }
-                    
-                    // Remove normal image layers without imageElement
+                    // Filtra layer immagine senza imageElement (non caricati)
                     if (layer.type === 'image' && !layer.imageElement) {
-                        console.warn('Layer ignorato:', layer.name);
+                        console.warn('Layer immagine ignorato (non caricato):', layer.name);
                         return false;
                     }
                     return true;
@@ -8549,8 +7828,6 @@ const state = window.state = {
                         state.selectedIds.push(id);
                     }
                 });
-                
-                await regenerateAllFXLayers();
                 
                 scheduleRender();
                 updateUI();
@@ -10734,19 +10011,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             }
             
             if (clickedLayer) {
-                if (clickedLayer.fxSourceId && clickedLayer.fxKind === 'standard') {
-                    const sourceLayer = state.layers.find(l => l.id === clickedLayer.fxSourceId);
-                    if (sourceLayer) {
-                        console.log(`🎯 Click su FX, reindirizzo a "${sourceLayer.name}"`);
-                        state.selectedIds = [sourceLayer.id];
-                        setEditMode(sourceLayer.id);
-                    } else {
-                        console.warn('⚠️  FX orfano');
-                        state.selectedIds = [clickedLayer.id];
-                    }
-                } else {
-                    state.selectedIds = [clickedLayer.id];
-                }
+                state.selectedIds = [clickedLayer.id];
                 // RIMOSSO (ridondante): announceGemini(`Selezionato: ${clickedLayer.name}`, 'polite');
             } else {
                 state.selectedIds = [];
@@ -10798,23 +10063,15 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     let message = `X ${x}, Y ${y}`;
                     
                     if (layerUnderMouse) {
-                        let layerToAnnounce = layerUnderMouse;
-                        if (layerUnderMouse.fxSourceId && layerUnderMouse.fxKind === 'standard') {
-                            const sourceLayer = state.layers.find(l => l.id === layerUnderMouse.fxSourceId);
-                            if (sourceLayer) {
-                                layerToAnnounce = sourceLayer;
-                            }
-                        }
-                        
-                        const typeStr = layerToAnnounce.type === 'text' ? 'Testo' :
-                                        layerToAnnounce.type === 'image' ? 'Immagine' :
-                                        layerToAnnounce.type === 'shape' ? 'Forma' :
-                                        layerToAnnounce.type === 'vector' ? 'Disegno' : 'Elemento';
-                        message += `. ${typeStr}: ${layerToAnnounce.name}`;
+                        const typeStr = layerUnderMouse.type === 'text' ? 'Testo' :
+                                        layerUnderMouse.type === 'image' ? 'Immagine' :
+                                        layerUnderMouse.type === 'shape' ? 'Forma' :
+                                        layerUnderMouse.type === 'vector' ? 'Disegno' : 'Elemento';
+                        message += `. ${typeStr}: ${layerUnderMouse.name}`;
                         
                         // Aggiungi info dimensioni
-                        const w = Math.floor(layerToAnnounce.width);
-                        const h = Math.floor(layerToAnnounce.height);
+                        const w = Math.floor(layerUnderMouse.width);
+                        const h = Math.floor(layerUnderMouse.height);
                         message += `. Dimensioni: ${w} per ${h} pixel`;
                     } else {
                         message += '. Spazio vuoto';
@@ -11470,6 +10727,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
         
         // ---- LISTENERS ----
         function setupListeners() {
+            // ✅ PROTEZIONE: Evita listener duplicati se setupListeners viene chiamata più volte
+            if (window.__listenersSetup) {
+                console.warn('⚠️ setupListeners già eseguito, skip per evitare duplicati');
+                return;
+            }
+            window.__listenersSetup = true;
+            
             // Pannelli collassabili
             document.querySelectorAll('.section-header').forEach(header => {
                 header.addEventListener('click', () => {
@@ -12035,6 +11299,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             });
             
             document.getElementById('btn-add-rect').addEventListener('click', () => {
+                console.log('🟦 [DEBUG] Click su btn-add-rect - aggiungendo rettangolo');
                 addLayer({ type: 'shape', shape: 'rect', name: 'Rettangolo',
                     x: 50, y: 50, width: 200, height: 150,
                     color: '#3b82f6', rotation: 0, opacity: 100
@@ -12407,7 +11672,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     const metrics = ctx.measureText(layer.text);
                     layer.width = metrics.width + (layer.text.length * (layer.letterSpacing || 0));
                     layer.height = layer.fontSize * (layer.lineHeight || 1.2);
-                    regenerateFXIfNeeded(layer.id);
                     saveState('Testo modificato');
                     scheduleRender();
                     updateUI();
@@ -12434,7 +11698,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         const metrics = ctx.measureText(layer.text);
                         layer.width = metrics.width + (layer.text.length * (layer.letterSpacing || 0));
                         layer.height = layer.fontSize * (layer.lineHeight || 1.2);
-                        regenerateFXIfNeeded(layer.id);
                         
                         saveState('Font modificato');
                         scheduleRender();
@@ -13003,7 +12266,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                             layerColorHex.value = value;
                         }
                         updateLayerColorPreview(value);
-                        regenerateFXIfNeeded(layer.id);
                         scheduleRender();
                         saveState('Colore modificato');
                     }
@@ -15109,7 +14371,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             });
 
             // ---- Tasti Rapidi Globali ----
-                    document.addEventListener('keydown', async (e) => {
+                    document.addEventListener('keydown', e => {
             // +A per anteprima schermo intero
             if (e.key === '+' || e.key === '=') {
                 setTimeout(() => {
@@ -15566,8 +14828,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             // SCORCIATOIE GLOBALI (PRIORITÀ NORMALE)
             // ============================================
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') { e.preventDefault(); toggleVectorMode(); }
-            else if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); e.shiftKey ? await redo() : await undo(); }
-            else if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); await redo(); }
+            else if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+            else if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redo(); }
             else if ((e.ctrlKey || e.metaKey) && e.key === 'c') { e.preventDefault(); copyLayer(); }
             else if ((e.ctrlKey || e.metaKey) && e.key === 'v') { e.preventDefault(); pasteLayer(); }
             else if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); duplicateLayer(); }
@@ -20825,17 +20087,22 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
   /**
    * Funzione di annuncio vocale per Gemini AI
    */
-  // DUPLICATO:   function announceGemini(text, assertive = false) {
-  // DUPLICATO:     const regionId = assertive ? 'sr-assert' : 'sr-polite';
-  // DUPLICATO:     const region = document.getElementById(regionId);
-  // DUPLICATO:     
-  // DUPLICATO:     if (region) {
-  // DUPLICATO:       region.textContent = '';
-  // DUPLICATO:       setTimeout(() => { region.textContent = text; }, 50);
-  // DUPLICATO:     }
-  // DUPLICATO:     
-  // DUPLICATO:     // RIMOSSO: Fallback window.speak - duplica la lettura di NVDA
-  // DUPLICATO:     // RIMOSSO: if (window.speak) window.speak(text); - duplica NVDA
+  function announceGemini(text, assertive = false) {
+    // Gestisce sia booleani che stringhe 'polite'/'assertive'
+    let regionId;
+    if (typeof assertive === 'string') {
+      regionId = assertive === 'assertive' ? 'sr-assert' : 'sr-polite';
+    } else {
+      regionId = assertive ? 'sr-assert' : 'sr-polite';
+    }
+    
+    const region = document.getElementById(regionId);
+    
+    if (region) {
+      region.textContent = '';
+      setTimeout(() => { region.textContent = text; }, 50);
+    }
+  }
   
   // ==================== FEATURE 1: DESCRIVI IMMAGINE CARICATA ====================
   
@@ -21425,7 +20692,6 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
   }
   
   console.log('✅ Gemini AI Integration inizializzata');
-    window.debugCheckpoint('GEMINI_AI_LOADED');
   console.log('  - Version: 33.8 FIXED');
   console.log('  - Null safety: ENABLED');
   console.log('  - Error handling: ENHANCED');
@@ -21820,7 +21086,6 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
   }, true); // Use capture per intercettare prima
   
   console.log('✅ Generative Fill (Fase 2 - MANUALE) inizializzato');
-    window.debugCheckpoint('GENERATIVE_FILL_LOADED');
   console.log('   - Tasto G nel disegno vettoriale per preparare area');
   console.log('   - Sistema MANUALE: genera immagini esternamente e caricale');
   console.log('   - NON richiede API Stability AI per generazione');
@@ -22241,16 +21506,15 @@ NON aggiungere testo prima o dopo il JSON.`
   // Permetti anche invio nel campo di testo
   const promptInput = document.getElementById('extract-prompt');
   if (promptInput) {
-    promptInput.addEventListener('keydown', async function(e) {
+    promptInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        await extractObject();
+        extractObject();
       }
     });
   }
   
   console.log('✅ Object Extraction (Fase 3) inizializzato');
-    window.debugCheckpoint('OBJECT_EXTRACTION_LOADED');
   console.log('   - Pannello 8: Estrai Oggetto con AI (solo per immagini)');
   console.log('   - Richiede: Gemini API + Stability API');
 })();
@@ -23129,7 +22393,7 @@ window.convertLayerToImage = convertLayerToImage;
 const AdvancedEffects={applyPixelate(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=Math.ceil(a.width/t),s=Math.ceil(a.height/t),l=document.createElement("canvas"),c=l.getContext("2d");l.width=o,l.height=s,c.drawImage(i,0,0,o,s),n.imageSmoothingEnabled=!1,n.drawImage(l,0,0,o,s,0,0,a.width,a.height);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Pixelate applicato (${t}px blocchi)`,"polite")},r.src=i.toDataURL(),!0},applyGlow(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d"),s=Math.ceil(t);n.width=i.width+2*s,n.height=i.height+2*s,o.shadowColor=a,o.shadowBlur=t,o.shadowOffsetX=0,o.shadowOffsetY=0,o.drawImage(i,s,s);const l=Math.ceil(t/30);for(let e=0;e<l;e++)o.drawImage(i,s,s);const c=new Image;return c.onload=()=>{e.imageElement=c,e.imageData=n.toDataURL(),e.width=n.width,e.height=n.height,window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Glow applicato (intensità ${t})`,"polite")},c.src=n.toDataURL(),!0},applyVignette(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=i.width/2,l=i.height/2,c=Math.sqrt(s*s+l*l),r=c*a/100,d=o.createRadialGradient(s,l,r,s,l,c);d.addColorStop(0,"rgba(0,0,0,0)"),d.addColorStop(1,`rgba(0,0,0,${t/100})`),o.fillStyle=d,o.fillRect(0,0,i.width,i.height);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Vignette applicato (int ${t}, size ${a})`,"polite")},m.src=n.toDataURL(),!0},applySharpen(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=[0,-1,0,-1,5,-1,0,-1,0],c=t/100,r=new Uint8ClampedArray(s),d=a.width,m=a.height;for(let e=1;e<m-1;e++)for(let t=1;t<d-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const c=(e+n)*d+(t+o),r=3*(n+1)+(o+1);i+=s[4*c+a]*l[r]}const n=4*(e*d+t)+a,o=s[n];r[n]=o+(i-o)*c}for(let e=0;e<s.length;e++)s[e]=r[e];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Sharpen applicato (amount ${t})`,"polite")},g.src=i.toDataURL(),!0},applyAutoLevels(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data;let l=255,c=0,r=255,d=0,m=255,g=0;for(let e=0;e<s.length;e+=4){const t=s[e],a=s[e+1],i=s[e+2];t<l&&(l=t),t>c&&(c=t),a<r&&(r=a),a>d&&(d=a),i<m&&(m=i),i>g&&(g=i)}const u=t/100;for(let e=0;e<s.length;e+=4){const t=c-l>0?255*(s[e]-l)/(c-l):s[e],a=d-r>0?255*(s[e+1]-r)/(d-r):s[e+1],i=g-m>0?255*(s[e+2]-m)/(g-m):s[e+2];s[e]=Math.min(255,Math.max(0,s[e]+(t-s[e])*u)),s[e+1]=Math.min(255,Math.max(0,s[e+1]+(a-s[e+1])*u)),s[e+2]=Math.min(255,Math.max(0,s[e+2]+(i-s[e+2])*u))}n.putImageData(o,0,0);const h=new Image;return h.onload=()=>{e.imageElement=h,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Auto Levels applicato (strength ${t})`,"polite")},h.src=i.toDataURL(),!0},applyNoise(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100*255;for(let e=0;e<l.length;e+=4)if("mono"===a){const t=(Math.random()-.5)*c;l[e]+=t,l[e+1]+=t,l[e+2]+=t}else l[e]+=(Math.random()-.5)*c,l[e+1]+=(Math.random()-.5)*c,l[e+2]+=(Math.random()-.5)*c;o.putImageData(s,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Noise/Grain applicato (${a}, amount ${t})`,"polite")},r.src=n.toDataURL(),!0},applyTemperature(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100,r=a/100;for(let e=0;e<l.length;e+=4){const t=c>0?c*20:c*15,a=c>0?-c*10:c*20;l[e]=Math.min(255,Math.max(0,l[e]+t)),l[e+2]=Math.min(255,Math.max(0,l[e+2]+a));const i=r>0?r*15:-r*15,n=r>0?-r*15:r*15;l[e]=Math.min(255,Math.max(0,l[e]+i)),l[e+1]=Math.min(255,Math.max(0,l[e+1]+n))}o.putImageData(s,0,0);const d=new Image;return d.onload=()=>{e.imageElement=d,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Temperature applicato (temp ${t}, tint ${a})`,"polite")},d.src=n.toDataURL(),!0},createGradientText(text,t,a,i,n){const o=document.createElement("canvas"),s=o.getContext("2d");s.font=`bold ${n}px Arial`;const l=s.measureText(text);o.width=Math.ceil(l.width)+20,o.height=n+40,s.font=`bold ${n}px Arial`,s.textBaseline="middle";const c=s.createLinearGradient(0,0,Math.cos(i*Math.PI/180)*o.width,Math.sin(i*Math.PI/180)*o.height);c.addColorStop(0,t),c.addColorStop(1,a),s.fillStyle=c,s.fillText(text,10,o.height/2);const r=new Image;return r.onload=()=>{const newLayer={type:"image",imageElement:r,imageData:o.toDataURL(),x:100,y:100,width:o.width,height:o.height,name:`Gradient Text: ${text.substring(0,15)}...`,visible:!0,locked:!1};window.state&&window.state.layers&&(window.state.layers.push(newLayer),window.state.currentLayerIndex=window.state.layers.length-1,window.updateLayersList&&window.updateLayersList(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Testo gradient creato: "${text}"`,"polite"))},r.src=o.toDataURL(),!0},applyDuotone(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;const r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=c[e]*(1-p)+p*(r+a*(g-r)),n=c[e+1]*(1-p)+p*(d+a*(u-d)),o=c[e+2]*(1-p)+p*(m+a*(h-m));c[e]=Math.min(255,Math.max(0,i)),c[e+1]=Math.min(255,Math.max(0,n)),c[e+2]=Math.min(255,Math.max(0,o))}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Duotone applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0},applyHSLShift(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;function rgbToHsl(e,t,a){e/=255,t/=255,a/=255;const i=Math.max(e,t,a),n=Math.min(e,t,a);let o,s,l=(i+n)/2;if(i===n)o=s=0;else{const c=i-n;s=l>.5?c/(2-i-n):c/(i+n),o=i===e?(t-a)/c+(t<a?6:0):i===t?(a-e)/c+2:(e-t)/c+4,o/=6}return[o,s,l]}function hslToRgb(e,t,a){let i,n,o;if(0===t)i=n=o=a;else{const s=(e,t,a)=>(a<0&&(a+=1),a>1&&(a-=1),a<1/6?e+6*(t-e)*a:a<.5?t:a<2/3?e+(t-e)*(2/3-a)*6:e),l=a<.5?a*(1+t):a+t-a*t,c=2*a-l;i=s(c,l,e+1/3),n=s(c,l,e),o=s(c,l,e-1/3)}return[Math.round(255*i),Math.round(255*n),Math.round(255*o)]}for(let e=0;e<c.length;e+=4){let[n,o,s]=rgbToHsl(c[e],c[e+1],c[e+2]);n=(n+t/360+1)%1,o=Math.min(1,Math.max(0,o+a/100)),s=Math.min(1,Math.max(0,s+i/100));const[l,r,d]=hslToRgb(n,o,s);c[e]=l,c[e+1]=r,c[e+2]=d}s.putImageData(l,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`HSL Shift applicato (H:${t} S:${a} L:${i})`,"polite")},r.src=o.toDataURL(),!0},applyOilPainting(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(l),r=i.width,d=i.height;for(let e=0;e<a;e++)for(let e=t;e<d-t;e++)for(let a=t;a<r-t;a++){const i=[];for(let n=-t;n<=t;n++)for(let t=-t;t<=t;t++){const o=4*((e+n)*r+(a+t));i.push([l[o],l[o+1],l[o+2]])}i.sort(((e,t)=>{const a=.299*e[0]+.587*e[1]+.114*e[2],i=.299*t[0]+.587*t[1]+.114*t[2];return a-i}));const n=i[Math.floor(i.length/2)],o=4*(e*r+a);c[o]=n[0],c[o+1]=n[1],c[o+2]=n[2]}for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Oil Painting applicato (brush ${t}, int ${a})`,"polite")},m.src=n.toDataURL(),!0},applyBlur(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.filter=`blur(${t}px)`,n.drawImage(a,0,0);const o=new Image;return o.onload=()=>{e.imageElement=o,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Blur applicato (radius ${t})`,"polite")},o.src=i.toDataURL(),!0},applyEmboss(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=new Uint8ClampedArray(s),c=a.width,r=a.height,d=[-2,-1,0,-1,1,1,0,1,2],m=t/100;for(let e=1;e<r-1;e++)for(let t=1;t<c-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const l=(e+n)*c+(t+o),r=3*(n+1)+(o+1);i+=s[4*l+a]*d[r]}const n=4*(e*c+t)+a;l[n]=Math.min(255,Math.max(0,128+i*m))}for(let e=0;e<s.length;e+=4)s[e]=l[e],s[e+1]=l[e+1],s[e+2]=l[e+2];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Emboss applicato (strength ${t})`,"polite")},g.src=i.toDataURL(),!0},applyEdgeDetect(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(s),r=i.width,d=i.height,m=[-1,-1,-1,-1,8,-1,-1,-1,-1],g=t/100*255;for(let e=1;e<d-1;e++)for(let t=1;t<r-1;t++){let a=0;for(let i=-1;i<=1;i++)for(let n=-1;n<=1;n++){const o=4*((e+i)*r+(t+n)),s=3*(i+1)+(n+1),c=.299*l[o]+.587*l[o+1]+.114*l[o+2];a+=c*m[s]}const i=4*(e*r+t),n=Math.abs(a)>g?255:0;c[i]=n,c[i+1]=n,c[i+2]=n,c[i+3]=255}if("true"===a)for(let e=0;e<c.length;e+=4)c[e]=255-c[e],c[e+1]=255-c[e+1],c[e+2]=255-c[e+2];for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Edge Detect applicato (threshold ${t}, ${"true"===a?"invertito":"normale"})`,"polite")},u.src=n.toDataURL(),!0},applyClarity(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height);const l=document.createElement("canvas"),c=l.getContext("2d");l.width=i.width,l.height=i.height,c.filter=`blur(${a}px)`,c.drawImage(i,0,0);const r=c.getImageData(0,0,i.width,i.height),d=s.data,m=r.data,g=t/100;for(let e=0;e<d.length;e+=4){for(let t=0;t<3;t++){const a=e+t,i=d[a]-m[a];d[a]=Math.min(255,Math.max(0,d[a]+i*g))}}o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Clarity applicato (amount ${t}, radius ${a})`,"polite")},u.src=n.toDataURL(),!0},applyDenoise(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=n.width,d=n.height,m=Math.ceil(t/20)+1,g=a/100,u=t/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2];c[e]=t,c[e+1]=t,c[e+2]=t}const h=new Uint8ClampedArray(c);for(let e=m;e<d-m;e++)for(let t=m;t<r-m;t++){let a=0,i=0;for(let n=-m;n<=m;n++)for(let o=-m;o<=m;o++){const s=4*((e+n)*r+(t+o));a+=c[s],i++}const n=4*(e*r+t),o=a/i,s=c[n];h[n]=s+(o-s)*u,h[n+1]=h[n],h[n+2]=h[n]}s.drawImage(n,0,0);const p=s.getImageData(0,0,n.width,n.height),f=p.data;for(let e=0;e<f.length;e+=4){const t=h[e],a=f[e]-t,n=f[e+1]-t,o=f[e+2]-t,s=1-g;f[e]=Math.min(255,Math.max(0,t+a*s)),f[e+1]=Math.min(255,Math.max(0,t+n*s)),f[e+2]=Math.min(255,Math.max(0,t+o*s))}const y=i/100;for(let e=0;e<f.length;e+=4){const t=f[e]-h[e],a=f[e+1]-h[e+1],i=f[e+2]-h[e+2];f[e]=Math.min(255,Math.max(0,f[e]+t*y)),f[e+1]=Math.min(255,Math.max(0,f[e+1]+a*y)),f[e+2]=Math.min(255,Math.max(0,f[e+2]+i*y))}s.putImageData(p,0,0);const b=new Image;return b.onload=()=>{e.imageElement=b,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Denoise applicato (luma ${t}, color ${a}, sharp ${i})`,"polite")},b.src=o.toDataURL(),!0},applyGradientMap(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=r+a*(g-r),n=d+a*(u-d),o=m+a*(h-m);c[e]=c[e]*(1-p)+i*p,c[e+1]=c[e+1]*(1-p)+n*p,c[e+2]=c[e+2]*(1-p)+o*p}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Gradient Map applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0}};
 
 // Event Listeners
-document.getElementById("pixelate-size")?.addEventListener("input",(e=>{const t=document.getElementById("pixelate-size-value");t&&(t.textContent=e.target.value+" px")})),document.getElementById("btn-apply-pixelate")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("pixelate-size").value);applyStandardEffect('applyPixelate',[e])})),document.getElementById("glow-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("glow-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-glow")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("glow-intensity").value),t=document.getElementById("glow-color").value;applyStandardEffect('applyGlow',[e,t])})),document.getElementById("vignette-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("vignette-size")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-vignette")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("vignette-intensity").value),t=parseInt(document.getElementById("vignette-size").value);applyStandardEffect('applyVignette',[e,t])})),document.getElementById("sharpen-amount")?.addEventListener("input",(e=>{const t=document.getElementById("sharpen-amount-value"),a=document.getElementById("sharpen-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("sharpen-preset")?.addEventListener("change",(e=>{const t={light:50,medium:100,strong:150}[e.target.value],a=document.getElementById("sharpen-amount"),i=document.getElementById("sharpen-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-sharpen")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("sharpen-amount").value);applyStandardEffect('applySharpen',[e])})),document.getElementById("autolevels-strength")?.addEventListener("input",(e=>{const t=document.getElementById("autolevels-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-autolevels")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("autolevels-strength").value);applyStandardEffect('applyAutoLevels',[e])})),document.getElementById("noise-amount")?.addEventListener("input",(e=>{const t=document.getElementById("noise-amount-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-noise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("noise-amount").value),t=document.getElementById("noise-type").value;applyStandardEffect('applyNoise',[e,t])})),document.getElementById("temperature-value")?.addEventListener("input",(e=>{const t=document.getElementById("temperature-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("tint-value")?.addEventListener("input",(e=>{const t=document.getElementById("tint-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-temperature")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("temperature-value").value),t=parseInt(document.getElementById("tint-value").value);applyStandardEffect('applyTemperature',[e,t])})),document.getElementById("gradient-text-angle")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-angle-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("gradient-text-font-size")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-font-size-value");t&&(t.textContent=e.target.value+"px")})),document.getElementById("btn-create-gradient-text")?.addEventListener("click",(()=>{const e=document.getElementById("gradient-text-input").value;if(!e||""===e.trim())return void announceExtraAI("Inserisci un testo da creare","assertive");const t=document.getElementById("gradient-text-color1").value,a=document.getElementById("gradient-text-color2").value,i=parseInt(document.getElementById("gradient-text-angle").value),n=parseInt(document.getElementById("gradient-text-font-size").value);AdvancedEffects.createGradientText(e,t,a,i,n)})),document.getElementById("duotone-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("duotone-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-duotone")?.addEventListener("click",(()=>{const e=document.getElementById("duotone-color1").value,t=document.getElementById("duotone-color2").value,a=parseInt(document.getElementById("duotone-intensity").value);applyStandardEffect('applyDuotone',[e,t,a])})),document.getElementById("hsl-hue")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-hue-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("hsl-saturation")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-saturation-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("hsl-lightness")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-lightness-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("btn-apply-hsl")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("hsl-hue").value),t=parseInt(document.getElementById("hsl-saturation").value),a=parseInt(document.getElementById("hsl-lightness").value);applyStandardEffect('applyHSLShift',[e,t,a])})),document.getElementById("oil-brush-size")?.addEventListener("input",(e=>{const t=document.getElementById("oil-brush-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("oil-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("oil-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-oil")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("oil-brush-size").value),t=parseInt(document.getElementById("oil-intensity").value);applyStandardEffect('applyOilPainting',[e,t])}));document.getElementById("blur-radius")?.addEventListener("input",(e=>{const t=document.getElementById("blur-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-blur")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("blur-radius").value);applyStandardEffect('applyBlur',[e])})),document.getElementById("emboss-strength")?.addEventListener("input",(e=>{const t=document.getElementById("emboss-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-emboss")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("emboss-strength").value);applyStandardEffect('applyEmboss',[e])})),document.getElementById("edge-threshold")?.addEventListener("input",(e=>{const t=document.getElementById("edge-threshold-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-edge")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("edge-threshold").value),t=document.getElementById("edge-invert").value;applyStandardEffect('applyEdgeDetect',[e,t])})),document.getElementById("clarity-amount")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-amount-value"),a=document.getElementById("clarity-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("clarity-radius")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("clarity-preset")?.addEventListener("change",(e=>{const t={subtle:30,moderate:50,strong:80,extreme:120}[e.target.value],a=document.getElementById("clarity-amount"),i=document.getElementById("clarity-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-clarity")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("clarity-amount").value),t=parseInt(document.getElementById("clarity-radius").value);applyStandardEffect('applyClarity',[e,t])})),document.getElementById("denoise-luminance")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-luminance-value"),a=document.getElementById("denoise-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("denoise-color")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-color-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-sharpen")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-sharpen-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-preset")?.addEventListener("change",(e=>{const presets={light:[30,20,15],moderate:[50,30,20],strong:[70,50,30],aggressive:[85,70,40]},preset=presets[e.target.value];if(preset){const e=document.getElementById("denoise-luminance"),t=document.getElementById("denoise-color"),a=document.getElementById("denoise-sharpen");e&&(e.value=preset[0],document.getElementById("denoise-luminance-value").textContent=preset[0]),t&&(t.value=preset[1],document.getElementById("denoise-color-value").textContent=preset[1]),a&&(a.value=preset[2],document.getElementById("denoise-sharpen-value").textContent=preset[2])}})),document.getElementById("btn-apply-denoise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("denoise-luminance").value),t=parseInt(document.getElementById("denoise-color").value),a=parseInt(document.getElementById("denoise-sharpen").value);applyStandardEffect('applyDenoise',[e,t,a])})),document.getElementById("softlut-intensity")?.addEventListener("input",e=>{const t=document.getElementById("softlut-intensity-value");t&&(t.textContent=e.target.value)}),document.getElementById("btn-apply-softlut")?.addEventListener("click",()=>{const preset=document.getElementById("softlut-preset").value,intensity=parseInt(document.getElementById("softlut-intensity").value);applyStandardEffect('applySoftLUT',[preset,intensity])}),document.getElementById("posterize-levels")?.addEventListener("input",e=>{const t=document.getElementById("posterize-levels-value"),a=document.getElementById("posterize-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")}),document.getElementById("posterize-preset")?.addEventListener("change",e=>{const levels={low:4,medium:8,high:16}[e.target.value],input=document.getElementById("posterize-levels"),value=document.getElementById("posterize-levels-value");levels&&input&&(input.value=levels,value&&(value.textContent=levels))}),document.getElementById("btn-apply-posterize")?.addEventListener("click",()=>{const levels=parseInt(document.getElementById("posterize-levels").value);applyStandardEffect('applyPosterize',[levels])}),document.getElementById("invert-preset")?.addEventListener("change",e=>{const presets={full:[!0,!0,!0],cyan:[!1,!0,!0],magenta:[!0,!1,!0],yellow:[!0,!0,!1]},preset=presets[e.target.value];if(preset){const e=document.getElementById("invert-red"),t=document.getElementById("invert-green"),a=document.getElementById("invert-blue");e&&(e.checked=preset[0]),t&&(t.checked=preset[1]),a&&(a.checked=preset[2])}}),document.getElementById("btn-apply-invert")?.addEventListener("click",()=>{const r=document.getElementById("invert-red").checked,g=document.getElementById("invert-green").checked,b=document.getElementById("invert-blue").checked;applyStandardEffect('applyInvertColors',[r,g,b])}),document.getElementById("gradmap-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("gradmap-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("gradmap-preset")?.addEventListener("change",(e=>{const presets={goldenblue:["#d4a574","#4a90e2"],cyanred:["#1fa2a6","#e63946"],purpleorange:["#7209b7","#f77f00"],greenmint:["#2d6a4f","#95d5b2"],retrowarm:["#5a3a31","#f4dfc8"]},preset=presets[e.target.value];if(preset){const e=document.getElementById("gradmap-shadow"),t=document.getElementById("gradmap-highlight");e&&(e.value=preset[0]),t&&(t.value=preset[1])}})),document.getElementById("btn-apply-gradmap")?.addEventListener("click",(()=>{const e=document.getElementById("gradmap-shadow").value,t=document.getElementById("gradmap-highlight").value,a=parseInt(document.getElementById("gradmap-intensity").value);applyStandardEffect('applyGradientMap',[e,t,a])}));
+document.getElementById("pixelate-size")?.addEventListener("input",(e=>{const t=document.getElementById("pixelate-size-value");t&&(t.textContent=e.target.value+" px")})),document.getElementById("btn-apply-pixelate")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("pixelate-size").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyPixelate(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("glow-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("glow-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-glow")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("glow-intensity").value),t=document.getElementById("glow-color").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyGlow(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("vignette-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("vignette-size")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-vignette")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("vignette-intensity").value),t=parseInt(document.getElementById("vignette-size").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyVignette(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("sharpen-amount")?.addEventListener("input",(e=>{const t=document.getElementById("sharpen-amount-value"),a=document.getElementById("sharpen-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("sharpen-preset")?.addEventListener("change",(e=>{const t={light:50,medium:100,strong:150}[e.target.value],a=document.getElementById("sharpen-amount"),i=document.getElementById("sharpen-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-sharpen")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("sharpen-amount").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applySharpen(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("autolevels-strength")?.addEventListener("input",(e=>{const t=document.getElementById("autolevels-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-autolevels")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("autolevels-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyAutoLevels(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("noise-amount")?.addEventListener("input",(e=>{const t=document.getElementById("noise-amount-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-noise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("noise-amount").value),t=document.getElementById("noise-type").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyNoise(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("temperature-value")?.addEventListener("input",(e=>{const t=document.getElementById("temperature-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("tint-value")?.addEventListener("input",(e=>{const t=document.getElementById("tint-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-temperature")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("temperature-value").value),t=parseInt(document.getElementById("tint-value").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyTemperature(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("gradient-text-angle")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-angle-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("gradient-text-font-size")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-font-size-value");t&&(t.textContent=e.target.value+"px")})),document.getElementById("btn-create-gradient-text")?.addEventListener("click",(()=>{const e=document.getElementById("gradient-text-input").value;if(!e||""===e.trim())return void announceExtraAI("Inserisci un testo da creare","assertive");const t=document.getElementById("gradient-text-color1").value,a=document.getElementById("gradient-text-color2").value,i=parseInt(document.getElementById("gradient-text-angle").value),n=parseInt(document.getElementById("gradient-text-font-size").value);AdvancedEffects.createGradientText(e,t,a,i,n)})),document.getElementById("duotone-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("duotone-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-duotone")?.addEventListener("click",(()=>{const e=document.getElementById("duotone-color1").value,t=document.getElementById("duotone-color2").value,a=parseInt(document.getElementById("duotone-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDuotone(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("hsl-hue")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-hue-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("hsl-saturation")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-saturation-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("hsl-lightness")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-lightness-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("btn-apply-hsl")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("hsl-hue").value),t=parseInt(document.getElementById("hsl-saturation").value),a=parseInt(document.getElementById("hsl-lightness").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyHSLShift(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("oil-brush-size")?.addEventListener("input",(e=>{const t=document.getElementById("oil-brush-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("oil-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("oil-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-oil")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("oil-brush-size").value),t=parseInt(document.getElementById("oil-intensity").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyOilPainting(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")}));document.getElementById("blur-radius")?.addEventListener("input",(e=>{const t=document.getElementById("blur-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-blur")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("blur-radius").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyBlur(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("emboss-strength")?.addEventListener("input",(e=>{const t=document.getElementById("emboss-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-emboss")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("emboss-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyEmboss(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("edge-threshold")?.addEventListener("input",(e=>{const t=document.getElementById("edge-threshold-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-edge")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("edge-threshold").value),t=document.getElementById("edge-invert").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyEdgeDetect(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("clarity-amount")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-amount-value"),a=document.getElementById("clarity-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("clarity-radius")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("clarity-preset")?.addEventListener("change",(e=>{const t={subtle:30,moderate:50,strong:80,extreme:120}[e.target.value],a=document.getElementById("clarity-amount"),i=document.getElementById("clarity-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-clarity")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("clarity-amount").value),t=parseInt(document.getElementById("clarity-radius").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyClarity(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("denoise-luminance")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-luminance-value"),a=document.getElementById("denoise-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("denoise-color")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-color-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-sharpen")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-sharpen-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-preset")?.addEventListener("change",(e=>{const presets={light:[30,20,15],moderate:[50,30,20],strong:[70,50,30],aggressive:[85,70,40]},preset=presets[e.target.value];if(preset){const e=document.getElementById("denoise-luminance"),t=document.getElementById("denoise-color"),a=document.getElementById("denoise-sharpen");e&&(e.value=preset[0],document.getElementById("denoise-luminance-value").textContent=preset[0]),t&&(t.value=preset[1],document.getElementById("denoise-color-value").textContent=preset[1]),a&&(a.value=preset[2],document.getElementById("denoise-sharpen-value").textContent=preset[2])}})),document.getElementById("btn-apply-denoise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("denoise-luminance").value),t=parseInt(document.getElementById("denoise-color").value),a=parseInt(document.getElementById("denoise-sharpen").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDenoise(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("softlut-intensity")?.addEventListener("input",e=>{const t=document.getElementById("softlut-intensity-value");t&&(t.textContent=e.target.value)}),document.getElementById("btn-apply-softlut")?.addEventListener("click",()=>{const preset=document.getElementById("softlut-preset").value,intensity=parseInt(document.getElementById("softlut-intensity").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applySoftLUT(layer,preset,intensity):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("posterize-levels")?.addEventListener("input",e=>{const t=document.getElementById("posterize-levels-value"),a=document.getElementById("posterize-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")}),document.getElementById("posterize-preset")?.addEventListener("change",e=>{const levels={low:4,medium:8,high:16}[e.target.value],input=document.getElementById("posterize-levels"),value=document.getElementById("posterize-levels-value");levels&&input&&(input.value=levels,value&&(value.textContent=levels))}),document.getElementById("btn-apply-posterize")?.addEventListener("click",()=>{const levels=parseInt(document.getElementById("posterize-levels").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyPosterize(layer,levels):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("invert-preset")?.addEventListener("change",e=>{const presets={full:[!0,!0,!0],cyan:[!1,!0,!0],magenta:[!0,!1,!0],yellow:[!0,!0,!1]},preset=presets[e.target.value];if(preset){const e=document.getElementById("invert-red"),t=document.getElementById("invert-green"),a=document.getElementById("invert-blue");e&&(e.checked=preset[0]),t&&(t.checked=preset[1]),a&&(a.checked=preset[2])}}),document.getElementById("btn-apply-invert")?.addEventListener("click",()=>{const r=document.getElementById("invert-red").checked,g=document.getElementById("invert-green").checked,b=document.getElementById("invert-blue").checked,layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyInvertColors(layer,r,g,b):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("gradmap-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("gradmap-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("gradmap-preset")?.addEventListener("change",(e=>{const presets={goldenblue:["#d4a574","#4a90e2"],cyanred:["#1fa2a6","#e63946"],purpleorange:["#7209b7","#f77f00"],greenmint:["#2d6a4f","#95d5b2"],retrowarm:["#5a3a31","#f4dfc8"]},preset=presets[e.target.value];if(preset){const e=document.getElementById("gradmap-shadow"),t=document.getElementById("gradmap-highlight");e&&(e.value=preset[0]),t&&(t.value=preset[1])}})),document.getElementById("btn-apply-gradmap")?.addEventListener("click",(()=>{const e=document.getElementById("gradmap-shadow").value,t=document.getElementById("gradmap-highlight").value,a=parseInt(document.getElementById("gradmap-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyGradientMap(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")}));
 
 console.log("✅ Effetti Avanzati v41.1 COMPLETO - 17 Effetti (+ Clarity, Denoise, Gradient Map)");
 
