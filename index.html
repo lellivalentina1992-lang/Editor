@@ -752,13 +752,19 @@ label {
         return false;
     }
     
-    // Avvia il caricamento con fallback
-    loadGlfxWithFallback().then(success => {
-        if (!success) {
-            // Notifica l'utente (opzionale, da gestire nell'UI principale)
-            console.warn('⚠️ GPU effects unavailable. Basic editing features will still work.');
+    // Avvia il caricamento con fallback usando IIFE async per compatibilità
+    (async function initGlfx() {
+        try {
+            const success = await loadGlfxWithFallback();
+            if (!success) {
+                // Notifica l'utente (opzionale, da gestire nell'UI principale)
+                console.warn('⚠️ GPU effects unavailable. Basic editing features will still work.');
+            }
+        } catch (error) {
+            console.error('❌ Error during glfx initialization:', error);
+            window.glfxAvailable = false;
         }
-    });
+    })();
     
 })();
 
@@ -5452,6 +5458,33 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
     (function() {
         'use strict';
         
+        // ---- UTILITY FUNCTIONS PER SCREEN READER ----
+        
+        /**
+         * Annuncia messaggi agli screen reader
+         * @param {string} text - Testo da annunciare
+         * @param {boolean|string} assertive - 'assertive', 'polite', true o false
+         */
+        function announceGemini(text, assertive = false) {
+            // Gestisce sia booleani che stringhe 'polite'/'assertive'
+            let regionId;
+            if (typeof assertive === 'string') {
+                regionId = assertive === 'assertive' ? 'sr-assert' : 'sr-polite';
+            } else {
+                regionId = assertive ? 'sr-assert' : 'sr-polite';
+            }
+            
+            const region = document.getElementById(regionId);
+            
+            if (region) {
+                region.textContent = '';
+                setTimeout(() => { region.textContent = text; }, 50);
+            }
+        }
+        
+        // Esporta come funzione globale per compatibilità con altri script
+        window.announceGemini = announceGemini;
+        
         // ---- UTILITY FUNCTIONS PER GESTIONE ERRORI ----
         
         // Sistema di logging errori centralizzato
@@ -6891,6 +6924,7 @@ const state = window.state = {
                 state.renderTimeout = setTimeout(() => {
                     safeExecute(() => {
                         render();
+                        applyGlobalGPUEffects();
                         state.lastRenderTime = performance.now();
                         state.renderPending = false;
                         state.renderTimeout = null;
@@ -6915,7 +6949,7 @@ const state = window.state = {
          * @returns {Object} {top, bottom, left, right} in pixel
          */
         function getUniversalSafeZonePixels() {
-            const canvas = document.getElementById('mainCanvas');
+            const canvas = document.getElementById('canvas');
             if (!canvas) return {top: 0, bottom: 0, left: 0, right: 0};
             
             const safeZone = state.universalSafeZone;
@@ -6932,7 +6966,7 @@ const state = window.state = {
             if (!state.globalEffects.enabled) return;
             
             const effects = state.globalEffects.gpuEffects;
-            const canvas = document.getElementById('mainCanvas');
+            const canvas = document.getElementById('canvas');
             if (!canvas) return;
             
             const ctx = canvas.getContext('2d');
@@ -6940,6 +6974,13 @@ const state = window.state = {
             // Se tutti gli effetti sono a 0, skip
             const hasActiveEffects = Object.values(effects).some(v => v !== 0);
             if (!hasActiveEffects) return;
+            
+            // DEBUG TEMPORANEO - Verifica che la funzione venga chiamata
+            console.log('applyGlobalGPUEffects called', {
+                enabled: state.globalEffects.enabled,
+                hasActiveEffects,
+                effects: {...effects}
+            });
             
             try {
                 // Ottieni i dati dell'immagine
@@ -20086,23 +20127,9 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
   
   /**
    * Funzione di annuncio vocale per Gemini AI
+   * (Definita all'inizio dello script principale)
    */
-  function announceGemini(text, assertive = false) {
-    // Gestisce sia booleani che stringhe 'polite'/'assertive'
-    let regionId;
-    if (typeof assertive === 'string') {
-      regionId = assertive === 'assertive' ? 'sr-assert' : 'sr-polite';
-    } else {
-      regionId = assertive ? 'sr-assert' : 'sr-polite';
-    }
-    
-    const region = document.getElementById(regionId);
-    
-    if (region) {
-      region.textContent = '';
-      setTimeout(() => { region.textContent = text; }, 50);
-    }
-  }
+  // announceGemini è già definita globalmente all'inizio del file
   
   // ==================== FEATURE 1: DESCRIVI IMMAGINE CARICATA ====================
   
@@ -20742,17 +20769,7 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
   
   // ==================== FUNZIONI HELPER ====================
   
-  // Funzione globale per annunci screen reader
-  window.announceGemini = function(text, priority = 'polite') {
-    const regionId = priority === 'assertive' ? 'sr-assert' : 'sr-polite';
-    const region = document.getElementById(regionId);
-    if (region) {
-      region.textContent = '';
-      setTimeout(() => { region.textContent = text; }, 50);
-    }
-    console.log(`🔊 ${text}`);
-  };
-  
+  // announceGemini è già definita globalmente all'inizio del file come window.announceGemini
   // Alias locale per compatibilità
   const announceGemini = window.announceGemini;
   
