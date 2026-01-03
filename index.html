@@ -114,7 +114,7 @@
             
             // Timeout per fallback
             const timeout = setTimeout(() => {
-                console.warn('⚠️ Google Fonts timeout - Usando font di sistema');
+                console.warn(⚠️ Google Fonts timeout - Usando font di sistema');
                 window.googleFontsAvailable = false;
                 updateFontSelector();
             }, 3000);
@@ -6064,6 +6064,7 @@ const SAFE_ZONE_PADDING = 60; // Valore di default, sovrascritto da state.tpl.sa
 const state = window.state = {
             layers: [],
             selectedIds: [],
+            currentLayerIndex: 0, // Indice del layer corrente per effetti
             backgroundColor: '#ffffff',
             history: [],
             historyIndex: -1,
@@ -6933,6 +6934,26 @@ const state = window.state = {
             }
         }
         
+        // Funzione di render sincrono per export/fullscreen
+        // Assicura che il render sia completato prima di catturare l'immagine
+        function renderSync() {
+            try {
+                // Cancella eventuali render asincroni in sospeso
+                if (state.renderTimeout !== null) {
+                    clearTimeout(state.renderTimeout);
+                    state.renderTimeout = null;
+                }
+                
+                render();
+                applyGlobalGPUEffects();
+                state.lastRenderTime = performance.now();
+                state.renderPending = false;
+            } catch (error) {
+                console.error('Errore durante render sincrono:', error);
+                state.renderPending = false; // Reset anche in caso di errore
+            }
+        }
+        
 
         // ═══════════════════════════════════════════════════════════════
         // EFFETTI GPU GLOBALI - Funzioni di Applicazione
@@ -7294,6 +7315,11 @@ const state = window.state = {
                 
                 state.layers = validLayers;
                 
+                // Valida e aggiusta currentLayerIndex dopo la rimozione di layer corrotti
+                if (state.currentLayerIndex >= state.layers.length) {
+                    state.currentLayerIndex = Math.max(0, state.layers.length - 1);
+                }
+                
                 // 2. Pulisci selectedIds orfani
                 const validSelectedIds = state.selectedIds.filter(id => 
                     state.layers.find(l => l.id === id)
@@ -7451,6 +7477,8 @@ const state = window.state = {
             // Aggiungi al layer array
             state.layers.push(layer);
             state.selectedIds = [layer.id];
+            // Aggiorna anche currentLayerIndex per allineare selezione e target effetti
+            state.currentLayerIndex = state.layers.length - 1;
             
             // Salva stato
             try {
@@ -7524,6 +7552,11 @@ const state = window.state = {
             } else {
                 // Selezione singola
                 state.selectedIds = [layerId];
+                // Aggiorna anche currentLayerIndex per allineare selezione e target effetti
+                const index = state.layers.findIndex(l => l.id === layerId);
+                if (index !== -1) {
+                    state.currentLayerIndex = index;
+                }
                 announceGemini(`Selezionato: ${layer.name}`, 'polite');
             }
             
@@ -7566,6 +7599,11 @@ const state = window.state = {
             // Filtra layers
             state.layers = state.layers.filter(l => !state.selectedIds.includes(l.id));
             state.selectedIds = [];
+            
+            // Aggiorna currentLayerIndex per evitare index fuori range
+            if (state.currentLayerIndex >= state.layers.length) {
+                state.currentLayerIndex = Math.max(0, state.layers.length - 1);
+            }
             
             // Salva stato
             try {
@@ -7685,6 +7723,13 @@ const state = window.state = {
                 state.layers[index] = state.layers[index + 1];
                 state.layers[index + 1] = temp;
                 
+                // Aggiorna currentLayerIndex se punta al layer spostato
+                if (state.currentLayerIndex === index) {
+                    state.currentLayerIndex = index + 1;
+                } else if (state.currentLayerIndex === index + 1) {
+                    state.currentLayerIndex = index;
+                }
+                
                 saveState('Livello spostato su');
                 scheduleRender();
                 updateLayerList(); // Solo la lista
@@ -7699,6 +7744,13 @@ const state = window.state = {
                 const temp = state.layers[index];
                 state.layers[index] = state.layers[index - 1];
                 state.layers[index - 1] = temp;
+                
+                // Aggiorna currentLayerIndex se punta al layer spostato
+                if (state.currentLayerIndex === index) {
+                    state.currentLayerIndex = index - 1;
+                } else if (state.currentLayerIndex === index - 1) {
+                    state.currentLayerIndex = index;
+                }
                 
                 saveState('Livello spostato giù');
                 scheduleRender();
@@ -7861,6 +7913,11 @@ const state = window.state = {
                     return true;
                 });
 
+                // Valida e aggiusta currentLayerIndex
+                if (state.currentLayerIndex >= state.layers.length) {
+                    state.currentLayerIndex = Math.max(0, state.layers.length - 1);
+                }
+
                 // Mantieni la selezione attuale se valida
                 const currentSelectedIds = [...state.selectedIds];
                 state.selectedIds = [];
@@ -7880,6 +7937,7 @@ const state = window.state = {
                 // Ripristino sicuro: canvas vuoto piuttosto che stato corrotto
                 state.layers = [];
                 state.selectedIds = [];
+                state.currentLayerIndex = 0;
                 scheduleRender();
                 updateUI();
             }
@@ -10053,6 +10111,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             
             if (clickedLayer) {
                 state.selectedIds = [clickedLayer.id];
+                // Aggiorna anche currentLayerIndex per allineare selezione e target effetti
+                const index = state.layers.findIndex(l => l.id === clickedLayer.id);
+                if (index !== -1) {
+                    state.currentLayerIndex = index;
+                }
                 // RIMOSSO (ridondante): announceGemini(`Selezionato: ${clickedLayer.name}`, 'polite');
             } else {
                 state.selectedIds = [];
@@ -10227,13 +10290,16 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 // Render pulito senza selezioni
                 const selection = [...state.selectedIds];
                 state.selectedIds = [];
-                scheduleRender();
+                
+                // Usa renderSync per assicurare che il render sia completo prima di toBlob
+                renderSync();
+                
+                // Ripristina selezione SUBITO dopo il render per evitare race condition
+                state.selectedIds = selection;
                 
                 canvas.toBlob(blob => {
                     if (!blob) {
                         announceGemini('Errore nella creazione dell\'immagine', 'assertive');
-                        state.selectedIds = selection;
-                        scheduleRender();
                         return;
                     }
                     
@@ -10244,16 +10310,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     a.click();
                     URL.revokeObjectURL(url);
                     
-                    // Ripristina selezione
-                    state.selectedIds = selection;
-                    scheduleRender();
                     announceGemini('Immagine esportata come ' + format.toUpperCase(), 'assertive');
                 }, 'image/' + format);
             } catch (error) {
                 console.error('Errore esportazione:', error);
                 announceGemini('Errore durante l\'esportazione dell\'immagine', 'assertive');
-                state.selectedIds = selection;
-                scheduleRender();
             }
         }
         
@@ -10326,6 +10387,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     await Promise.all(imagePromises);
                     state.layers = newLayers;
                     state.selectedIds = [];
+                    
+                    // Valida e aggiusta currentLayerIndex
+                    if (state.currentLayerIndex >= state.layers.length) {
+                        state.currentLayerIndex = Math.max(0, state.layers.length - 1);
+                    }
                     
                     saveState('Progetto caricato');
                     scheduleRender();
@@ -13206,31 +13272,43 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             
             // Anteprima Fullscreen
             document.getElementById('btn-fullscreen').addEventListener('click', (e) => {
-                elementToFocusAfterFullscreen = e.target;
-                const fsCtx = fullscreenCanvas.getContext('2d');
-                fullscreenCanvas.width = state.tpl.w;
-                fullscreenCanvas.height = state.tpl.h;
-                
-                // Render pulito senza selezioni
-                const selection = [...state.selectedIds];
-                state.selectedIds = [];
-                scheduleRender(); 
-                fsCtx.drawImage(canvas, 0, 0);
-                state.selectedIds = selection;
-                scheduleRender();
-                
-                // Mostra l'anteprima fullscreen
-                fullscreenContainer.style.display = 'flex';
-                
-                // Prova a entrare in modalità fullscreen nativa del browser
-                if (fullscreenContainer.requestFullscreen) {
-                    fullscreenContainer.requestFullscreen();
-                } else if (fullscreenContainer.webkitRequestFullscreen) {
-                    fullscreenContainer.webkitRequestFullscreen();
-                } else if (fullscreenContainer.mozRequestFullScreen) {
-                    fullscreenContainer.mozRequestFullScreen();
-                } else if (fullscreenContainer.msRequestFullscreen) {
-                    fullscreenContainer.msRequestFullscreen();
+                try {
+                    elementToFocusAfterFullscreen = e.target;
+                    const fsCtx = fullscreenCanvas.getContext('2d');
+                    fullscreenCanvas.width = state.tpl.w;
+                    fullscreenCanvas.height = state.tpl.h;
+                    
+                    // Render pulito senza selezioni
+                    const selection = [...state.selectedIds];
+                    state.selectedIds = [];
+                    
+                    // Usa renderSync per assicurare che il render sia completo prima di drawImage
+                    renderSync();
+                    
+                    // Ripristina selezione SUBITO dopo il render
+                    state.selectedIds = selection;
+                    
+                    fsCtx.drawImage(canvas, 0, 0);
+                    
+                    // Re-renderizza il canvas principale per mostrare la selezione
+                    scheduleRender();
+                    
+                    // Mostra l'anteprima fullscreen
+                    fullscreenContainer.style.display = 'flex';
+                    
+                    // Prova a entrare in modalità fullscreen nativa del browser
+                    if (fullscreenContainer.requestFullscreen) {
+                        fullscreenContainer.requestFullscreen();
+                    } else if (fullscreenContainer.webkitRequestFullscreen) {
+                        fullscreenContainer.webkitRequestFullscreen();
+                    } else if (fullscreenContainer.mozRequestFullScreen) {
+                        fullscreenContainer.mozRequestFullScreen();
+                    } else if (fullscreenContainer.msRequestFullscreen) {
+                        fullscreenContainer.msRequestFullscreen();
+                    }
+                } catch (error) {
+                    console.error('Errore fullscreen:', error);
+                    announceGemini('Errore durante l\'anteprima fullscreen', 'assertive');
                 }
             });
             // Gestione eventi fullscreen per tutti i browser
@@ -20451,6 +20529,9 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
         btnDescribeCanvas.disabled = true;
         btnDescribeCanvas.textContent = '⏳ Analisi...';
         
+        // Assicura che il canvas sia completamente renderizzato prima della cattura
+        renderSync();
+        
         // ✅ v39.0: Ottimizza immagine per API (max 2048px, riduce timeout risk)
         currentCanvasImage = getOptimizedCanvasImage(canvas, 2048, 0.85);
         
@@ -21001,6 +21082,8 @@ Sii specifico ma conciso. Usa ⚠️ per problemi critici.`;
           state.layers.push(newLayer);
           // Usa selectedIds invece di selected per coerenza
           state.selectedIds = [newLayer.id];
+          // Aggiorna anche currentLayerIndex per allineare selezione e target effetti
+          state.currentLayerIndex = state.layers.length - 1;
         }
         
         if (window.updateUI) window.updateUI();
@@ -21466,6 +21549,8 @@ NON aggiungere testo prima o dopo il JSON.`
             state.layers.push(newLayer);
             // Usa selectedIds invece di selected per coerenza
             state.selectedIds = [newLayer.id];
+            // Aggiorna anche currentLayerIndex per allineare selezione e target effetti
+            state.currentLayerIndex = state.layers.length - 1;
           }
           
           if (window.updateUI) window.updateUI();
