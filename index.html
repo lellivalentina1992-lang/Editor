@@ -114,7 +114,7 @@
             
             // Timeout per fallback
             const timeout = setTimeout(() => {
-                console.warn(⚠️ Google Fonts timeout - Usando font di sistema');
+                console.warn('⚠️ Google Fonts timeout - Usando font di sistema');
                 window.googleFontsAvailable = false;
                 updateFontSelector();
             }, 3000);
@@ -144,7 +144,7 @@
          * Aggiorna il selettore font in base alla disponibilità
          */
         function updateFontSelector() {
-            const selector = document.getElementById('font-family');
+            const selector = document.getElementById('ff');
             if (!selector) {
                 // Selector non ancora nel DOM, riprova tra 100ms
                 setTimeout(updateFontSelector, 100);
@@ -2339,33 +2339,31 @@ label {
                         <fieldset style="border: none; padding: 0; margin: 0;">
                             <legend style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">Tipo di Sfondo Canvas</legend>
                             <div class="control-group">
-                                <label for="bg-type" class="sr-only">Scegli come riempire lo sfondo</label>
                                 <select id="bg-type">
-                                    <option value="color">Colore Solido: un solo colore uniforme</option>
-                                    <option value="gradient">Gradiente: sfumatura tra due colori</option>
-                                    <option value="image">Immagine: foto o texture di sfondo</option>
+                                    <option value="color">Colore solido</option>
+                                    <option value="gradient">Gradiente</option>
+                                    <option value="image">Immagine</option>
                                 </select>
                             </div>
                         </fieldset>
                         
                         <div class="control-group" id="bg-color-controls">
                             <strong class="control-group-title">Colore</strong>
-                            <label for="bg-color-preset" class="sr-only">Colore sfondo</label>
-                            <select id="bg-color-preset">
-                                <option value="#ffffff" selected>Bianco</option>
+                            <select id="c">
+                                <option value="white" selected>Bianco</option>
                                 <option value="transparent">Trasparente</option>
-                                <option value="#000000">Nero</option>
-                                <option value="#ff0000">Rosso</option>
-                                <option value="#00ff00">Verde</option>
-                                <option value="#0000ff">Blu</option>
-                                <option value="#ffff00">Giallo</option>
-                                <option value="#ff00ff">Magenta</option>
-                                <option value="#00ffff">Ciano</option>
-                                <option value="#ffa500">Arancione</option>
-                                <option value="#800080">Viola</option>
-                                <option value="#ffc0cb">Rosa</option>
-                                <option value="#808080">Grigio</option>
-                                <option value="#a52a2a">Marrone</option>
+                                <option value="black">Nero</option>
+                                <option value="red">Rosso</option>
+                                <option value="green">Verde</option>
+                                <option value="blue">Blu</option>
+                                <option value="yellow">Giallo</option>
+                                <option value="magenta">Magenta</option>
+                                <option value="cyan">Ciano</option>
+                                <option value="orange">Arancione</option>
+                                <option value="purple">Viola</option>
+                                <option value="pink">Rosa</option>
+                                <option value="gray">Grigio</option>
+                                <option value="brown">Marrone</option>
                                 <option value="custom">Personalizzato...</option>
                             </select>
                             
@@ -2402,30 +2400,32 @@ label {
                     
                     <!-- CONTROLLI GRADIENTE (mostrati quando si seleziona gradiente) -->
                     <div class="control-group" id="bg-gradient-controls" style="display:none; margin-top: 16px;">
+                        
+                        <!-- Toggle HEX/RGB (FUORI dal fieldset per non confondere NVDA) -->
+                        <div role="radiogroup" aria-label="Formato colore" style="margin-bottom: 12px; display: flex; gap: 10px;">
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="radio" name="bg-color-format" value="hex" checked style="margin-right: 6px;">
+                                <span>Codice HEX</span>
+                            </label>
+                            <label style="display: flex; align-items: center; cursor: pointer;">
+                                <input type="radio" name="bg-color-format" value="rgb" style="margin-right: 6px;">
+                                <span>Valori RGB</span>
+                            </label>
+                        </div>
+                        
                         <fieldset style="border: none; padding: 0; margin: 0;">
                             <legend style="font-weight: 600; font-size: 14px; margin-bottom: 12px;">Configurazione Gradiente</legend>
-                            
-                            <!-- Toggle HEX/RGB -->
-                            <div style="margin-bottom: 12px; display: flex; gap: 10px;">
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="radio" name="bg-color-format" value="hex" checked style="margin-right: 6px;">
-                                    <span>Codice HEX</span>
-                                </label>
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="radio" name="bg-color-format" value="rgb" style="margin-right: 6px;">
-                                    <span>Valori RGB</span>
-                                </label>
-                            </div>
                             
                             <!-- Colore 1 -->
                             <strong class="control-group-title">Colore 1</strong>
                             <div class="control-row">
                                 <div class="input-with-label" id="bg-gradient-hex-controls">
+                                    <label for="bg-gradient-color1-hex" class="sr-only">Codice HEX Colore 1</label>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="color" id="bg-gradient-color1" value="#3b82f6"
+                                        <input type="color" id="bg-gradient-color1" value="#3b82f6" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="bg-gradient-color1-hex" value="#3b82f6"
-                                               placeholder="#000000" maxlength="7"
+                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX Colore 1"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
@@ -2455,11 +2455,12 @@ label {
                             <strong class="control-group-title" style="margin-top: 16px; display: block;">Colore 2</strong>
                             <div class="control-row">
                                 <div class="input-with-label" id="bg-gradient-hex-controls-2">
+                                    <label for="bg-gradient-color2-hex" class="sr-only">Codice HEX Colore 2</label>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="color" id="bg-gradient-color2" value="#8b5cf6"
+                                        <input type="color" id="bg-gradient-color2" value="#8b5cf6" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="bg-gradient-color2-hex" value="#8b5cf6"
-                                               placeholder="#ffffff" maxlength="7"
+                                               placeholder="#ffffff" maxlength="7" aria-label="Codice HEX Colore 2"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
@@ -2520,11 +2521,18 @@ label {
                         <div class="input-with-label" style="margin-top:12px;">
                             <label for="bg-image-fit">Adattamento</label>
                             <select id="bg-image-fit">
-                                <option value="cover" selected>Copri tutto (taglia se necessario)</option>
-                                <option value="contain">Contenuto (mostra tutto)</option>
+                                <option value="cover" selected>Copri tutto</option>
+                                <option value="contain">Contenuto</option>
                                 <option value="stretch">Allunga</option>
-                                <option value="tile">Ripeti (pattern)</option>
+                                <option value="tile">Ripeti</option>
                             </select>
+                        </div>
+                        
+                        <!-- NOTA INFORMATIVA -->
+                        <div style="margin-top: 12px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
+                                <strong>💡 Nota:</strong> Per modificare l'immagine di sfondo (dimensioni, posizione, filtri, effetti), selezionala nel pannello <strong>"Livelli"</strong> e usa <strong>"Modifica Livello"</strong> (sezione 8).
+                            </p>
                         </div>
                     </div>
                     
@@ -2584,6 +2592,13 @@ label {
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- NOTA INFORMATIVA -->
+                        <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
+                                <strong>💡 Nota:</strong> Dopo aver aggiunto l'immagine, usa il pannello <strong>"Modifica Livello"</strong> (sezione 8) per applicare filtri, effetti, rotazione, opacità e ritaglio.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2607,8 +2622,7 @@ label {
                         
                         <div class="control-group">
                             <strong class="control-group-title">Font</strong>
-                            <label for="new-font-family" class="sr-only">Famiglia font</label>
-                            <select id="new-font-family">
+                            <select id="nff">
                                 <option value="Arial" selected>Arial</option>
                                 <option value="Montserrat">Montserrat</option>
                                 <option value="Open Sans">Open Sans</option>
@@ -2637,8 +2651,8 @@ label {
                                     <input type="number" id="new-font-size" min="8" max="200" value="32">
                                 </div>
                                 <div class="input-with-label">
-                                    <label for="new-font-weight">Peso</label>
-                                    <select id="new-font-weight">
+                                    <label for="nfw">Peso</label>
+                                    <select id="nfw">
                                         <option value="100">Thin 100</option>
                                         <option value="200">Extra Light 200</option>
                                         <option value="300">Light 300</option>
@@ -2655,23 +2669,23 @@ label {
                         
                         <div class="control-group">
                             <strong class="control-group-title">Colore</strong>
-                            <label for="text-color-preset" class="sr-only">Seleziona colore testo</label>
-                            <select id="text-color-preset" aria-describedby="text-color-preset-desc">
-                                <option value="#000000">Nero</option>
-                                <option value="#ffffff">Bianco</option>
-                                <option value="#ff0000">Rosso</option>
-                                <option value="#00ff00">Verde</option>
-                                <option value="#0000ff">Blu</option>
-                                <option value="#ffff00">Giallo</option>
-                                <option value="#ff00ff">Magenta</option>
-                                <option value="#00ffff">Ciano</option>
-                                <option value="#ffa500">Arancione</option>
-                                <option value="#800080">Viola</option>
-                                <option value="#ffc0cb">Rosa</option>
-                                <option value="#808080">Grigio</option>
-                                <option value="#a52a2a">Marrone</option>
-                                <option value="#ffd700">Oro</option>
-                                <option value="#c0c0c0">Argento</option>
+                            <label for="tc" class="sr-only">Seleziona colore testo</label>
+                            <select id="tc">
+                                <option value="black">Nero</option>
+                                <option value="white">Bianco</option>
+                                <option value="red">Rosso</option>
+                                <option value="green">Verde</option>
+                                <option value="blue">Blu</option>
+                                <option value="yellow">Giallo</option>
+                                <option value="magenta">Magenta</option>
+                                <option value="cyan">Ciano</option>
+                                <option value="orange">Arancione</option>
+                                <option value="purple">Viola</option>
+                                <option value="pink">Rosa</option>
+                                <option value="gray">Grigio</option>
+                                <option value="brown">Marrone</option>
+                                <option value="gold">Oro</option>
+                                <option value="silver">Argento</option>
                                 <option value="custom">Personalizzato...</option>
                             </select>
                             
@@ -2703,6 +2717,13 @@ label {
                                     <span id="text-color-preview-text" style="font-size: 12px; color: var(--text-secondary);">Anteprima colore</span>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- NOTA INFORMATIVA -->
+                        <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
+                                <strong>💡 Nota:</strong> Dopo aver aggiunto il testo, usa il pannello <strong>"Modifica Livello"</strong> (sezione 8) per cambiare posizione, rotazione, opacità, ombra e altri effetti avanzati.
+                            </p>
                         </div>
                         
                         <div style="margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--border-color);">
@@ -2828,6 +2849,13 @@ label {
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- NOTA INFORMATIVA -->
+                        <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
+                                <strong>💡 Nota:</strong> Dopo aver aggiunto la forma, usa il pannello <strong>"Modifica Livello"</strong> (sezione 8) per cambiare dimensioni, posizione, rotazione e opacità.
+                            </p>
                         </div>
                     </div>
                     
@@ -2955,6 +2983,13 @@ label {
                             <div class="vector-info-title">Punti posizionati</div>
                             <div class="vector-info-text" id="vector-points-count">Nessun punto</div>
                         </div>
+                        
+                        <!-- NOTA INFORMATIVA -->
+                        <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
+                                <strong>💡 Nota:</strong> Dopo aver creato il disegno, usa il pannello <strong>"Modifica Livello"</strong> (sezione 8) per cambiare colori, dimensioni, posizione, rotazione e opacità.
+                            </p>
+                        </div>
                     </div>
                     
                     <!-- PULSANTE TOGGLE AVANZATE -->
@@ -2969,33 +3004,33 @@ label {
                             <strong class="control-group-title">Colori</strong>
                             <div class="control-row">
                                 <div class="input-with-label">
-                                    <label for="vector-fill-color">Riempimento</label>
-                                    <select id="vector-fill-color">
-                                        <option value="#3b82f6" selected>Blu</option>
-                                        <option value="#000000">Nero</option>
-                                        <option value="#ffffff">Bianco</option>
-                                        <option value="#ff0000">Rosso</option>
-                                        <option value="#00ff00">Verde</option>
-                                        <option value="#ffff00">Giallo</option>
-                                        <option value="#ff00ff">Magenta</option>
-                                        <option value="#00ffff">Ciano</option>
-                                        <option value="#ffa500">Arancione</option>
-                                        <option value="#800080">Viola</option>
-                                        <option value="#ffc0cb">Rosa</option>
+                                    <label for="vfc" class="sr-only">Riempimento</label>
+                                    <select id="vfc">
+                                        <option value="lightblue" selected>Blu</option>
+                                        <option value="black">Nero</option>
+                                        <option value="white">Bianco</option>
+                                        <option value="red">Rosso</option>
+                                        <option value="green">Verde</option>
+                                        <option value="yellow">Giallo</option>
+                                        <option value="magenta">Magenta</option>
+                                        <option value="cyan">Ciano</option>
+                                        <option value="orange">Arancione</option>
+                                        <option value="purple">Viola</option>
+                                        <option value="pink">Rosa</option>
                                     </select>
                                 </div>
                                 <div class="input-with-label">
-                                    <label for="vector-stroke-color">Bordo</label>
-                                    <select id="vector-stroke-color">
-                                        <option value="#1e40af" selected>Blu Scuro</option>
-                                        <option value="#000000">Nero</option>
-                                        <option value="#ffffff">Bianco</option>
-                                        <option value="#ff0000">Rosso</option>
-                                        <option value="#00ff00">Verde</option>
-                                        <option value="#0000ff">Blu</option>
-                                        <option value="#ffff00">Giallo</option>
-                                        <option value="#800080">Viola</option>
-                                        <option value="#ffa500">Arancione</option>
+                                    <label for="vsc" class="sr-only">Bordo</label>
+                                    <select id="vsc">
+                                        <option value="darkblue" selected>Blu Scuro</option>
+                                        <option value="black">Nero</option>
+                                        <option value="white">Bianco</option>
+                                        <option value="red">Rosso</option>
+                                        <option value="green">Verde</option>
+                                        <option value="blue">Blu</option>
+                                        <option value="yellow">Giallo</option>
+                                        <option value="purple">Viola</option>
+                                        <option value="orange">Arancione</option>
                                     </select>
                                 </div>
                             </div>
@@ -3069,9 +3104,8 @@ label {
                     
                     <div class="control-group" id="font-controls" class="hidden">
                         <strong class="control-group-title">Font</strong>
-                        <label for="font-family" class="sr-only">Famiglia font</label>
                         <!-- Select popolato dinamicamente in base a connettività -->
-                        <select id="font-family">
+                        <select id="ff">
                             <option value="Arial">Caricamento font...</option>
                         </select>
                     
@@ -3081,8 +3115,8 @@ label {
                                 <input type="number" id="font-size" min="8" max="200" value="32">
                             </div>
                             <div class="input-with-label">
-                                <label for="font-weight">Peso</label>
-                                <select id="font-weight">
+                                <label for="fw">Peso</label>
+                                <select id="fw">
                                     <option value="100">Thin 100</option>
                                     <option value="200">Extra Light 200</option>
                                     <option value="300">Light 300</option>
@@ -3159,21 +3193,20 @@ label {
                     
                     <div class="control-group" id="color-controls" class="hidden">
                         <strong class="control-group-title">Colore</strong>
-                        <label for="layer-color-preset" class="sr-only">Colore layer</label>
-                        <select id="layer-color-preset">
-                            <option value="#000000">Nero</option>
-                            <option value="#ffffff">Bianco</option>
-                            <option value="#ff0000">Rosso</option>
-                            <option value="#00ff00">Verde</option>
-                            <option value="#0000ff">Blu</option>
-                            <option value="#ffff00">Giallo</option>
-                            <option value="#ff00ff">Magenta</option>
-                            <option value="#00ffff">Ciano</option>
-                            <option value="#ffa500">Arancione</option>
-                            <option value="#800080">Viola</option>
-                            <option value="#ffc0cb">Rosa</option>
-                            <option value="#808080">Grigio</option>
-                            <option value="#a52a2a">Marrone</option>
+                        <select id="lc">
+                            <option value="black">Nero</option>
+                            <option value="white">Bianco</option>
+                            <option value="red">Rosso</option>
+                            <option value="green">Verde</option>
+                            <option value="blue">Blu</option>
+                            <option value="yellow">Giallo</option>
+                            <option value="magenta">Magenta</option>
+                            <option value="cyan">Ciano</option>
+                            <option value="orange">Arancione</option>
+                            <option value="purple">Viola</option>
+                            <option value="pink">Rosa</option>
+                            <option value="gray">Grigio</option>
+                            <option value="brown">Marrone</option>
                             <option value="custom">Personalizzato...</option>
                             <option value="eyedropper">Usa Contagocce</option>
                         </select>
@@ -3219,9 +3252,9 @@ label {
                                 <label for="gradient-type">
                                     <strong>Tipo di Gradiente Layer</strong>
                                 </label>
-                                <select id="gradient-type" aria-label="Scegli il tipo di gradiente per questo elemento">
-                                    <option value="linear">Lineare: sfumatura dritta da sinistra a destra</option>
-                                    <option value="radial">Radiale: sfumatura circolare dal centro ai bordi</option>
+                                <select id="gradient-type" aria-label="Tipo di gradiente">
+                                    <option value="linear">Lineare</option>
+                                    <option value="radial">Radiale</option>
                                 </select>
                             </div>
                             
@@ -3275,19 +3308,19 @@ label {
                         <div id="stroke-controls" class="hidden">
                             <div class="control-row">
                                 <div class="input-with-label">
-                                    <label for="stroke-color">Colore Bordo</label>
-                                    <select id="stroke-color">
-                                        <option value="#000000" selected>Nero</option>
-                                        <option value="#ffffff">Bianco</option>
-                                        <option value="#ff0000">Rosso</option>
-                                        <option value="#00ff00">Verde</option>
-                                        <option value="#0000ff">Blu</option>
-                                        <option value="#ffff00">Giallo</option>
-                                        <option value="#ff00ff">Magenta</option>
-                                        <option value="#00ffff">Ciano</option>
-                                        <option value="#ffa500">Arancione</option>
-                                        <option value="#800080">Viola</option>
-                                        <option value="#ffc0cb">Rosa</option>
+                                    <label for="sc" class="sr-only">Colore Bordo</label>
+                                    <select id="sc">
+                                        <option value="black" selected>Nero</option>
+                                        <option value="white">Bianco</option>
+                                        <option value="red">Rosso</option>
+                                        <option value="green">Verde</option>
+                                        <option value="blue">Blu</option>
+                                        <option value="yellow">Giallo</option>
+                                        <option value="magenta">Magenta</option>
+                                        <option value="cyan">Ciano</option>
+                                        <option value="orange">Arancione</option>
+                                        <option value="purple">Viola</option>
+                                        <option value="pink">Rosa</option>
                                     </select>
                                 </div>
                                 <div class="input-with-label">
@@ -3544,20 +3577,20 @@ label {
                         
                         <div id="shadow-controls" class="hidden">
                             <div class="input-with-label">
-                                <label for="shadow-color">Colore</label>
-                                <select id="shadow-color">
-                                    <option value="#000000" selected>Nero</option>
-                                    <option value="#808080">Grigio</option>
-                                    <option value="#ffffff">Bianco</option>
-                                    <option value="#ff0000">Rosso</option>
-                                    <option value="#00ff00">Verde</option>
-                                    <option value="#0000ff">Blu</option>
-                                    <option value="#ffff00">Giallo</option>
-                                    <option value="#ff00ff">Magenta</option>
-                                    <option value="#00ffff">Ciano</option>
-                                    <option value="#ffa500">Arancione</option>
-                                    <option value="#800080">Viola</option>
-                                    <option value="#ffc0cb">Rosa</option>
+                                <label for="shc" class="sr-only">Colore</label>
+                                <select id="shc">
+                                    <option value="black" selected>Nero</option>
+                                    <option value="gray">Grigio</option>
+                                    <option value="white">Bianco</option>
+                                    <option value="red">Rosso</option>
+                                    <option value="green">Verde</option>
+                                    <option value="blue">Blu</option>
+                                    <option value="yellow">Giallo</option>
+                                    <option value="magenta">Magenta</option>
+                                    <option value="cyan">Ciano</option>
+                                    <option value="orange">Arancione</option>
+                                    <option value="purple">Viola</option>
+                                    <option value="pink">Rosa</option>
                                 </select>
                             </div>
                             
@@ -3865,9 +3898,9 @@ label {
                                 <label for="sharpen-preset">Preset Rapido</label>
                                 <select id="sharpen-preset">
                                     <option value="custom">Personalizzato</option>
-                                    <option value="light">Leggero (dettagli sottili)</option>
-                                    <option value="medium" selected>Medio (uso generale)</option>
-                                    <option value="strong">Forte (massima nitidezza)</option>
+                                    <option value="light">Leggero</option>
+                                    <option value="medium" selected>Medio</option>
+                                    <option value="strong">Forte</option>
                                 </select>
                             </div>
                             <div class="input-with-label">
@@ -3968,8 +4001,8 @@ label {
                             <div class="input-with-label">
                                 <label for="noise-type">Tipo Grana</label>
                                 <select id="noise-type">
-                                    <option value="mono">Monocromatica (B&N Film)</option>
-                                    <option value="color">Colorata (Film a colori)</option>
+                                    <option value="mono">Monocromatica</option>
+                                    <option value="color">Colorata</option>
                                 </select>
                             </div>
                             <div class="input-with-label">
@@ -4304,10 +4337,10 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                                 <label for="clarity-preset">Preset Rapido</label>
                                 <select id="clarity-preset">
                                     <option value="custom">Personalizzato</option>
-                                    <option value="subtle">Sottile (ritratti delicati)</option>
-                                    <option value="moderate" selected>Moderato (uso generale)</option>
-                                    <option value="strong">Forte (paesaggi drammatici)</option>
-                                    <option value="extreme">Estremo (HDR effect)</option>
+                                    <option value="subtle">Sottile</option>
+                                    <option value="moderate" selected>Moderato</option>
+                                    <option value="strong">Forte</option>
+                                    <option value="extreme">Estremo</option>
                                 </select>
                             </div>
                             <div class="input-with-label">
@@ -4344,10 +4377,10 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                                 <label for="denoise-preset">Preset Rapido</label>
                                 <select id="denoise-preset">
                                     <option value="custom">Personalizzato</option>
-                                    <option value="light">Leggero (pulizia sottile)</option>
-                                    <option value="moderate" selected>Moderato (foto normali)</option>
-                                    <option value="strong">Forte (ISO alto)</option>
-                                    <option value="aggressive">Aggressivo (rumore estremo)</option>
+                                    <option value="light">Leggero</option>
+                                    <option value="moderate" selected>Moderato</option>
+                                    <option value="strong">Forte</option>
+                                    <option value="aggressive">Aggressivo</option>
                                 </select>
                             </div>
                             <div class="input-with-label">
@@ -4391,11 +4424,11 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                                 <label for="gradmap-preset">Preset Creativi</label>
                                 <select id="gradmap-preset">
                                     <option value="custom">Personalizzato</option>
-                                    <option value="goldenblue">Golden Hour (oro→blu)</option>
-                                    <option value="cyanred">Cinema Teal (ciano→rosso)</option>
-                                    <option value="purpleorange">Sunset Dream (viola→arancio)</option>
-                                    <option value="greenmint">Nature Fresh (verde→menta)</option>
-                                    <option value="retrowarm">Retro Warm (marrone→crema)</option>
+                                    <option value="goldenblue">Golden Hour</option>
+                                    <option value="cyanred">Cinema Teal</option>
+                                    <option value="purpleorange">Sunset Dream</option>
+                                    <option value="greenmint">Nature Fresh</option>
+                                    <option value="retrowarm">Retro Warm</option>
                                 </select>
                             </div>
                             <div class="input-with-label">
@@ -4705,10 +4738,10 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                     <div class="input-with-label">
                         <label for="curves-preset" style="color: rgba(255,255,255,0.9);">Preset Curva</label>
                         <select id="curves-preset" style="background: rgba(255,255,255,0.95); color: #667eea;">
-                            <option value="linear">Lineare (nessun effetto)</option>
-                            <option value="scurve">S-Curve (contrasto medio)</option>
-                            <option value="fade">Fade (stile vintage)</option>
-                            <option value="contrast">High Contrast (drammatico)</option>
+                            <option value="linear">Lineare</option>
+                            <option value="scurve">S-Curve</option>
+                            <option value="fade">Fade</option>
+                            <option value="contrast">High Contrast</option>
                         </select>
                     </div>
                     <button class="btn btn-full gpu-apply-btn" id="btn-apply-curves" aria-label="Applica effetto Curves Pro GPU">
@@ -5792,7 +5825,7 @@ Errori registrati: ${errorLog.length}
         let audioCtx;
         
         // Layer Color Controls (usati in updateUI e nei listener)
-        const layerColorPreset = document.getElementById('layer-color-preset');
+        const layerColorPreset = document.getElementById('lc');
         const layerColorCustomSection = document.getElementById('layer-color-custom-section');
         const layerColorHex = document.getElementById('layer-color-hex');
         const layerColorR = document.getElementById('layer-color-r');
@@ -8662,11 +8695,6 @@ const state = window.state = {
         function renderImage(layer) {
             if (!layer.imageElement) return;
             
-            // Applica filtri
-            if (layer.filters) {
-                applyImageFilters(layer);
-            }
-            
             // Maschera di Ritaglio
             const maskType = layer.maskShape || layer.mask;
             if (maskType && maskType !== 'none') {
@@ -8753,6 +8781,11 @@ const state = window.state = {
                 }
                 
                 ctx.clip();
+            }
+            
+            // Applica filtri CSS prima di disegnare
+            if (layer.filters) {
+                applyImageFilters(layer);
             }
             
             // Flip
@@ -8844,6 +8877,9 @@ const state = window.state = {
             }
             if (f.blur > 0) {
                 filterString += `blur(${f.blur}px) `;
+            }
+            if (f.invert > 0) {
+                filterString += `invert(${f.invert}%) `;
             }
             
             ctx.filter = filterString || 'none';
@@ -9694,6 +9730,76 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
         }
         
         // ═══════════════════════════════════════════════════════════════
+        // MAPPA COLORI GLOBALE - Converte nomi in codici HEX
+        // ═══════════════════════════════════════════════════════════════
+        const COLOR_MAP = {
+            // Nomi inglesi (mantenuti per retrocompatibilità)
+            'white': '#ffffff',
+            'black': '#000000',
+            'red': '#ff0000',
+            'green': '#00ff00',
+            'blue': '#0000ff',
+            'yellow': '#ffff00',
+            'magenta': '#ff00ff',
+            'cyan': '#00ffff',
+            'orange': '#ffa500',
+            'purple': '#800080',
+            'pink': '#ffc0cb',
+            'gray': '#808080',
+            'grey': '#808080',
+            'brown': '#a52a2a',
+            'gold': '#ffd700',
+            'silver': '#c0c0c0',
+            'darkblue': '#1e40af',
+            'lightblue': '#3b82f6',
+            'transparent': 'transparent',
+            // Nomi italiani (per accessibilità NVDA)
+            'Bianco': '#ffffff',
+            'Nero': '#000000',
+            'Rosso': '#ff0000',
+            'Verde': '#00ff00',
+            'Blu': '#0000ff',
+            'Giallo': '#ffff00',
+            'Magenta': '#ff00ff',
+            'Ciano': '#00ffff',
+            'Arancione': '#ffa500',
+            'Viola': '#800080',
+            'Rosa': '#ffc0cb',
+            'Grigio': '#808080',
+            'Marrone': '#a52a2a',
+            'Trasparente': 'transparent',
+            // Alias per gestire anche "custom"
+            'custom': null,
+            'Personalizzato': null
+        };
+        
+        // Funzione helper globale per ottenere il codice HEX da un nome o value
+        function getColorHex(value) {
+            // Se è già un codice HEX, ritorna così com'è
+            if (value && value.startsWith('#')) return value;
+            // Se è nella mappa, ritorna il valore mappato
+            if (COLOR_MAP[value]) return COLOR_MAP[value];
+            // Altrimenti ritorna il valore originale
+            return value;
+        }
+        
+        // Funzione inversa globale: converte HEX in nome (per popolare i select)
+        function getColorName(hexValue) {
+            // Se è transparent, ritorna così
+            if (hexValue === 'transparent') return 'transparent';
+            // Se non è un HEX, ritorna così
+            if (!hexValue || !hexValue.startsWith('#')) return hexValue;
+            // Cerca nella mappa il nome corrispondente
+            for (const [name, hex] of Object.entries(COLOR_MAP)) {
+                if (hex.toLowerCase() === hexValue.toLowerCase()) {
+                    return name;
+                }
+            }
+            // Se non trovato, ritorna 'custom' per permettere uso colori personalizzati
+            return 'custom';
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
         // FIX: updateLayerColorPreview - Funzione globale per anteprima colore
         // ═══════════════════════════════════════════════════════════════
         function updateLayerColorPreview(color) {
@@ -9729,10 +9835,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             
             // Popola controlli comuni - aggiornato per nuovo sistema colore
             const layerColor = layer.color || '#000000';
-            // Verifica se il colore è nei preset
-            const presetOption = Array.from(layerColorPreset.options).find(opt => opt.value === layerColor);
-            if (presetOption) {
-                layerColorPreset.value = layerColor;
+            // Converte HEX in nome per il preset
+            const colorName = getColorName(layerColor);
+            if (colorName !== 'custom') {
+                layerColorPreset.value = colorName;
                 layerColorCustomSection.style.display = 'none';
             } else {
                 layerColorPreset.value = 'custom';
@@ -9772,7 +9878,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 strokeControls.classList.add('hidden');
             }
             if (layer.stroke) {
-                document.getElementById('stroke-color').value = layer.stroke.color;
+                document.getElementById('sc').value = getColorName(layer.stroke.color);
                 document.getElementById('stroke-width').value = layer.stroke.width;
             }
             document.getElementById('pos-x').value = Math.round(layer.x);
@@ -9788,7 +9894,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             if (layer.dropShadow) {
                 document.getElementById('shadow-enabled').checked = layer.dropShadow.enabled;
                 document.getElementById('shadow-controls').style.display = layer.dropShadow.enabled ? 'block' : 'none';
-                document.getElementById('shadow-color').value = layer.dropShadow.color;
+                document.getElementById('shc').value = getColorName(layer.dropShadow.color);
                 document.getElementById('shadow-blur').value = layer.dropShadow.blur;
                 document.getElementById('shadow-blur-value').textContent = layer.dropShadow.blur + ' px';
                 document.getElementById('shadow-x').value = layer.dropShadow.x;
@@ -9817,9 +9923,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
                 // Popola controlli testo
                 document.getElementById('text-edit').value = layer.text;
-                document.getElementById('font-family').value = layer.fontFamily;
+                document.getElementById('ff').value = layer.fontFamily;
                 document.getElementById('font-size').value = layer.fontSize;
-                document.getElementById('font-weight').value = layer.fontWeight || '400';
+                document.getElementById('fw').value = layer.fontWeight || '400';
                 document.getElementById('letter-spacing').value = layer.letterSpacing || 0;
                 document.getElementById('letter-spacing-value').textContent = (layer.letterSpacing || 0) + ' px';
                 document.getElementById('line-height').value = layer.lineHeight || 1.2;
@@ -10069,7 +10175,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     if (layer) {
                         layer.color = color;
                         // Aggiorna il nuovo selettore
-                        layerColorPreset.value = color;
+                        layerColorPreset.value = getColorName(color);
                         layerColorCustomSection.style.display = 'none';
                         updateLayerColorPreview(color);
                         saveState('Colore modificato');
@@ -10994,13 +11100,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 setControlsVisibility(gradientControls, type === 'gradient');
                 setControlsVisibility(imageControls, type === 'image');
                 
-                // Annunci NVDA chiari e descrittivi
+                // Annunci NVDA chiari e descrittivi (NVDA legge già il nome, qui solo la spiegazione)
                 const typeDescriptions = {
-                    'color': 'Colore Solido selezionato: lo sfondo sarà un solo colore uniforme',
-                    'gradient': 'Gradiente selezionato: lo sfondo sarà una sfumatura tra due colori',
-                    'image': 'Immagine selezionata: lo sfondo sarà una foto o texture'
+                    'color': 'Lo sfondo sarà un solo colore uniforme',
+                    'gradient': 'Lo sfondo sarà una sfumatura tra due colori',
+                    'image': 'Lo sfondo sarà una foto o texture'
                 };
-                announceGemini(typeDescriptions[type], 'polite');
+                announceGemini(typeDescriptions[type], 'polite'); // Si triggera solo quando selezioni (Enter/click), non durante navigazione frecce
             });
             
             // Listener per slider angolo gradiente
@@ -11128,7 +11234,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             });
             
             // Gestione nuovo selettore colore sfondo con preset
-            const bgColorPreset = document.getElementById('bg-color-preset');
+            
+            const bgColorPreset = document.getElementById('c');
             const bgColorCustomSection = document.getElementById('bg-color-custom-section');
             const bgColorHex = document.getElementById('bg-color-hex');
             const bgColorR = document.getElementById('bg-color-r');
@@ -11142,16 +11249,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     const hex = parseInt(x).toString(16);
                     return hex.length === 1 ? '0' + hex : hex;
                 }).join('');
-            }
-            
-            // Funzione per convertire HEX in RGB
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? {
-                    r: parseInt(result[1], 16),
-                    g: parseInt(result[2], 16),
-                    b: parseInt(result[3], 16)
-                } : null;
             }
             
             // Funzione per aggiornare l'anteprima colore
@@ -11169,21 +11266,22 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             bgColorPreset.addEventListener('change', (e) => {
                 const value = e.target.value;
                 
-                if (value === 'custom') {
+                if (value === 'custom' || value === 'Personalizzato') {
                     bgColorCustomSection.style.display = 'block';
                     announceGemini('Modalità colore personalizzato attivata. Usa Tab per navigare tra i campi HEX e RGB', 'polite');
                 } else {
                     bgColorCustomSection.style.display = 'none';
-                    updateColorPreview(value);
+                    const hexColor = getColorHex(value);
+                    updateColorPreview(hexColor);
                     
                     // Aggiorna anche i campi RGB/HEX nel caso l'utente torni su personalizzato
-                    if (value !== 'transparent') {
-                        const rgb = hexToRgb(value);
+                    if (hexColor !== 'transparent') {
+                        const rgb = hexToRgb(hexColor);
                         if (rgb) {
                             bgColorR.value = rgb.r;
                             bgColorG.value = rgb.g;
                             bgColorB.value = rgb.b;
-                            bgColorHex.value = value;
+                            bgColorHex.value = hexColor;
                         }
                     }
                     
@@ -11221,7 +11319,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             bgColorB.addEventListener('input', syncRgbToHex);
             
             // Gestione selettore colore TESTO con preset (stesso sistema dello sfondo)
-            const textColorPreset = document.getElementById('text-color-preset');
+            const textColorPreset = document.getElementById('tc');
             const textColorCustomSection = document.getElementById('text-color-custom-section');
             const textColorHex = document.getElementById('text-color-hex');
             const textColorR = document.getElementById('text-color-r');
@@ -11244,15 +11342,16 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     announceGemini('Modalità colore testo personalizzato attivata. Usa Tab per navigare tra i campi HEX e RGB', 'polite');
                 } else {
                     textColorCustomSection.style.display = 'none';
-                    updateTextColorPreview(value);
+                    const hexColor = getColorHex(value);
+                    updateTextColorPreview(hexColor);
                     
                     // Aggiorna anche i campi RGB/HEX
-                    const rgb = hexToRgb(value);
+                    const rgb = hexToRgb(hexColor);
                     if (rgb) {
                         textColorR.value = rgb.r;
                         textColorG.value = rgb.g;
                         textColorB.value = rgb.b;
-                        textColorHex.value = value;
+                        textColorHex.value = hexColor;
                     }
                     
                     const colorName = e.target.options[e.target.selectedIndex].text;
@@ -11299,7 +11398,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         // Usa il valore HEX personalizzato
                         state.backgroundColor = bgColorHex.value;
                     } else {
-                        state.backgroundColor = presetValue;
+                        // Converte il nome del colore in HEX usando la mappa
+                        state.backgroundColor = getColorHex(presetValue);
                     }
                     
                     state.backgroundType = 'color';
@@ -11364,15 +11464,15 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             // Sezione 2: Aggiungi Livelli
             document.getElementById('btn-add-text').addEventListener('click', () => {
                 const text = document.getElementById('text-input').value || 'Nuovo Testo';
-                const fontFamily = document.getElementById('new-font-family').value;
+                const fontFamily = document.getElementById('nff').value;
                 const fontSize = parseInt(document.getElementById('new-font-size').value);
-                const fontWeight = document.getElementById('new-font-weight').value;
+                const fontWeight = document.getElementById('nfw').value;
                 const lineHeight = parseFloat(document.getElementById('new-line-height').value);
                 const letterSpacing = parseFloat(document.getElementById('new-letter-spacing').value);
                 
                 // Ottieni colore dal nuovo sistema preset/personalizzato
                 const colorPreset = textColorPreset.value;
-                const color = (colorPreset === 'custom') ? textColorHex.value : colorPreset;
+                const color = (colorPreset === 'custom') ? textColorHex.value : getColorHex(colorPreset);
                 
                 const x = parseInt(document.getElementById('new-text-x').value);
                 const y = parseInt(document.getElementById('new-text-y').value);
@@ -11755,12 +11855,12 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 document.getElementById('vector-step-value').textContent = state.vectorStep + ' px';
             });
             
-            document.getElementById('vector-fill-color').addEventListener('input', e => {
-                state.vectorFillColor = e.target.value;
+            document.getElementById('vfc').addEventListener('input', e => {
+                state.vectorFillColor = getColorHex(e.target.value);
             });
             
-            document.getElementById('vector-stroke-color').addEventListener('input', e => {
-                state.vectorStrokeColor = e.target.value;
+            document.getElementById('vsc').addEventListener('input', e => {
+                state.vectorStrokeColor = getColorHex(e.target.value);
             });
             
             document.getElementById('vector-stroke-width').addEventListener('input', e => {
@@ -11792,13 +11892,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             });
             
             // Font
-            ['font-family', 'font-size', 'font-weight'].forEach(id => {
+            ['ff', 'font-size', 'fw'].forEach(id => {
                 document.getElementById(id).addEventListener('change', () => {
                     const layer = getSelectedLayer();
                     if (layer && layer.type === 'text') {
-                        layer.fontFamily = document.getElementById('font-family').value;
+                        layer.fontFamily = document.getElementById('ff').value;
                         layer.fontSize = parseInt(document.getElementById('font-size').value);
-                        layer.fontWeight = document.getElementById('font-weight').value;
+                        layer.fontWeight = document.getElementById('fw').value;
                         
                         // Ricalcola dimensioni
                         ctx.font = layer.fontWeight + ' ' + layer.fontSize + 'px ' + layer.fontFamily;
@@ -12363,16 +12463,17 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     announceGemini('Contagocce attivato. Clicca sul canvas per prelevare un colore', 'assertive');
                 } else {
                     layerColorCustomSection.style.display = 'none';
+                    const hexColor = getColorHex(value);
                     if (layer) {
-                        layer.color = value;
-                        const rgb = hexToRgb(value);
+                        layer.color = hexColor;
+                        const rgb = hexToRgb(hexColor);
                         if (rgb) {
                             layerColorR.value = rgb.r;
                             layerColorG.value = rgb.g;
                             layerColorB.value = rgb.b;
-                            layerColorHex.value = value;
+                            layerColorHex.value = hexColor;
                         }
-                        updateLayerColorPreview(value);
+                        updateLayerColorPreview(hexColor);
                         scheduleRender();
                         saveState('Colore modificato');
                     }
@@ -12463,13 +12564,129 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     scheduleRender();
                     updateUI();
                     
-                    // Annuncio NVDA chiaro e descrittivo
+                    // Annuncio NVDA semplificato (NVDA legge già "Lineare" o "Radiale")
                     const typeDescription = newType === 'linear' 
-                        ? 'Gradiente lineare selezionato: sfumatura dritta da sinistra a destra'
-                        : 'Gradiente radiale selezionato: sfumatura circolare dal centro ai bordi';
+                        ? 'Sfumatura dritta da un punto all\'altro'
+                        : 'Sfumatura circolare dal centro ai bordi';
                     announceGemini(typeDescription, 'polite');
                 }
             });
+            
+            // === Descrizioni utili per preset filtri (NVDA legge solo quando selezioni) ===
+            
+            // Clarity preset
+            const claritySelect = document.getElementById('clarity-preset');
+            if (claritySelect) {
+                claritySelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'custom': 'Personalizza manualmente intensità e raggio',
+                        'subtle': 'Effetto sottile ideale per ritratti delicati',
+                        'moderate': 'Intensità moderata per uso generale',
+                        'strong': 'Effetto forte per paesaggi drammatici',
+                        'extreme': 'Intensità estrema con effetto HDR'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Denoise preset
+            const denoiseSelect = document.getElementById('denoise-preset');
+            if (denoiseSelect) {
+                denoiseSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'custom': 'Personalizza manualmente i parametri di riduzione rumore',
+                        'light': 'Riduzione leggera per foto con ISO 800-1600',
+                        'moderate': 'Riduzione moderata per foto con ISO 1600-3200',
+                        'strong': 'Riduzione forte per foto con ISO 3200-6400',
+                        'aggressive': 'Riduzione aggressiva per rumore estremo sopra ISO 6400'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Gradient Map preset
+            const gradmapSelect = document.getElementById('gradmap-preset');
+            if (gradmapSelect) {
+                gradmapSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'custom': 'Personalizza i colori ombre e luci manualmente',
+                        'goldenblue': 'Golden Hour: effetto tramonto con tonalità oro verso blu',
+                        'cyanred': 'Cinema Teal: look cinematografico con ciano verso rosso',
+                        'purpleorange': 'Sunset Dream: tramonto magico viola verso arancio',
+                        'greenmint': 'Nature Fresh: tonalità naturali verde verso menta',
+                        'retrowarm': 'Retro Warm: stile vintage anni 70 marrone verso crema'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Background Image Fit
+            const bgFitSelect = document.getElementById('bg-image-fit');
+            if (bgFitSelect) {
+                bgFitSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'cover': 'Copri tutto: riempie l\'area tagliando se necessario',
+                        'contain': 'Contenuto: mostra l\'immagine intera senza tagliarla',
+                        'stretch': 'Allunga: deforma l\'immagine per riempire l\'area',
+                        'tile': 'Ripeti: crea un pattern ripetendo l\'immagine'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Sharpen preset
+            const sharpenSelect = document.getElementById('sharpen-preset');
+            if (sharpenSelect) {
+                sharpenSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'custom': 'Personalizza manualmente l\'intensità dello sharpening',
+                        'light': 'Sharpening leggero per dettagli sottili',
+                        'medium': 'Sharpening medio per uso generale',
+                        'strong': 'Sharpening forte per massima nitidezza'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Noise type
+            const noiseSelect = document.getElementById('noise-type');
+            if (noiseSelect) {
+                noiseSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'mono': 'Grana monocromatica: effetto pellicola bianco e nero classica',
+                        'color': 'Grana colorata: effetto pellicola a colori vintage'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
+            
+            // Curves preset
+            const curvesSelect = document.getElementById('curves-preset');
+            if (curvesSelect) {
+                curvesSelect.addEventListener('change', (e) => {
+                    const descriptions = {
+                        'linear': 'Lineare: nessun effetto sulla curva tonale',
+                        'scurve': 'S-Curve: aumenta contrasto nei mezzitoni ideale per ritratti',
+                        'fade': 'Fade: riduce contrasto per look vintage e analogico',
+                        'contrast': 'High Contrast: effetto drammatico con neri profondi e bianchi brillanti'
+                    };
+                    if (descriptions[e.target.value]) {
+                        announceGemini(descriptions[e.target.value], 'polite');
+                    }
+                });
+            }
             
             // Gradient colors
             ['gradient-color1', 'gradient-color2'].forEach(id => {
@@ -12553,11 +12770,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 }
             });
             
-            ['stroke-color', 'stroke-width'].forEach(id => {
+            ['sc', 'stroke-width'].forEach(id => {
                 document.getElementById(id).addEventListener('change', () => {
                     const layer = getSelectedLayer();
                     if (layer && layer.stroke) {
-                        layer.stroke.color = document.getElementById('stroke-color').value;
+                        layer.stroke.color = getColorHex(document.getElementById('sc').value);
                         layer.stroke.width = parseInt(document.getElementById('stroke-width').value);
                         saveState('Bordo modificato');
                         scheduleRender();
@@ -12689,10 +12906,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 }
             });
             
-            document.getElementById('shadow-color').addEventListener('change', () => {
+            document.getElementById('shc').addEventListener('change', () => {
                 const layer = getSelectedLayer();
                 if (layer && layer.dropShadow) {
-                    layer.dropShadow.color = document.getElementById('shadow-color').value;
+                    layer.dropShadow.color = getColorHex(document.getElementById('shc').value);
                     saveState('Colore ombra modificato');
                     scheduleRender();
                 }
@@ -13490,7 +13707,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Testi brevi e incisivi funzionano meglio sui social. Per titoli, usare massimo 5-7 parole. Per descrizioni, massimo 2-3 righe.' }
                     ]
                 },
-                'new-font-family': {
+                'nff': {
                     title: 'Famiglia font',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Sceglie il carattere tipografico (font) per il nuovo testo.' },
@@ -13506,7 +13723,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Per un post Instagram 1080x1080, usare 40-60px per il titolo principale e 24-32px per il testo secondario.' }
                     ]
                 },
-                'new-font-weight': {
+                'nfw': {
                     title: 'Peso font',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Controlla lo spessore del carattere (quanto è "grassetto").' },
@@ -13602,7 +13819,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Permette di trasformare un rettangolo in un "badge" o in un pulsante con angoli smussati.' }
                     ]
                 },
-                'shadow-color': {
+                'shc': {
                     title: 'Colore ombra',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Imposta il colore dell\'ombra (se "Ombra" è attiva).' },
@@ -13938,7 +14155,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Questo è il modo corretto per correggere un errore di battitura o aggiornare un testo, senza doverlo cancellare e ricreare.' }
                     ]
                 },
-                'font-family': {
+                'ff': {
                     title: 'Famiglia font (livello selezionato)',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Cambia il font del livello di testo attualmente selezionato. Sistema intelligente: se sei online hai accesso a 900+ Google Fonts (marcati con ⭐), se sei offline usa 13 font di sistema garantiti (marcati con 💻).' },
@@ -13954,7 +14171,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Si può usare questo campo o si può ridimensionare il testo trascinando i suoi angoli sul canvas.' }
                     ]
                 },
-                'font-weight': {
+                'fw': {
                     title: 'Peso font (livello selezionato)',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Cambia lo spessore (grassetto) del livello di testo attualmente selezionato.' },
@@ -14002,7 +14219,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         { subtitle: 'Consiglio', text: 'Un bordo ben scelto può far risaltare le forme su sfondi complessi.' }
                     ]
                 },
-                'stroke-color': {
+                'sc': {
                     title: 'Colore bordo (livello selezionato)',
                     sections: [
                         { subtitle: 'Cosa fa', text: 'Cambia il colore del contorno della forma o testo selezionato (se il bordo è attivo).' },
@@ -14690,11 +14907,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     announceGemini('Testo vuoto, operazione annullata', 'polite');
                     return;
                 }
-                const fontFamily = document.getElementById('new-font-family').value;
+                const fontFamily = document.getElementById('nff').value;
                 const fontSize = parseInt(document.getElementById('new-font-size').value);
-                const fontWeight = document.getElementById('new-font-weight').value;
+                const fontWeight = document.getElementById('nfw').value;
                 const colorPresetVal = textColorPreset.value;
-                const color = (colorPresetVal === 'custom') ? textColorHex.value : colorPresetVal;
+                const color = (colorPresetVal === 'custom') ? textColorHex.value : getColorHex(colorPresetVal);
                 const lineHeight = parseFloat(document.getElementById('new-line-height').value);
                 const letterSpacing = parseFloat(document.getElementById('new-letter-spacing').value);
                 let textAlign = 'left';
@@ -15740,7 +15957,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
     return { display: 'none' };
   }
   if(typeof window.layerColorPreset === 'undefined' || window.layerColorPreset === null){
-    window.layerColorPreset = ensure('layer-color-preset') || { value:'custom', addEventListener:function(){}, style:styleObj() };
+    window.layerColorPreset = ensure('lc') || { value:'custom', addEventListener:function(){}, style:styleObj() };
   }
   if(typeof window.layerColorHex === 'undefined' || window.layerColorHex === null){
     window.layerColorHex = ensure('layer-color-hex') || { value:'#000000' };
@@ -15985,6 +16202,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 (function(){
   function simplifyBgPresetSelect(sel){
     if(!sel) return;
+    // Skip il select principale che ha già il testo corretto
+    if(sel.id === 'bg-color') return;
+    
     // Remove aria-label to avoid label repetition; rely on <label for="...">
     sel.removeAttribute('aria-label');
     var mapNames = {
@@ -16020,6 +16240,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   function initBgPresets(){
     // target any select whose id/name/label mentions bg/background/sfondo + color/preset
     var selects = Array.from(document.querySelectorAll('select')).filter(function(s){
+      // Skip bg-color principale
+      if(s.id === 'bg-color') return false;
+      
       var id=(s.id||''); var name=(s.name||'');
       var lbl = '';
       if(id){ var el = document.querySelector('label[for="'+id+'"]'); if(el) lbl = el.textContent || ''; }
@@ -16130,6 +16353,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
 <script>
 // === Pulizia specifica: select tipo sfondo (niente "bg-type: gradient" ecc.) ===
+// DISABLED: Questa funzione causa problemi di navigazione con NVDA
+/*
 (function(){
   function cleanBgTypeSelect(sel){
     if(!sel) return;
@@ -16174,10 +16399,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run);
   else run();
 })();
+*/
 </script>
 
 <script>
 // === Pulizia aggressiva: "Tipo sfondo" (niente 'type color/gradient/image') ===
+// DISABLED: Questa funzione causa problemi di navigazione con NVDA
+/*
 (function(){
   function prettyBgType(valOrText){
     const s = (valOrText||'').toString().trim().toLowerCase();
@@ -16229,10 +16457,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   setTimeout(run, 200);
   setTimeout(run, 800);
 })();
+*/
 </script>
 
 <script>
 // === Normalizzazione definitiva: "Tipo sfondo" (solo italiano) ===
+// DISABLED: Questa funzione causa problemi di navigazione con NVDA
+/*
 (function(){
   function canonical(val){
     const s = (val||'').toString().trim().toLowerCase();
@@ -16285,10 +16516,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   setTimeout(run, 200);
   setTimeout(run, 800);
 })();
+*/
 </script>
 
 <script>
 // === Ensure 'Immagine' option exists in Tipo sfondo ===
+// DISABLED: Questa funzione causa problemi di navigazione con NVDA
+/*
 (function(){
   function isBgTypeSelect(sel){
     const id=(sel.id||''); const name=(sel.name||'');
@@ -16324,6 +16558,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   setTimeout(run, 250);
   setTimeout(run, 900);
 })();
+*/
 </script>
 
 <script>
@@ -16482,6 +16717,21 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   }
 
   function ensureAriaLabel(select) {
+    // Lista di select che NON devono avere aria-label (usano label nativi per NVDA)
+    const silentIds = [
+      "tpl", "bg-type", "c", "tc", "lc", "vfc", "vsc", "sc", "shc",
+      "nff", "ff", "nfw", "fw",
+      "blend-mode", "filter-preset", "sharpen-preset", "noise-type",
+      "denoise-preset", "gradmap-preset", "curves-preset", "clarity-preset",
+      "mask-shape", "bg-gradient-type", "bg-image-fit",
+      "gradient-type",
+      "crop-preset", "mask-shape-2", "new-shape-fill", "new-shape-stroke",
+      "new-line-style"
+    ];
+    
+    // Se questa select è nella lista silenziosa, non aggiungere aria-label
+    if (silentIds.includes(select.id)) return;
+    
     if (select.getAttribute("aria-label")) return;
     let labelText = "";
     const id = select.id;
@@ -16535,6 +16785,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
   }
 
   function wireSelect(select) {
+    // Skip completo per select colori e font - nessun processing
+    const skipIds = ['c', 'tc', 'lc', 'vfc', 'vsc', 'sc', 'shc', 'nff', 'ff', 'nfw', 'fw', 'bg-type'];
+    if (skipIds.includes(select.id)) return;
+    
     ensureAriaLabel(select);
     dedupeAndNormalize(select);
     // imposta prevText iniziale per evitare announce al primo 'change' programmatico
@@ -16557,42 +16811,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
   function patchAll() {
     document.querySelectorAll("select").forEach(wireSelect);
-    
-    // RIDUZIONE VERBOSITÀ: rimuovi aria-label dalle select principali
-    // così NVDA legge solo il valore dell'opzione, non "Formato Post Instagram"
-    const silentSelects = [
-      "tpl",              // Formato canvas
-      "bg-type",          // Tipo sfondo
-      "bg-color-preset",  // Colore sfondo
-      "new-font-family",  // Font nuovo testo
-      "font-family",      // Font modifica
-      "text-color-preset", // Colore testo
-      "layer-color-preset", // Colore layer
-      "blend-mode",       // Modalità fusione
-      "filter-preset",    // Filtro preset
-      "mask-shape",       // Maschera
-      "bg-gradient-type", // Tipo gradiente
-      "bg-image-fit",     // Adattamento immagine
-      "new-font-weight",  // Peso font nuovo
-      "font-weight",      // Peso font
-      "gradient-type",    // Tipo gradiente layer
-      "stroke-color",     // Colore bordo
-      "shadow-color",     // Colore ombra
-      "crop-preset",      // Preset ritaglio
-      "mask-shape-2",     // Maschera 2
-      "new-shape-fill",   // Riempimento forma
-      "new-shape-stroke", // Bordo forma
-      "new-line-style",   // Stile linea
-      "vector-fill-color", // Colore riempimento vettoriale
-      "vector-stroke-color" // Colore bordo vettoriale
-    ];
-    
-    silentSelects.forEach(id => {
-      const sel = document.getElementById(id);
-      if (sel && sel.getAttribute('aria-label')) {
-        sel.removeAttribute('aria-label');
-      }
-    });
   }
 
   if (document.readyState === "loading") {
@@ -19299,8 +19517,8 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
       // Recupera dal DOM
       const textEditArea = document.getElementById('text-edit');
       const fontSizeInput = document.getElementById('font-size');
-      const fontSelect = document.getElementById('font-family');
-      const fontWeightInput = document.getElementById('font-weight');
+      const fontSelect = document.getElementById('ff');
+      const fontWeightInput = document.getElementById('fw');
       const lineHeightInput = document.getElementById('line-height');
       
       if (textEditArea) text = textEditArea.value || '';
@@ -22494,8 +22712,492 @@ window.convertLayerToImage = convertLayerToImage;
 
 const AdvancedEffects={applyPixelate(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=Math.ceil(a.width/t),s=Math.ceil(a.height/t),l=document.createElement("canvas"),c=l.getContext("2d");l.width=o,l.height=s,c.drawImage(i,0,0,o,s),n.imageSmoothingEnabled=!1,n.drawImage(l,0,0,o,s,0,0,a.width,a.height);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Pixelate applicato (${t}px blocchi)`,"polite")},r.src=i.toDataURL(),!0},applyGlow(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d"),s=Math.ceil(t);n.width=i.width+2*s,n.height=i.height+2*s,o.shadowColor=a,o.shadowBlur=t,o.shadowOffsetX=0,o.shadowOffsetY=0,o.drawImage(i,s,s);const l=Math.ceil(t/30);for(let e=0;e<l;e++)o.drawImage(i,s,s);const c=new Image;return c.onload=()=>{e.imageElement=c,e.imageData=n.toDataURL(),e.width=n.width,e.height=n.height,window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Glow applicato (intensità ${t})`,"polite")},c.src=n.toDataURL(),!0},applyVignette(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=i.width/2,l=i.height/2,c=Math.sqrt(s*s+l*l),r=c*a/100,d=o.createRadialGradient(s,l,r,s,l,c);d.addColorStop(0,"rgba(0,0,0,0)"),d.addColorStop(1,`rgba(0,0,0,${t/100})`),o.fillStyle=d,o.fillRect(0,0,i.width,i.height);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Vignette applicato (int ${t}, size ${a})`,"polite")},m.src=n.toDataURL(),!0},applySharpen(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=[0,-1,0,-1,5,-1,0,-1,0],c=t/100,r=new Uint8ClampedArray(s),d=a.width,m=a.height;for(let e=1;e<m-1;e++)for(let t=1;t<d-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const c=(e+n)*d+(t+o),r=3*(n+1)+(o+1);i+=s[4*c+a]*l[r]}const n=4*(e*d+t)+a,o=s[n];r[n]=o+(i-o)*c}for(let e=0;e<s.length;e++)s[e]=r[e];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Sharpen applicato (amount ${t})`,"polite")},g.src=i.toDataURL(),!0},applyAutoLevels(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data;let l=255,c=0,r=255,d=0,m=255,g=0;for(let e=0;e<s.length;e+=4){const t=s[e],a=s[e+1],i=s[e+2];t<l&&(l=t),t>c&&(c=t),a<r&&(r=a),a>d&&(d=a),i<m&&(m=i),i>g&&(g=i)}const u=t/100;for(let e=0;e<s.length;e+=4){const t=c-l>0?255*(s[e]-l)/(c-l):s[e],a=d-r>0?255*(s[e+1]-r)/(d-r):s[e+1],i=g-m>0?255*(s[e+2]-m)/(g-m):s[e+2];s[e]=Math.min(255,Math.max(0,s[e]+(t-s[e])*u)),s[e+1]=Math.min(255,Math.max(0,s[e+1]+(a-s[e+1])*u)),s[e+2]=Math.min(255,Math.max(0,s[e+2]+(i-s[e+2])*u))}n.putImageData(o,0,0);const h=new Image;return h.onload=()=>{e.imageElement=h,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Auto Levels applicato (strength ${t})`,"polite")},h.src=i.toDataURL(),!0},applyNoise(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100*255;for(let e=0;e<l.length;e+=4)if("mono"===a){const t=(Math.random()-.5)*c;l[e]+=t,l[e+1]+=t,l[e+2]+=t}else l[e]+=(Math.random()-.5)*c,l[e+1]+=(Math.random()-.5)*c,l[e+2]+=(Math.random()-.5)*c;o.putImageData(s,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Noise/Grain applicato (${a}, amount ${t})`,"polite")},r.src=n.toDataURL(),!0},applyTemperature(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=t/100,r=a/100;for(let e=0;e<l.length;e+=4){const t=c>0?c*20:c*15,a=c>0?-c*10:c*20;l[e]=Math.min(255,Math.max(0,l[e]+t)),l[e+2]=Math.min(255,Math.max(0,l[e+2]+a));const i=r>0?r*15:-r*15,n=r>0?-r*15:r*15;l[e]=Math.min(255,Math.max(0,l[e]+i)),l[e+1]=Math.min(255,Math.max(0,l[e+1]+n))}o.putImageData(s,0,0);const d=new Image;return d.onload=()=>{e.imageElement=d,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Temperature applicato (temp ${t}, tint ${a})`,"polite")},d.src=n.toDataURL(),!0},createGradientText(text,t,a,i,n){const o=document.createElement("canvas"),s=o.getContext("2d");s.font=`bold ${n}px Arial`;const l=s.measureText(text);o.width=Math.ceil(l.width)+20,o.height=n+40,s.font=`bold ${n}px Arial`,s.textBaseline="middle";const c=s.createLinearGradient(0,0,Math.cos(i*Math.PI/180)*o.width,Math.sin(i*Math.PI/180)*o.height);c.addColorStop(0,t),c.addColorStop(1,a),s.fillStyle=c,s.fillText(text,10,o.height/2);const r=new Image;return r.onload=()=>{const newLayer={type:"image",imageElement:r,imageData:o.toDataURL(),x:100,y:100,width:o.width,height:o.height,name:`Gradient Text: ${text.substring(0,15)}...`,visible:!0,locked:!1};window.state&&window.state.layers&&(window.state.layers.push(newLayer),window.state.currentLayerIndex=window.state.layers.length-1,window.updateLayersList&&window.updateLayersList(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Testo gradient creato: "${text}"`,"polite"))},r.src=o.toDataURL(),!0},applyDuotone(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;const r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=c[e]*(1-p)+p*(r+a*(g-r)),n=c[e+1]*(1-p)+p*(d+a*(u-d)),o=c[e+2]*(1-p)+p*(m+a*(h-m));c[e]=Math.min(255,Math.max(0,i)),c[e+1]=Math.min(255,Math.max(0,n)),c[e+2]=Math.min(255,Math.max(0,o))}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Duotone applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0},applyHSLShift(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data;function rgbToHsl(e,t,a){e/=255,t/=255,a/=255;const i=Math.max(e,t,a),n=Math.min(e,t,a);let o,s,l=(i+n)/2;if(i===n)o=s=0;else{const c=i-n;s=l>.5?c/(2-i-n):c/(i+n),o=i===e?(t-a)/c+(t<a?6:0):i===t?(a-e)/c+2:(e-t)/c+4,o/=6}return[o,s,l]}function hslToRgb(e,t,a){let i,n,o;if(0===t)i=n=o=a;else{const s=(e,t,a)=>(a<0&&(a+=1),a>1&&(a-=1),a<1/6?e+6*(t-e)*a:a<.5?t:a<2/3?e+(t-e)*(2/3-a)*6:e),l=a<.5?a*(1+t):a+t-a*t,c=2*a-l;i=s(c,l,e+1/3),n=s(c,l,e),o=s(c,l,e-1/3)}return[Math.round(255*i),Math.round(255*n),Math.round(255*o)]}for(let e=0;e<c.length;e+=4){let[n,o,s]=rgbToHsl(c[e],c[e+1],c[e+2]);n=(n+t/360+1)%1,o=Math.min(1,Math.max(0,o+a/100)),s=Math.min(1,Math.max(0,s+i/100));const[l,r,d]=hslToRgb(n,o,s);c[e]=l,c[e+1]=r,c[e+2]=d}s.putImageData(l,0,0);const r=new Image;return r.onload=()=>{e.imageElement=r,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`HSL Shift applicato (H:${t} S:${a} L:${i})`,"polite")},r.src=o.toDataURL(),!0},applyOilPainting(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(l),r=i.width,d=i.height;for(let e=0;e<a;e++)for(let e=t;e<d-t;e++)for(let a=t;a<r-t;a++){const i=[];for(let n=-t;n<=t;n++)for(let t=-t;t<=t;t++){const o=4*((e+n)*r+(a+t));i.push([l[o],l[o+1],l[o+2]])}i.sort(((e,t)=>{const a=.299*e[0]+.587*e[1]+.114*e[2],i=.299*t[0]+.587*t[1]+.114*t[2];return a-i}));const n=i[Math.floor(i.length/2)],o=4*(e*r+a);c[o]=n[0],c[o+1]=n[1],c[o+2]=n[2]}for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const m=new Image;return m.onload=()=>{e.imageElement=m,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Oil Painting applicato (brush ${t}, int ${a})`,"polite")},m.src=n.toDataURL(),!0},applyBlur(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.filter=`blur(${t}px)`,n.drawImage(a,0,0);const o=new Image;return o.onload=()=>{e.imageElement=o,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Blur applicato (radius ${t})`,"polite")},o.src=i.toDataURL(),!0},applyEmboss(e,t){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const a=e.imageElement,i=document.createElement("canvas"),n=i.getContext("2d");i.width=a.width,i.height=a.height,n.drawImage(a,0,0);const o=n.getImageData(0,0,a.width,a.height),s=o.data,l=new Uint8ClampedArray(s),c=a.width,r=a.height,d=[-2,-1,0,-1,1,1,0,1,2],m=t/100;for(let e=1;e<r-1;e++)for(let t=1;t<c-1;t++)for(let a=0;a<3;a++){let i=0;for(let n=-1;n<=1;n++)for(let o=-1;o<=1;o++){const l=(e+n)*c+(t+o),r=3*(n+1)+(o+1);i+=s[4*l+a]*d[r]}const n=4*(e*c+t)+a;l[n]=Math.min(255,Math.max(0,128+i*m))}for(let e=0;e<s.length;e+=4)s[e]=l[e],s[e+1]=l[e+1],s[e+2]=l[e+2];n.putImageData(o,0,0);const g=new Image;return g.onload=()=>{e.imageElement=g,e.imageData=i.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Emboss applicato (strength ${t})`,"polite")},g.src=i.toDataURL(),!0},applyEdgeDetect(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height),l=s.data,c=new Uint8ClampedArray(s),r=i.width,d=i.height,m=[-1,-1,-1,-1,8,-1,-1,-1,-1],g=t/100*255;for(let e=1;e<d-1;e++)for(let t=1;t<r-1;t++){let a=0;for(let i=-1;i<=1;i++)for(let n=-1;n<=1;n++){const o=4*((e+i)*r+(t+n)),s=3*(i+1)+(n+1),c=.299*l[o]+.587*l[o+1]+.114*l[o+2];a+=c*m[s]}const i=4*(e*r+t),n=Math.abs(a)>g?255:0;c[i]=n,c[i+1]=n,c[i+2]=n,c[i+3]=255}if("true"===a)for(let e=0;e<c.length;e+=4)c[e]=255-c[e],c[e+1]=255-c[e+1],c[e+2]=255-c[e+2];for(let e=0;e<l.length;e++)l[e]=c[e];o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Edge Detect applicato (threshold ${t}, ${"true"===a?"invertito":"normale"})`,"polite")},u.src=n.toDataURL(),!0},applyClarity(e,t,a){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const i=e.imageElement,n=document.createElement("canvas"),o=n.getContext("2d");n.width=i.width,n.height=i.height,o.drawImage(i,0,0);const s=o.getImageData(0,0,i.width,i.height);const l=document.createElement("canvas"),c=l.getContext("2d");l.width=i.width,l.height=i.height,c.filter=`blur(${a}px)`,c.drawImage(i,0,0);const r=c.getImageData(0,0,i.width,i.height),d=s.data,m=r.data,g=t/100;for(let e=0;e<d.length;e+=4){for(let t=0;t<3;t++){const a=e+t,i=d[a]-m[a];d[a]=Math.min(255,Math.max(0,d[a]+i*g))}}o.putImageData(s,0,0);const u=new Image;return u.onload=()=>{e.imageElement=u,e.imageData=n.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Clarity applicato (amount ${t}, radius ${a})`,"polite")},u.src=n.toDataURL(),!0},applyDenoise(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=n.width,d=n.height,m=Math.ceil(t/20)+1,g=a/100,u=t/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2];c[e]=t,c[e+1]=t,c[e+2]=t}const h=new Uint8ClampedArray(c);for(let e=m;e<d-m;e++)for(let t=m;t<r-m;t++){let a=0,i=0;for(let n=-m;n<=m;n++)for(let o=-m;o<=m;o++){const s=4*((e+n)*r+(t+o));a+=c[s],i++}const n=4*(e*r+t),o=a/i,s=c[n];h[n]=s+(o-s)*u,h[n+1]=h[n],h[n+2]=h[n]}s.drawImage(n,0,0);const p=s.getImageData(0,0,n.width,n.height),f=p.data;for(let e=0;e<f.length;e+=4){const t=h[e],a=f[e]-t,n=f[e+1]-t,o=f[e+2]-t,s=1-g;f[e]=Math.min(255,Math.max(0,t+a*s)),f[e+1]=Math.min(255,Math.max(0,t+n*s)),f[e+2]=Math.min(255,Math.max(0,t+o*s))}const y=i/100;for(let e=0;e<f.length;e+=4){const t=f[e]-h[e],a=f[e+1]-h[e+1],i=f[e+2]-h[e+2];f[e]=Math.min(255,Math.max(0,f[e]+t*y)),f[e+1]=Math.min(255,Math.max(0,f[e+1]+a*y)),f[e+2]=Math.min(255,Math.max(0,f[e+2]+i*y))}s.putImageData(p,0,0);const b=new Image;return b.onload=()=>{e.imageElement=b,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Denoise applicato (luma ${t}, color ${a}, sharp ${i})`,"polite")},b.src=o.toDataURL(),!0},applyGradientMap(e,t,a,i){if(!e||!e.imageElement)return announceExtraAI("Seleziona un livello immagine valido","assertive"),!1;const n=e.imageElement,o=document.createElement("canvas"),s=o.getContext("2d");o.width=n.width,o.height=n.height,s.drawImage(n,0,0);const l=s.getImageData(0,0,n.width,n.height),c=l.data,r=parseInt(t.slice(1,3),16),d=parseInt(t.slice(3,5),16),m=parseInt(t.slice(5,7),16),g=parseInt(a.slice(1,3),16),u=parseInt(a.slice(3,5),16),h=parseInt(a.slice(5,7),16),p=i/100;for(let e=0;e<c.length;e+=4){const t=.299*c[e]+.587*c[e+1]+.114*c[e+2],a=t/255,i=r+a*(g-r),n=d+a*(u-d),o=m+a*(h-m);c[e]=c[e]*(1-p)+i*p,c[e+1]=c[e+1]*(1-p)+n*p,c[e+2]=c[e+2]*(1-p)+o*p}s.putImageData(l,0,0);const f=new Image;return f.onload=()=>{e.imageElement=f,e.imageData=o.toDataURL(),window.scheduleRender&&window.scheduleRender(),announceExtraAI(`Gradient Map applicato (intensity ${i})`,"polite")},f.src=o.toDataURL(),!0}};
 
-// Event Listeners
-document.getElementById("pixelate-size")?.addEventListener("input",(e=>{const t=document.getElementById("pixelate-size-value");t&&(t.textContent=e.target.value+" px")})),document.getElementById("btn-apply-pixelate")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("pixelate-size").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyPixelate(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("glow-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("glow-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-glow")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("glow-intensity").value),t=document.getElementById("glow-color").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyGlow(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("vignette-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("vignette-size")?.addEventListener("input",(e=>{const t=document.getElementById("vignette-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-vignette")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("vignette-intensity").value),t=parseInt(document.getElementById("vignette-size").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyVignette(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("sharpen-amount")?.addEventListener("input",(e=>{const t=document.getElementById("sharpen-amount-value"),a=document.getElementById("sharpen-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("sharpen-preset")?.addEventListener("change",(e=>{const t={light:50,medium:100,strong:150}[e.target.value],a=document.getElementById("sharpen-amount"),i=document.getElementById("sharpen-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-sharpen")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("sharpen-amount").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applySharpen(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("autolevels-strength")?.addEventListener("input",(e=>{const t=document.getElementById("autolevels-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-autolevels")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("autolevels-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyAutoLevels(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("noise-amount")?.addEventListener("input",(e=>{const t=document.getElementById("noise-amount-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-noise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("noise-amount").value),t=document.getElementById("noise-type").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyNoise(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("temperature-value")?.addEventListener("input",(e=>{const t=document.getElementById("temperature-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("tint-value")?.addEventListener("input",(e=>{const t=document.getElementById("tint-value-display");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-temperature")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("temperature-value").value),t=parseInt(document.getElementById("tint-value").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyTemperature(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("gradient-text-angle")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-angle-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("gradient-text-font-size")?.addEventListener("input",(e=>{const t=document.getElementById("gradient-text-font-size-value");t&&(t.textContent=e.target.value+"px")})),document.getElementById("btn-create-gradient-text")?.addEventListener("click",(()=>{const e=document.getElementById("gradient-text-input").value;if(!e||""===e.trim())return void announceExtraAI("Inserisci un testo da creare","assertive");const t=document.getElementById("gradient-text-color1").value,a=document.getElementById("gradient-text-color2").value,i=parseInt(document.getElementById("gradient-text-angle").value),n=parseInt(document.getElementById("gradient-text-font-size").value);AdvancedEffects.createGradientText(e,t,a,i,n)})),document.getElementById("duotone-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("duotone-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-duotone")?.addEventListener("click",(()=>{const e=document.getElementById("duotone-color1").value,t=document.getElementById("duotone-color2").value,a=parseInt(document.getElementById("duotone-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDuotone(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("hsl-hue")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-hue-value");t&&(t.textContent=e.target.value+"°")})),document.getElementById("hsl-saturation")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-saturation-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("hsl-lightness")?.addEventListener("input",(e=>{const t=document.getElementById("hsl-lightness-value");t&&(t.textContent=e.target.value+"%")})),document.getElementById("btn-apply-hsl")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("hsl-hue").value),t=parseInt(document.getElementById("hsl-saturation").value),a=parseInt(document.getElementById("hsl-lightness").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyHSLShift(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("oil-brush-size")?.addEventListener("input",(e=>{const t=document.getElementById("oil-brush-size-value");t&&(t.textContent=e.target.value)})),document.getElementById("oil-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("oil-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-oil")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("oil-brush-size").value),t=parseInt(document.getElementById("oil-intensity").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyOilPainting(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")}));document.getElementById("blur-radius")?.addEventListener("input",(e=>{const t=document.getElementById("blur-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-blur")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("blur-radius").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyBlur(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("emboss-strength")?.addEventListener("input",(e=>{const t=document.getElementById("emboss-strength-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-emboss")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("emboss-strength").value),t=window.state?.layers[window.state?.currentLayerIndex];t&&"image"===t.type?AdvancedEffects.applyEmboss(t,e):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("edge-threshold")?.addEventListener("input",(e=>{const t=document.getElementById("edge-threshold-value");t&&(t.textContent=e.target.value)})),document.getElementById("btn-apply-edge")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("edge-threshold").value),t=document.getElementById("edge-invert").value,a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyEdgeDetect(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("clarity-amount")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-amount-value"),a=document.getElementById("clarity-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("clarity-radius")?.addEventListener("input",(e=>{const t=document.getElementById("clarity-radius-value");t&&(t.textContent=e.target.value)})),document.getElementById("clarity-preset")?.addEventListener("change",(e=>{const t={subtle:30,moderate:50,strong:80,extreme:120}[e.target.value],a=document.getElementById("clarity-amount"),i=document.getElementById("clarity-amount-value");t&&a&&(a.value=t,i&&(i.textContent=t))})),document.getElementById("btn-apply-clarity")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("clarity-amount").value),t=parseInt(document.getElementById("clarity-radius").value),a=window.state?.layers[window.state?.currentLayerIndex];a&&"image"===a.type?AdvancedEffects.applyClarity(a,e,t):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("denoise-luminance")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-luminance-value"),a=document.getElementById("denoise-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")})),document.getElementById("denoise-color")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-color-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-sharpen")?.addEventListener("input",(e=>{const t=document.getElementById("denoise-sharpen-value");t&&(t.textContent=e.target.value)})),document.getElementById("denoise-preset")?.addEventListener("change",(e=>{const presets={light:[30,20,15],moderate:[50,30,20],strong:[70,50,30],aggressive:[85,70,40]},preset=presets[e.target.value];if(preset){const e=document.getElementById("denoise-luminance"),t=document.getElementById("denoise-color"),a=document.getElementById("denoise-sharpen");e&&(e.value=preset[0],document.getElementById("denoise-luminance-value").textContent=preset[0]),t&&(t.value=preset[1],document.getElementById("denoise-color-value").textContent=preset[1]),a&&(a.value=preset[2],document.getElementById("denoise-sharpen-value").textContent=preset[2])}})),document.getElementById("btn-apply-denoise")?.addEventListener("click",(()=>{const e=parseInt(document.getElementById("denoise-luminance").value),t=parseInt(document.getElementById("denoise-color").value),a=parseInt(document.getElementById("denoise-sharpen").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyDenoise(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")})),document.getElementById("softlut-intensity")?.addEventListener("input",e=>{const t=document.getElementById("softlut-intensity-value");t&&(t.textContent=e.target.value)}),document.getElementById("btn-apply-softlut")?.addEventListener("click",()=>{const preset=document.getElementById("softlut-preset").value,intensity=parseInt(document.getElementById("softlut-intensity").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applySoftLUT(layer,preset,intensity):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("posterize-levels")?.addEventListener("input",e=>{const t=document.getElementById("posterize-levels-value"),a=document.getElementById("posterize-preset");t&&(t.textContent=e.target.value),a&&(a.value="custom")}),document.getElementById("posterize-preset")?.addEventListener("change",e=>{const levels={low:4,medium:8,high:16}[e.target.value],input=document.getElementById("posterize-levels"),value=document.getElementById("posterize-levels-value");levels&&input&&(input.value=levels,value&&(value.textContent=levels))}),document.getElementById("btn-apply-posterize")?.addEventListener("click",()=>{const levels=parseInt(document.getElementById("posterize-levels").value),layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyPosterize(layer,levels):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("invert-preset")?.addEventListener("change",e=>{const presets={full:[!0,!0,!0],cyan:[!1,!0,!0],magenta:[!0,!1,!0],yellow:[!0,!0,!1]},preset=presets[e.target.value];if(preset){const e=document.getElementById("invert-red"),t=document.getElementById("invert-green"),a=document.getElementById("invert-blue");e&&(e.checked=preset[0]),t&&(t.checked=preset[1]),a&&(a.checked=preset[2])}}),document.getElementById("btn-apply-invert")?.addEventListener("click",()=>{const r=document.getElementById("invert-red").checked,g=document.getElementById("invert-green").checked,b=document.getElementById("invert-blue").checked,layer=window.state?.layers[window.state?.currentLayerIndex];layer&&"image"===layer.type?AdvancedEffects.applyInvertColors(layer,r,g,b):announceExtraAI("Seleziona un livello immagine prima","assertive")}),document.getElementById("gradmap-intensity")?.addEventListener("input",(e=>{const t=document.getElementById("gradmap-intensity-value");t&&(t.textContent=e.target.value)})),document.getElementById("gradmap-preset")?.addEventListener("change",(e=>{const presets={goldenblue:["#d4a574","#4a90e2"],cyanred:["#1fa2a6","#e63946"],purpleorange:["#7209b7","#f77f00"],greenmint:["#2d6a4f","#95d5b2"],retrowarm:["#5a3a31","#f4dfc8"]},preset=presets[e.target.value];if(preset){const e=document.getElementById("gradmap-shadow"),t=document.getElementById("gradmap-highlight");e&&(e.value=preset[0]),t&&(t.value=preset[1])}})),document.getElementById("btn-apply-gradmap")?.addEventListener("click",(()=>{const e=document.getElementById("gradmap-shadow").value,t=document.getElementById("gradmap-highlight").value,a=parseInt(document.getElementById("gradmap-intensity").value),i=window.state?.layers[window.state?.currentLayerIndex];i&&"image"===i.type?AdvancedEffects.applyGradientMap(i,e,t,a):announceExtraAI("Seleziona un livello immagine prima","assertive")}));
+// Event Listeners - CORRETTI per permettere conversione automatica forme → immagini
+
+// Pixelate
+document.getElementById("pixelate-size")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("pixelate-size-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + " px";
+});
+
+document.getElementById("btn-apply-pixelate")?.addEventListener("click", () => {
+    const size = parseInt(document.getElementById("pixelate-size").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyPixelate(layer, size);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Glow
+document.getElementById("glow-intensity")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("glow-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-glow")?.addEventListener("click", () => {
+    const intensity = parseInt(document.getElementById("glow-intensity").value);
+    const color = document.getElementById("glow-color").value;
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyGlow(layer, intensity, color);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Vignette
+document.getElementById("vignette-intensity")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("vignette-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("vignette-size")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("vignette-size-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-vignette")?.addEventListener("click", () => {
+    const intensity = parseInt(document.getElementById("vignette-intensity").value);
+    const size = parseInt(document.getElementById("vignette-size").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyVignette(layer, intensity, size);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Sharpen
+document.getElementById("sharpen-amount")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("sharpen-amount-value");
+    const presetSelect = document.getElementById("sharpen-preset");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+    if (presetSelect) presetSelect.value = "custom";
+});
+
+document.getElementById("sharpen-preset")?.addEventListener("change", (e) => {
+    const presets = { light: 50, medium: 100, strong: 150 };
+    const value = presets[e.target.value];
+    const amountSlider = document.getElementById("sharpen-amount");
+    const valueDisplay = document.getElementById("sharpen-amount-value");
+    if (value && amountSlider) {
+        amountSlider.value = value;
+        if (valueDisplay) valueDisplay.textContent = value;
+    }
+});
+
+document.getElementById("btn-apply-sharpen")?.addEventListener("click", () => {
+    const amount = parseInt(document.getElementById("sharpen-amount").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applySharpen(layer, amount);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Auto Levels
+document.getElementById("autolevels-strength")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("autolevels-strength-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-autolevels")?.addEventListener("click", () => {
+    const strength = parseInt(document.getElementById("autolevels-strength").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyAutoLevels(layer, strength);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Noise
+document.getElementById("noise-amount")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("noise-amount-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-noise")?.addEventListener("click", () => {
+    const amount = parseInt(document.getElementById("noise-amount").value);
+    const type = document.getElementById("noise-type").value;
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyNoise(layer, amount, type);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Temperature/Tint
+document.getElementById("temperature-value")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("temperature-value-display");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("tint-value")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("tint-value-display");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-temperature")?.addEventListener("click", () => {
+    const temp = parseInt(document.getElementById("temperature-value").value);
+    const tint = parseInt(document.getElementById("tint-value").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyTemperature(layer, temp, tint);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Gradient Text
+document.getElementById("gradient-text-angle")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("gradient-text-angle-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + "°";
+});
+
+document.getElementById("gradient-text-font-size")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("gradient-text-font-size-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + "px";
+});
+
+document.getElementById("btn-create-gradient-text")?.addEventListener("click", () => {
+    const text = document.getElementById("gradient-text-input").value;
+    if (!text || text.trim() === "") {
+        announceExtraAI("Inserisci un testo da creare", "assertive");
+        return;
+    }
+    const color1 = document.getElementById("gradient-text-color1").value;
+    const color2 = document.getElementById("gradient-text-color2").value;
+    const angle = parseInt(document.getElementById("gradient-text-angle").value);
+    const fontSize = parseInt(document.getElementById("gradient-text-font-size").value);
+    AdvancedEffects.createGradientText(text, color1, color2, angle, fontSize);
+});
+
+// Duotone
+document.getElementById("duotone-intensity")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("duotone-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-duotone")?.addEventListener("click", () => {
+    const color1 = document.getElementById("duotone-color1").value;
+    const color2 = document.getElementById("duotone-color2").value;
+    const intensity = parseInt(document.getElementById("duotone-intensity").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyDuotone(layer, color1, color2, intensity);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// HSL Shift
+document.getElementById("hsl-hue")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("hsl-hue-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + "°";
+});
+
+document.getElementById("hsl-saturation")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("hsl-saturation-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + "%";
+});
+
+document.getElementById("hsl-lightness")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("hsl-lightness-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value + "%";
+});
+
+document.getElementById("btn-apply-hsl")?.addEventListener("click", () => {
+    const hue = parseInt(document.getElementById("hsl-hue").value);
+    const saturation = parseInt(document.getElementById("hsl-saturation").value);
+    const lightness = parseInt(document.getElementById("hsl-lightness").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyHSLShift(layer, hue, saturation, lightness);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Oil Painting
+document.getElementById("oil-brush-size")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("oil-brush-size-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("oil-intensity")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("oil-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-oil")?.addEventListener("click", () => {
+    const brushSize = parseInt(document.getElementById("oil-brush-size").value);
+    const intensity = parseInt(document.getElementById("oil-intensity").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyOilPainting(layer, brushSize, intensity);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Blur
+document.getElementById("blur-radius")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("blur-radius-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-blur")?.addEventListener("click", () => {
+    const radius = parseInt(document.getElementById("blur-radius").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyBlur(layer, radius);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Emboss
+document.getElementById("emboss-strength")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("emboss-strength-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-emboss")?.addEventListener("click", () => {
+    const strength = parseInt(document.getElementById("emboss-strength").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyEmboss(layer, strength);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Edge Detect
+document.getElementById("edge-threshold")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("edge-threshold-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-edge")?.addEventListener("click", () => {
+    const threshold = parseInt(document.getElementById("edge-threshold").value);
+    const invert = document.getElementById("edge-invert").value;
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyEdgeDetect(layer, threshold, invert);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Clarity
+document.getElementById("clarity-amount")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("clarity-amount-value");
+    const presetSelect = document.getElementById("clarity-preset");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+    if (presetSelect) presetSelect.value = "custom";
+});
+
+document.getElementById("clarity-radius")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("clarity-radius-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("clarity-preset")?.addEventListener("change", (e) => {
+    const presets = { subtle: 30, moderate: 50, strong: 80, extreme: 120 };
+    const value = presets[e.target.value];
+    const amountSlider = document.getElementById("clarity-amount");
+    const valueDisplay = document.getElementById("clarity-amount-value");
+    if (value && amountSlider) {
+        amountSlider.value = value;
+        if (valueDisplay) valueDisplay.textContent = value;
+    }
+});
+
+document.getElementById("btn-apply-clarity")?.addEventListener("click", () => {
+    const amount = parseInt(document.getElementById("clarity-amount").value);
+    const radius = parseInt(document.getElementById("clarity-radius").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyClarity(layer, amount, radius);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Denoise
+document.getElementById("denoise-luminance")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("denoise-luminance-value");
+    const presetSelect = document.getElementById("denoise-preset");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+    if (presetSelect) presetSelect.value = "custom";
+});
+
+document.getElementById("denoise-color")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("denoise-color-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("denoise-sharpen")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("denoise-sharpen-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("denoise-preset")?.addEventListener("change", (e) => {
+    const presets = {
+        light: [30, 20, 15],
+        moderate: [50, 30, 20],
+        strong: [70, 50, 30],
+        aggressive: [85, 70, 40]
+    };
+    const preset = presets[e.target.value];
+    if (preset) {
+        const lumSlider = document.getElementById("denoise-luminance");
+        const colorSlider = document.getElementById("denoise-color");
+        const sharpSlider = document.getElementById("denoise-sharpen");
+        if (lumSlider) {
+            lumSlider.value = preset[0];
+            document.getElementById("denoise-luminance-value").textContent = preset[0];
+        }
+        if (colorSlider) {
+            colorSlider.value = preset[1];
+            document.getElementById("denoise-color-value").textContent = preset[1];
+        }
+        if (sharpSlider) {
+            sharpSlider.value = preset[2];
+            document.getElementById("denoise-sharpen-value").textContent = preset[2];
+        }
+    }
+});
+
+document.getElementById("btn-apply-denoise")?.addEventListener("click", () => {
+    const luminance = parseInt(document.getElementById("denoise-luminance").value);
+    const color = parseInt(document.getElementById("denoise-color").value);
+    const sharpen = parseInt(document.getElementById("denoise-sharpen").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyDenoise(layer, luminance, color, sharpen);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Soft LUT (rimosso dai listener originali ma includo per completezza se esiste)
+document.getElementById("softlut-intensity")?.addEventListener("input", e => {
+    const valueDisplay = document.getElementById("softlut-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("btn-apply-softlut")?.addEventListener("click", () => {
+    const preset = document.getElementById("softlut-preset").value;
+    const intensity = parseInt(document.getElementById("softlut-intensity").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applySoftLUT(layer, preset, intensity);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Posterize
+document.getElementById("posterize-levels")?.addEventListener("input", e => {
+    const valueDisplay = document.getElementById("posterize-levels-value");
+    const presetSelect = document.getElementById("posterize-preset");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+    if (presetSelect) presetSelect.value = "custom";
+});
+
+document.getElementById("posterize-preset")?.addEventListener("change", e => {
+    const presets = { low: 4, medium: 8, high: 16 };
+    const levels = presets[e.target.value];
+    const input = document.getElementById("posterize-levels");
+    const valueDisplay = document.getElementById("posterize-levels-value");
+    if (levels && input) {
+        input.value = levels;
+        if (valueDisplay) valueDisplay.textContent = levels;
+    }
+});
+
+document.getElementById("btn-apply-posterize")?.addEventListener("click", () => {
+    const levels = parseInt(document.getElementById("posterize-levels").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyPosterize(layer, levels);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Invert Colors
+document.getElementById("invert-preset")?.addEventListener("change", e => {
+    const presets = {
+        full: [true, true, true],
+        cyan: [false, true, true],
+        magenta: [true, false, true],
+        yellow: [true, true, false]
+    };
+    const preset = presets[e.target.value];
+    if (preset) {
+        const redCheck = document.getElementById("invert-red");
+        const greenCheck = document.getElementById("invert-green");
+        const blueCheck = document.getElementById("invert-blue");
+        if (redCheck) redCheck.checked = preset[0];
+        if (greenCheck) greenCheck.checked = preset[1];
+        if (blueCheck) blueCheck.checked = preset[2];
+    }
+});
+
+document.getElementById("btn-apply-invert")?.addEventListener("click", () => {
+    const r = document.getElementById("invert-red").checked;
+    const g = document.getElementById("invert-green").checked;
+    const b = document.getElementById("invert-blue").checked;
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyInvertColors(layer, r, g, b);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
+// Gradient Map
+document.getElementById("gradmap-intensity")?.addEventListener("input", (e) => {
+    const valueDisplay = document.getElementById("gradmap-intensity-value");
+    if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+document.getElementById("gradmap-preset")?.addEventListener("change", (e) => {
+    const presets = {
+        goldenblue: ["#d4a574", "#4a90e2"],
+        cyanred: ["#1fa2a6", "#e63946"],
+        purpleorange: ["#7209b7", "#f77f00"],
+        greenmint: ["#2d6a4f", "#95d5b2"],
+        retrowarm: ["#5a3a31", "#f4dfc8"]
+    };
+    const preset = presets[e.target.value];
+    if (preset) {
+        const shadowPicker = document.getElementById("gradmap-shadow");
+        const highlightPicker = document.getElementById("gradmap-highlight");
+        if (shadowPicker) shadowPicker.value = preset[0];
+        if (highlightPicker) highlightPicker.value = preset[1];
+    }
+});
+
+document.getElementById("btn-apply-gradmap")?.addEventListener("click", () => {
+    const shadow = document.getElementById("gradmap-shadow").value;
+    const highlight = document.getElementById("gradmap-highlight").value;
+    const intensity = parseInt(document.getElementById("gradmap-intensity").value);
+    const layer = window.state?.layers[window.state?.currentLayerIndex];
+    if (layer) {
+        AdvancedEffects.applyGradientMap(layer, shadow, highlight, intensity);
+    } else {
+        announceExtraAI("Seleziona un layer prima", "assertive");
+    }
+});
+
 
 console.log("✅ Effetti Avanzati v41.1 COMPLETO - 17 Effetti (+ Clarity, Denoise, Gradient Map)");
 
@@ -23281,7 +23983,13 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v44.0 - CHROMATIC SHIFT
         if (document.getElementById('btn-apply-chromatic')) {
-            document.getElementById('btn-apply-chromatic').addEventListener('click', () => {
+            document.getElementById('btn-apply-chromatic').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const intensity = parseInt(document.getElementById('chromatic-intensity').value);
                 const angle = parseInt(document.getElementById('chromatic-angle').value);
                 
@@ -23319,7 +24027,13 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v44.0 - GLITCH EFFECT
         if (document.getElementById('btn-apply-glitch')) {
-            document.getElementById('btn-apply-glitch').addEventListener('click', () => {
+            document.getElementById('btn-apply-glitch').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const intensity = parseInt(document.getElementById('glitch-intensity').value);
                 const blocks = parseInt(document.getElementById('glitch-blocks').value);
                 
@@ -23357,7 +24071,13 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v44.0 - VHS LIGHT EFFECT
         if (document.getElementById('btn-apply-vhs')) {
-            document.getElementById('btn-apply-vhs').addEventListener('click', () => {
+            document.getElementById('btn-apply-vhs').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const intensity = parseInt(document.getElementById('vhs-intensity').value);
                 const lines = parseInt(document.getElementById('vhs-lines').value);
                 
@@ -23399,7 +24119,13 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
         
         // 🆕 v44.1 - DEHAZE / DEFOG
         if (document.getElementById('btn-apply-dehaze')) {
-            document.getElementById('btn-apply-dehaze').addEventListener('click', () => {
+            document.getElementById('btn-apply-dehaze').addEventListener('click', async () => {
+                const layer = getSelectedLayer();
+                if (!layer) {
+                    announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
+                    return;
+                }
+                
                 const strength = parseInt(document.getElementById('dehaze-strength').value);
                 const saturation = parseInt(document.getElementById('dehaze-saturation').value);
                 
