@@ -2373,7 +2373,7 @@ label {
                                 <div class="control-row" style="gap: 8px;">
                                     <div class="input-with-label" class="flex-1">
                                         <label for="bg-color-hex">Codice HEX</label>
-                                        <input type="text" id="bg-color-hex" placeholder="#ffffff" maxlength="7">
+                                        <input type="text" id="bg-color-hex" placeholder="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
                                 </div>
                                 <div class="control-row" style="gap: 8px; margin-top: 8px;">
@@ -2425,7 +2425,7 @@ label {
                                         <input type="color" id="bg-gradient-color1" value="#3b82f6" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="bg-gradient-color1-hex" value="#3b82f6"
-                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX Colore 1"
+                                               placeholder="#000000" maxlength="7"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
@@ -2460,7 +2460,7 @@ label {
                                         <input type="color" id="bg-gradient-color2" value="#8b5cf6" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="bg-gradient-color2-hex" value="#8b5cf6"
-                                               placeholder="#ffffff" maxlength="7" aria-label="Codice HEX Colore 2"
+                                               placeholder="#ffffff" maxlength="7"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
@@ -2695,7 +2695,7 @@ label {
                                 <div class="control-row" style="gap: 8px;">
                                     <div class="input-with-label" class="flex-1">
                                         <label for="text-color-hex">Codice HEX</label>
-                                        <input type="text" id="text-color-hex" placeholder="#000000" maxlength="7">
+                                        <input type="text" id="text-color-hex" placeholder="#000000" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
                                 </div>
                                 <div class="control-row" style="gap: 8px; margin-top: 8px;">
@@ -3216,7 +3216,7 @@ label {
                             <div class="control-row" style="gap: 8px;">
                                 <div class="input-with-label" class="flex-1">
                                     <label for="layer-color-hex">HEX</label>
-                                    <input type="text" id="layer-color-hex" placeholder="#000000" maxlength="7">
+                                    <input type="text" id="layer-color-hex" placeholder="#000000" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
                                 </div>
                             </div>
                             <div class="control-row" style="gap: 8px; margin-top: 8px;">
@@ -3258,38 +3258,89 @@ label {
                                 </select>
                             </div>
                             
+                            <!-- Toggle HEX/RGB per gradiente forme -->
+                            <div role="radiogroup" aria-label="Formato colore gradiente" style="margin-bottom: 12px; margin-top: 12px; display: flex; gap: 10px;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="layer-gradient-color-format" value="hex" checked style="margin-right: 6px;">
+                                    <span>Codice HEX</span>
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="layer-gradient-color-format" value="rgb" style="margin-right: 6px;">
+                                    <span>Valori RGB</span>
+                                </label>
+                            </div>
+                            
+                            <!-- Colore 1 -->
+                            <strong class="control-group-title">Colore 1</strong>
                             <div class="control-row">
-                                <div class="input-with-label">
-                                    <label for="gradient-color1">Colore 1 (HEX)</label>
+                                <div class="input-with-label" id="layer-gradient-hex-controls-1">
+                                    <label for="gradient-color1-hex" class="sr-only">Codice HEX Colore 1</label>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="color" id="gradient-color1" value="#ff0000" 
+                                        <input type="color" id="gradient-color1" value="#ff0000" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="gradient-color1-hex" value="#ff0000" 
                                                placeholder="#000000" maxlength="7"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
-                                    <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">
-                                        Formato: #RRGGBB (es. #ff0000 per rosso)
-                                    </small>
                                 </div>
-                                <div class="input-with-label">
-                                    <label for="gradient-color2">Colore 2 (HEX)</label>
+                                <div class="input-with-label" id="layer-gradient-rgb-controls-1" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color1-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="gradient-color1-r" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color1-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="gradient-color1-g" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color1-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="gradient-color1-b" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colore 2 -->
+                            <strong class="control-group-title" style="margin-top: 16px; display: block;">Colore 2</strong>
+                            <div class="control-row">
+                                <div class="input-with-label" id="layer-gradient-hex-controls-2">
+                                    <label for="gradient-color2-hex" class="sr-only">Codice HEX Colore 2</label>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="color" id="gradient-color2" value="#0000ff"
+                                        <input type="color" id="gradient-color2" value="#0000ff" aria-hidden="true" tabindex="-1"
                                                style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
                                         <input type="text" id="gradient-color2-hex" value="#0000ff"
                                                placeholder="#ffffff" maxlength="7"
                                                style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
                                                pattern="^#[0-9A-Fa-f]{6}$">
                                     </div>
-                                    <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">
-                                        Formato: #RRGGBB (es. #0000ff per blu)
-                                    </small>
+                                </div>
+                                <div class="input-with-label" id="layer-gradient-rgb-controls-2" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color2-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="gradient-color2-r" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color2-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="gradient-color2-g" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradient-color2-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="gradient-color2-b" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="input-with-label">
+                            <div class="input-with-label" style="margin-top: 12px;">
                                 <label for="gradient-angle">Angolo (solo lineare)</label>
                                 <div class="slider-group">
                                     <input type="range" id="gradient-angle" min="0" max="360" value="0">
@@ -3308,7 +3359,7 @@ label {
                         <div id="stroke-controls" class="hidden">
                             <div class="control-row">
                                 <div class="input-with-label">
-                                    <label for="sc" class="sr-only">Colore Bordo</label>
+                                    <label for="sc">Colore Bordo</label>
                                     <select id="sc">
                                         <option value="black" selected>Nero</option>
                                         <option value="white">Bianco</option>
@@ -3321,11 +3372,67 @@ label {
                                         <option value="orange">Arancione</option>
                                         <option value="purple">Viola</option>
                                         <option value="pink">Rosa</option>
+                                        <option value="custom">Personalizzato...</option>
                                     </select>
                                 </div>
                                 <div class="input-with-label">
                                     <label for="stroke-width">Spessore</label>
                                     <input type="number" id="stroke-width" min="1" max="50" value="2">
+                                </div>
+                            </div>
+                            
+                            <!-- Sezione colore personalizzato bordo -->
+                            <div id="stroke-color-custom-section" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 6px;">
+                                <h4 style="font-size: 14px; margin-bottom: 8px;">Colore Bordo Personalizzato</h4>
+                                
+                                <!-- Toggle HEX/RGB per Bordo -->
+                                <div role="radiogroup" aria-label="Formato colore bordo" style="margin-bottom: 8px; display: flex; gap: 10px;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="stroke-color-format" value="hex" checked style="margin-right: 6px;">
+                                        <span>Codice HEX</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="stroke-color-format" value="rgb" style="margin-right: 6px;">
+                                        <span>Valori RGB</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="stroke-hex-controls">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="stroke-color-picker" value="#000000" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="stroke-color-hex" value="#000000" 
+                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX colore bordo"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="stroke-rgb-controls" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="stroke-color-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="stroke-color-r" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="stroke-color-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="stroke-color-g" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="stroke-color-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="stroke-color-b" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Preview colore -->
+                                <div style="margin-top: 8px; padding: 8px; background: white; border: 1px solid var(--border-color); border-radius: 4px;">
+                                    <div id="stroke-color-preview" style="width: 100%; height: 40px; border-radius: 4px; background: #000000;"></div>
                                 </div>
                             </div>
                         </div>
@@ -3577,7 +3684,7 @@ label {
                         
                         <div id="shadow-controls" class="hidden">
                             <div class="input-with-label">
-                                <label for="shc" class="sr-only">Colore</label>
+                                <label for="shc">Colore Ombra</label>
                                 <select id="shc">
                                     <option value="black" selected>Nero</option>
                                     <option value="gray">Grigio</option>
@@ -3591,7 +3698,63 @@ label {
                                     <option value="orange">Arancione</option>
                                     <option value="purple">Viola</option>
                                     <option value="pink">Rosa</option>
+                                    <option value="custom">Personalizzato...</option>
                                 </select>
+                            </div>
+                            
+                            <!-- Sezione colore personalizzato Drop Shadow -->
+                            <div id="shadow-color-custom-section" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 6px;">
+                                <h4 style="font-size: 14px; margin-bottom: 8px;">Colore Ombra Personalizzato</h4>
+                                
+                                <!-- Toggle HEX/RGB per Drop Shadow -->
+                                <div role="radiogroup" aria-label="Formato colore ombra" style="margin-bottom: 8px; display: flex; gap: 10px;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="shadow-color-format" value="hex" checked style="margin-right: 6px;">
+                                        <span>Codice HEX</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="shadow-color-format" value="rgb" style="margin-right: 6px;">
+                                        <span>Valori RGB</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="shadow-hex-controls">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="shadow-color-picker" value="#000000" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="shadow-color-hex" value="#000000" 
+                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX colore ombra"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="shadow-rgb-controls" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="shadow-color-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="shadow-color-r" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="shadow-color-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="shadow-color-g" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="shadow-color-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="shadow-color-b" min="0" max="255" value="0" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Preview colore -->
+                                <div style="margin-top: 8px; padding: 8px; background: white; border: 1px solid var(--border-color); border-radius: 4px;">
+                                    <div id="shadow-color-preview" style="width: 100%; height: 40px; border-radius: 4px; background: #000000;"></div>
+                                </div>
                             </div>
                             
                             <div class="input-with-label">
@@ -3846,8 +4009,52 @@ label {
                                 </div>
                             </div>
                             <div class="input-with-label">
-                                <label for="glow-color">Colore Bagliore</label>
-                                <input type="color" id="glow-color" value="#ffffff">
+                                <label for="glow-color"><strong>Colore Bagliore</strong></label>
+                                
+                                <!-- Toggle HEX/RGB per Glow -->
+                                <div role="radiogroup" aria-label="Formato colore bagliore" style="margin-bottom: 8px; margin-top: 8px; display: flex; gap: 10px;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="glow-color-format" value="hex" checked style="margin-right: 6px;">
+                                        <span>Codice HEX</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="glow-color-format" value="rgb" style="margin-right: 6px;">
+                                        <span>Valori RGB</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="glow-hex-controls">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="glow-color" value="#ffffff" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="glow-color-hex" value="#ffffff" 
+                                               placeholder="#ffffff" maxlength="7" aria-label="Codice HEX colore bagliore"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="glow-rgb-controls" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="glow-color-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="glow-color-r" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="glow-color-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="glow-color-g" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="glow-color-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="glow-color-b" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <button class="btn btn-primary btn-full" id="btn-apply-glow"
                                     style="margin-top: 12px; background: linear-gradient(to right, #f59e0b, #d97706);">
@@ -4124,11 +4331,11 @@ label {
                             </div>
                             <div class="input-with-label">
                                 <label for="gradient-text-color1">Colore Inizio</label>
-                                <input type="color" id="gradient-text-color1" value="#ff0080">
+                                <input type="color" id="gradient-text-color1" value="#ff0080" aria-hidden="true" tabindex="-1">
                             </div>
                             <div class="input-with-label">
                                 <label for="gradient-text-color2">Colore Fine</label>
-                                <input type="color" id="gradient-text-color2" value="#7928ca">
+                                <input type="color" id="gradient-text-color2" value="#7928ca" aria-hidden="true" tabindex="-1">
                             </div>
                             <div class="input-with-label">
                                 <label for="gradient-text-angle">Angolo Sfumatura (0-360°)</label>
@@ -4160,13 +4367,92 @@ label {
                             <h4 style="color: #be185d; margin-bottom: 12px; font-size: 15px; font-weight: 600;">
                                 🎭 Duotone (Due Tonalità)
                             </h4>
-                            <div class="input-with-label">
-                                <label for="duotone-color1">Colore Ombre (toni scuri)</label>
-                                <input type="color" id="duotone-color1" value="#1e3a8a">
+                            <!-- Toggle HEX/RGB per Duotone -->
+                            <div role="radiogroup" aria-label="Formato colore duotone" style="margin-bottom: 12px; display: flex; gap: 10px;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="duotone-color-format" value="hex" checked style="margin-right: 6px;">
+                                    <span>Codice HEX</span>
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="duotone-color-format" value="rgb" style="margin-right: 6px;">
+                                    <span>Valori RGB</span>
+                                </label>
                             </div>
+                            
+                            <!-- Colore 1 - Ombre -->
                             <div class="input-with-label">
-                                <label for="duotone-color2">Colore Luci (toni chiari)</label>
-                                <input type="color" id="duotone-color2" value="#fb923c">
+                                <label for="duotone-color1"><strong>Colore Ombre (toni scuri)</strong></label>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="duotone-hex-controls-1">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="duotone-color1" value="#1e3a8a" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="duotone-color1-hex" value="#1e3a8a" 
+                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX colore ombre"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="duotone-rgb-controls-1" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color1-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="duotone-color1-r" min="0" max="255" value="30" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color1-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="duotone-color1-g" min="0" max="255" value="58" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color1-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="duotone-color1-b" min="0" max="255" value="138" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colore 2 - Luci -->
+                            <div class="input-with-label" style="margin-top: 12px;">
+                                <label for="duotone-color2"><strong>Colore Luci (toni chiari)</strong></label>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="duotone-hex-controls-2">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="duotone-color2" value="#fb923c" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="duotone-color2-hex" value="#fb923c"
+                                               placeholder="#ffffff" maxlength="7" aria-label="Codice HEX colore luci"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="duotone-rgb-controls-2" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color2-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="duotone-color2-r" min="0" max="255" value="251" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color2-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="duotone-color2-g" min="0" max="255" value="146" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="duotone-color2-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="duotone-color2-b" min="0" max="255" value="60" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="input-with-label">
                                 <label for="duotone-intensity">Intensità (0-100)</label>
@@ -4431,13 +4717,93 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                                     <option value="retrowarm">Retro Warm</option>
                                 </select>
                             </div>
-                            <div class="input-with-label">
-                                <label for="gradmap-shadow">Colore Ombre (scuro)</label>
-                                <input type="color" id="gradmap-shadow" value="#1a1a2e">
+                            
+                            <!-- Toggle HEX/RGB per Gradient Map -->
+                            <div role="radiogroup" aria-label="Formato colore gradient map" style="margin-bottom: 12px; margin-top: 12px; display: flex; gap: 10px;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="gradmap-color-format" value="hex" checked style="margin-right: 6px;">
+                                    <span>Codice HEX</span>
+                                </label>
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="radio" name="gradmap-color-format" value="rgb" style="margin-right: 6px;">
+                                    <span>Valori RGB</span>
+                                </label>
                             </div>
+                            
+                            <!-- Colore Ombre -->
                             <div class="input-with-label">
-                                <label for="gradmap-highlight">Colore Luci (chiaro)</label>
-                                <input type="color" id="gradmap-highlight" value="#eef4ff">
+                                <label for="gradmap-shadow"><strong>Colore Ombre (scuro)</strong></label>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="gradmap-hex-controls-1">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="gradmap-shadow" value="#1a1a2e" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="gradmap-shadow-hex" value="#1a1a2e" 
+                                               placeholder="#000000" maxlength="7" aria-label="Codice HEX colore ombre"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="gradmap-rgb-controls-1" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-shadow-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="gradmap-shadow-r" min="0" max="255" value="26" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-shadow-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="gradmap-shadow-g" min="0" max="255" value="26" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-shadow-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="gradmap-shadow-b" min="0" max="255" value="46" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colore Luci -->
+                            <div class="input-with-label" style="margin-top: 12px;">
+                                <label for="gradmap-highlight"><strong>Colore Luci (chiaro)</strong></label>
+                                
+                                <!-- Controlli HEX -->
+                                <div id="gradmap-hex-controls-2">
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="gradmap-highlight" value="#eef4ff" aria-hidden="true" tabindex="-1"
+                                               style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+                                        <input type="text" id="gradmap-highlight-hex" value="#eef4ff"
+                                               placeholder="#ffffff" maxlength="7" aria-label="Codice HEX colore luci"
+                                               style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+                                               pattern="^#[0-9A-Fa-f]{6}$">
+                                    </div>
+                                </div>
+                                
+                                <!-- Controlli RGB -->
+                                <div id="gradmap-rgb-controls-2" style="display: none;">
+                                    <div style="display: flex; gap: 8px;">
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-highlight-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+                                            <input type="number" id="gradmap-highlight-r" min="0" max="255" value="238" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-highlight-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+                                            <input type="number" id="gradmap-highlight-g" min="0" max="255" value="244" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label for="gradmap-highlight-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+                                            <input type="number" id="gradmap-highlight-b" min="0" max="255" value="255" 
+                                                   style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="input-with-label">
                                 <label for="gradmap-intensity">Intensità Mix (0-100)</label>
@@ -4609,7 +4975,6 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             <input type="range" id="gpu-global-brightness" 
                                    min="-1" max="1" step="0.01" value="0"
                                    oninput="updateGlobalGPUEffect('brightness', parseFloat(this.value))"
-                                   aria-label="Regola luminosità globale" 
                                    aria-valuemin="-1" aria-valuemax="1">
                         </div>
                     </div>
@@ -4626,7 +4991,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             <input type="range" id="gpu-global-contrast" 
                                    min="-1" max="1" step="0.01" value="0"
                                    oninput="updateGlobalGPUEffect('contrast', parseFloat(this.value))"
-                                   aria-label="Regola contrasto globale" 
+                                   
                                    aria-valuemin="-1" aria-valuemax="1">
                         </div>
                     </div>
@@ -4643,7 +5008,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             <input type="range" id="gpu-global-hue" 
                                    min="-1" max="1" step="0.01" value="0"
                                    oninput="updateGlobalGPUEffect('hue', parseFloat(this.value))"
-                                   aria-label="Regola tonalità globale" 
+                                   
                                    aria-valuemin="-1" aria-valuemax="1">
                         </div>
                     </div>
@@ -4660,7 +5025,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             <input type="range" id="gpu-global-saturation" 
                                    min="-1" max="1" step="0.01" value="0"
                                    oninput="updateGlobalGPUEffect('saturation', parseFloat(this.value))"
-                                   aria-label="Regola saturazione globale" 
+                                   
                                    aria-valuemin="-1" aria-valuemax="1">
                         </div>
                     </div>
@@ -4677,7 +5042,6 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
                             <input type="range" id="gpu-global-vibrance" 
                                    min="-1" max="1" step="0.01" value="0"
                                    oninput="updateGlobalGPUEffect('vibrance', parseFloat(this.value))"
-                                   aria-label="Regola vivacità globale" 
                                    aria-valuemin="-1" aria-valuemax="1">
                         </div>
                     </div>
@@ -9865,6 +10229,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 document.getElementById('gradient-color2').value = layer.gradient.color2;
                 document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
                 document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
+                
+                // Sincronizza anche i campi RGB
+                syncHexToRgb(layer.gradient.color1, 'gradient-color1');
+                syncHexToRgb(layer.gradient.color2, 'gradient-color2');
+                
                 document.getElementById('gradient-angle').value = layer.gradient.angle;
                 document.getElementById('gradient-angle-value').textContent = layer.gradient.angle + '°';
                 updateGradientPreview();
@@ -9877,7 +10246,23 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 strokeControls.classList.add('hidden');
             }
             if (layer.stroke) {
-                document.getElementById('sc').value = getColorName(layer.stroke.color);
+                const colorName = getColorName(layer.stroke.color);
+                
+                // Se il colore non è nei preset, usa "custom"
+                if (colorName === layer.stroke.color) {
+                    // Il colore è custom (getColorName ha restituito l'HEX)
+                    document.getElementById('sc').value = 'custom';
+                    document.getElementById('stroke-color-custom-section').style.display = 'block';
+                    document.getElementById('stroke-color-hex').value = layer.stroke.color;
+                    document.getElementById('stroke-color-picker').value = layer.stroke.color;
+                    document.getElementById('stroke-color-preview').style.background = layer.stroke.color;
+                    syncHexToRgb(layer.stroke.color, 'stroke-color');
+                } else {
+                    // Il colore è un preset
+                    document.getElementById('sc').value = colorName;
+                    document.getElementById('stroke-color-custom-section').style.display = 'none';
+                }
+                
                 document.getElementById('stroke-width').value = layer.stroke.width;
             }
             document.getElementById('pos-x').value = Math.round(layer.x);
@@ -9893,7 +10278,24 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             if (layer.dropShadow) {
                 document.getElementById('shadow-enabled').checked = layer.dropShadow.enabled;
                 document.getElementById('shadow-controls').style.display = layer.dropShadow.enabled ? 'block' : 'none';
-                document.getElementById('shc').value = getColorName(layer.dropShadow.color);
+                
+                const colorName = getColorName(layer.dropShadow.color);
+                
+                // Se il colore non è nei preset, usa "custom"
+                if (colorName === layer.dropShadow.color) {
+                    // Il colore è custom (getColorName ha restituito l'HEX)
+                    document.getElementById('shc').value = 'custom';
+                    document.getElementById('shadow-color-custom-section').style.display = 'block';
+                    document.getElementById('shadow-color-hex').value = layer.dropShadow.color;
+                    document.getElementById('shadow-color-picker').value = layer.dropShadow.color;
+                    document.getElementById('shadow-color-preview').style.background = layer.dropShadow.color;
+                    syncHexToRgb(layer.dropShadow.color, 'shadow-color');
+                } else {
+                    // Il colore è un preset
+                    document.getElementById('shc').value = colorName;
+                    document.getElementById('shadow-color-custom-section').style.display = 'none';
+                }
+                
                 document.getElementById('shadow-blur').value = layer.dropShadow.blur;
                 document.getElementById('shadow-blur-value').textContent = layer.dropShadow.blur + ' px';
                 document.getElementById('shadow-x').value = layer.dropShadow.x;
@@ -11256,6 +11658,20 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 }).join('');
             }
             
+            // Funzione helper per sincronizzare valori HEX ai campi RGB
+            function syncHexToRgb(hexValue, baseId) {
+                const rgb = hexToRgb(hexValue);
+                if (rgb) {
+                    const rInput = document.getElementById(baseId + '-r');
+                    const gInput = document.getElementById(baseId + '-g');
+                    const bInput = document.getElementById(baseId + '-b');
+                    
+                    if (rInput) rInput.value = rgb.r;
+                    if (gInput) gInput.value = rgb.g;
+                    if (bInput) bInput.value = rgb.b;
+                }
+            }
+            
             // Funzione per aggiornare l'anteprima colore
             function updateColorPreview(color) {
                 if (color === 'transparent') {
@@ -12546,6 +12962,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         document.getElementById('gradient-color2').value = layer.gradient.color2;
                         document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
                         document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
+                        
+                        // Sincronizza anche i campi RGB
+                        syncHexToRgb(layer.gradient.color1, 'gradient-color1');
+                        syncHexToRgb(layer.gradient.color2, 'gradient-color2');
+                        
                         document.getElementById('gradient-angle').value = layer.gradient.angle;
                         document.getElementById('gradient-angle-value').textContent = layer.gradient.angle + '°';
                         updateGradientPreview();
@@ -12703,6 +13124,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                         // Sincronizza i campi HEX
                         document.getElementById('gradient-color1-hex').value = layer.gradient.color1;
                         document.getElementById('gradient-color2-hex').value = layer.gradient.color2;
+                        // Sincronizza anche i campi RGB
+                        syncHexToRgb(layer.gradient.color1, 'gradient-color1');
+                        syncHexToRgb(layer.gradient.color2, 'gradient-color2');
                         saveState('Colori gradiente modificati');
                         scheduleRender();
                         updateGradientPreview();
@@ -12718,6 +13142,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     if (layer && layer.gradient) {
                         layer.gradient.color1 = value;
                         document.getElementById('gradient-color1').value = value;
+                        
+                        // Sincronizza anche i campi RGB se visibili
+                        syncHexToRgb(value, 'gradient-color1');
+                        
                         scheduleRender();
                         updateGradientPreview();
                     }
@@ -12735,6 +13163,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                     if (layer && layer.gradient) {
                         layer.gradient.color2 = value;
                         document.getElementById('gradient-color2').value = value;
+                        
+                        // Sincronizza anche i campi RGB se visibili
+                        syncHexToRgb(value, 'gradient-color2');
+                        
                         scheduleRender();
                         updateGradientPreview();
                     }
@@ -12760,6 +13192,86 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 saveState('Angolo gradiente modificato');
             });
             
+            // Toggle HEX/RGB per gradiente forme
+            document.querySelectorAll('input[name="layer-gradient-color-format"]').forEach(radio => {
+                radio.addEventListener('change', e => {
+                    const format = e.target.value;
+                    const hexControls1 = document.getElementById('layer-gradient-hex-controls-1');
+                    const hexControls2 = document.getElementById('layer-gradient-hex-controls-2');
+                    const rgbControls1 = document.getElementById('layer-gradient-rgb-controls-1');
+                    const rgbControls2 = document.getElementById('layer-gradient-rgb-controls-2');
+                    
+                    if (format === 'hex') {
+                        hexControls1.style.display = '';
+                        hexControls2.style.display = '';
+                        rgbControls1.style.display = 'none';
+                        rgbControls2.style.display = 'none';
+                        announce('Modalità codice HEX attivata per gradiente', 'polite');
+                    } else {
+                        hexControls1.style.display = 'none';
+                        hexControls2.style.display = 'none';
+                        rgbControls1.style.display = '';
+                        rgbControls2.style.display = '';
+                        
+                        // Sincronizza valori RGB con HEX corrente
+                        const color1 = document.getElementById('gradient-color1-hex').value;
+                        const color2 = document.getElementById('gradient-color2-hex').value;
+                        if (color1) syncHexToRgb(color1, 'gradient-color1');
+                        if (color2) syncHexToRgb(color2, 'gradient-color2');
+                        
+                        announce('Modalità valori RGB attivata per gradiente', 'polite');
+                    }
+                });
+            });
+            
+            // Listener per campi RGB del gradiente forme - Colore 1
+            ['gradient-color1-r', 'gradient-color1-g', 'gradient-color1-b'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    const r = parseInt(document.getElementById('gradient-color1-r').value) || 0;
+                    const g = parseInt(document.getElementById('gradient-color1-g').value) || 0;
+                    const b = parseInt(document.getElementById('gradient-color1-b').value) || 0;
+                    const hex = rgbToHex(r, g, b);
+                    
+                    document.getElementById('gradient-color1-hex').value = hex;
+                    document.getElementById('gradient-color1').value = hex;
+                    
+                    const layer = getSelectedLayer();
+                    if (layer && layer.gradient) {
+                        layer.gradient.color1 = hex;
+                        scheduleRender();
+                        updateGradientPreview();
+                    }
+                });
+                
+                document.getElementById(id).addEventListener('change', () => {
+                    saveState('Colore 1 gradiente modificato (RGB)');
+                });
+            });
+            
+            // Listener per campi RGB del gradiente forme - Colore 2
+            ['gradient-color2-r', 'gradient-color2-g', 'gradient-color2-b'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    const r = parseInt(document.getElementById('gradient-color2-r').value) || 0;
+                    const g = parseInt(document.getElementById('gradient-color2-g').value) || 0;
+                    const b = parseInt(document.getElementById('gradient-color2-b').value) || 0;
+                    const hex = rgbToHex(r, g, b);
+                    
+                    document.getElementById('gradient-color2-hex').value = hex;
+                    document.getElementById('gradient-color2').value = hex;
+                    
+                    const layer = getSelectedLayer();
+                    if (layer && layer.gradient) {
+                        layer.gradient.color2 = hex;
+                        scheduleRender();
+                        updateGradientPreview();
+                    }
+                });
+                
+                document.getElementById(id).addEventListener('change', () => {
+                    saveState('Colore 2 gradiente modificato (RGB)');
+                });
+            });
+            
             // Bordo
             document.getElementById('use-stroke').addEventListener('change', e => {
                 const layer = getSelectedLayer();
@@ -12779,13 +13291,113 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
                 document.getElementById(id).addEventListener('change', () => {
                     const layer = getSelectedLayer();
                     if (layer && layer.stroke) {
-                        layer.stroke.color = getColorHex(document.getElementById('sc').value);
+                        const scValue = document.getElementById('sc').value;
+                        
+                        // Se è custom, usa il valore HEX personalizzato
+                        if (scValue === 'custom') {
+                            layer.stroke.color = document.getElementById('stroke-color-hex').value;
+                        } else {
+                            layer.stroke.color = getColorHex(scValue);
+                        }
+                        
                         layer.stroke.width = parseInt(document.getElementById('stroke-width').value);
                         saveState('Bordo modificato');
                         scheduleRender();
                         // RIMOSSO: announceGemini('Bordo aggiornato', 'polite'); // NVDA già legge il valore dello slider
                     }
                 });
+            });
+            
+            // ═══════════════════════════════════════════════════════════════════
+            // BORDO - Colore personalizzato con HEX/RGB
+            // ═══════════════════════════════════════════════════════════════════
+            
+            // Mostra/nascondi sezione colore personalizzato
+            document.getElementById('sc').addEventListener('change', e => {
+                const customSection = document.getElementById('stroke-color-custom-section');
+                if (e.target.value === 'custom') {
+                    customSection.style.display = 'block';
+                    announce('Modalità colore bordo personalizzato attivata', 'polite');
+                } else {
+                    customSection.style.display = 'none';
+                }
+            });
+            
+            // Toggle HEX/RGB per Bordo
+            document.querySelectorAll('input[name="stroke-color-format"]').forEach(radio => {
+                radio.addEventListener('change', e => {
+                    const format = e.target.value;
+                    const hexControls = document.getElementById('stroke-hex-controls');
+                    const rgbControls = document.getElementById('stroke-rgb-controls');
+                    
+                    if (format === 'hex') {
+                        hexControls.style.display = '';
+                        rgbControls.style.display = 'none';
+                        announce('Modalità codice HEX attivata per bordo', 'polite');
+                    } else {
+                        hexControls.style.display = 'none';
+                        rgbControls.style.display = '';
+                        
+                        // Sincronizza valori RGB con HEX corrente
+                        const color = document.getElementById('stroke-color-hex').value;
+                        if (color) syncHexToRgb(color, 'stroke-color');
+                        
+                        announce('Modalità valori RGB attivata per bordo', 'polite');
+                    }
+                });
+            });
+            
+            // Listener per campo HEX Bordo
+            document.getElementById('stroke-color-hex')?.addEventListener('input', e => {
+                const value = e.target.value;
+                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                    document.getElementById('stroke-color-picker').value = value;
+                    document.getElementById('stroke-color-preview').style.background = value;
+                    syncHexToRgb(value, 'stroke-color');
+                    
+                    // Aggiorna il colore del bordo se un layer è selezionato
+                    const layer = getSelectedLayer();
+                    if (layer && layer.stroke && document.getElementById('sc').value === 'custom') {
+                        layer.stroke.color = value;
+                        scheduleRender();
+                    }
+                }
+            });
+            
+            // Listener per campi RGB Bordo
+            ['stroke-color-r', 'stroke-color-g', 'stroke-color-b'].forEach(id => {
+                document.getElementById(id)?.addEventListener('input', () => {
+                    const r = parseInt(document.getElementById('stroke-color-r').value) || 0;
+                    const g = parseInt(document.getElementById('stroke-color-g').value) || 0;
+                    const b = parseInt(document.getElementById('stroke-color-b').value) || 0;
+                    const hex = rgbToHex(r, g, b);
+                    
+                    document.getElementById('stroke-color-hex').value = hex;
+                    document.getElementById('stroke-color-picker').value = hex;
+                    document.getElementById('stroke-color-preview').style.background = hex;
+                    
+                    // Aggiorna il colore del bordo se un layer è selezionato
+                    const layer = getSelectedLayer();
+                    if (layer && layer.stroke && document.getElementById('sc').value === 'custom') {
+                        layer.stroke.color = hex;
+                        scheduleRender();
+                    }
+                });
+            });
+            
+            // Listener per color picker Bordo
+            document.getElementById('stroke-color-picker')?.addEventListener('change', e => {
+                const value = e.target.value;
+                document.getElementById('stroke-color-hex').value = value;
+                document.getElementById('stroke-color-preview').style.background = value;
+                syncHexToRgb(value, 'stroke-color');
+                
+                // Aggiorna il colore del bordo se un layer è selezionato
+                const layer = getSelectedLayer();
+                if (layer && layer.stroke && document.getElementById('sc').value === 'custom') {
+                    layer.stroke.color = value;
+                    scheduleRender();
+                }
             });
             
             // Trasformazioni
@@ -12914,8 +13526,108 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
             document.getElementById('shc').addEventListener('change', () => {
                 const layer = getSelectedLayer();
                 if (layer && layer.dropShadow) {
-                    layer.dropShadow.color = getColorHex(document.getElementById('shc').value);
+                    const shcValue = document.getElementById('shc').value;
+                    
+                    // Se è custom, usa il valore HEX personalizzato
+                    if (shcValue === 'custom') {
+                        layer.dropShadow.color = document.getElementById('shadow-color-hex').value;
+                    } else {
+                        layer.dropShadow.color = getColorHex(shcValue);
+                    }
+                    
                     saveState('Colore ombra modificato');
+                    scheduleRender();
+                }
+            });
+            
+            // ═══════════════════════════════════════════════════════════════════
+            // DROP SHADOW - Colore personalizzato con HEX/RGB
+            // ═══════════════════════════════════════════════════════════════════
+            
+            // Mostra/nascondi sezione colore personalizzato
+            document.getElementById('shc').addEventListener('change', e => {
+                const customSection = document.getElementById('shadow-color-custom-section');
+                if (e.target.value === 'custom') {
+                    customSection.style.display = 'block';
+                    announce('Modalità colore ombra personalizzato attivata', 'polite');
+                } else {
+                    customSection.style.display = 'none';
+                }
+            });
+            
+            // Toggle HEX/RGB per Drop Shadow
+            document.querySelectorAll('input[name="shadow-color-format"]').forEach(radio => {
+                radio.addEventListener('change', e => {
+                    const format = e.target.value;
+                    const hexControls = document.getElementById('shadow-hex-controls');
+                    const rgbControls = document.getElementById('shadow-rgb-controls');
+                    
+                    if (format === 'hex') {
+                        hexControls.style.display = '';
+                        rgbControls.style.display = 'none';
+                        announce('Modalità codice HEX attivata per ombra', 'polite');
+                    } else {
+                        hexControls.style.display = 'none';
+                        rgbControls.style.display = '';
+                        
+                        // Sincronizza valori RGB con HEX corrente
+                        const color = document.getElementById('shadow-color-hex').value;
+                        if (color) syncHexToRgb(color, 'shadow-color');
+                        
+                        announce('Modalità valori RGB attivata per ombra', 'polite');
+                    }
+                });
+            });
+            
+            // Listener per campo HEX Drop Shadow
+            document.getElementById('shadow-color-hex')?.addEventListener('input', e => {
+                const value = e.target.value;
+                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                    document.getElementById('shadow-color-picker').value = value;
+                    document.getElementById('shadow-color-preview').style.background = value;
+                    syncHexToRgb(value, 'shadow-color');
+                    
+                    // Aggiorna il colore dell'ombra se un layer è selezionato
+                    const layer = getSelectedLayer();
+                    if (layer && layer.dropShadow && document.getElementById('shc').value === 'custom') {
+                        layer.dropShadow.color = value;
+                        scheduleRender();
+                    }
+                }
+            });
+            
+            // Listener per campi RGB Drop Shadow
+            ['shadow-color-r', 'shadow-color-g', 'shadow-color-b'].forEach(id => {
+                document.getElementById(id)?.addEventListener('input', () => {
+                    const r = parseInt(document.getElementById('shadow-color-r').value) || 0;
+                    const g = parseInt(document.getElementById('shadow-color-g').value) || 0;
+                    const b = parseInt(document.getElementById('shadow-color-b').value) || 0;
+                    const hex = rgbToHex(r, g, b);
+                    
+                    document.getElementById('shadow-color-hex').value = hex;
+                    document.getElementById('shadow-color-picker').value = hex;
+                    document.getElementById('shadow-color-preview').style.background = hex;
+                    
+                    // Aggiorna il colore dell'ombra se un layer è selezionato
+                    const layer = getSelectedLayer();
+                    if (layer && layer.dropShadow && document.getElementById('shc').value === 'custom') {
+                        layer.dropShadow.color = hex;
+                        scheduleRender();
+                    }
+                });
+            });
+            
+            // Listener per color picker Drop Shadow
+            document.getElementById('shadow-color-picker')?.addEventListener('change', e => {
+                const value = e.target.value;
+                document.getElementById('shadow-color-hex').value = value;
+                document.getElementById('shadow-color-preview').style.background = value;
+                syncHexToRgb(value, 'shadow-color');
+                
+                // Aggiorna il colore dell'ombra se un layer è selezionato
+                const layer = getSelectedLayer();
+                if (layer && layer.dropShadow && document.getElementById('shc').value === 'custom') {
+                    layer.dropShadow.color = value;
                     scheduleRender();
                 }
             });
@@ -22744,6 +23456,63 @@ document.getElementById("glow-intensity")?.addEventListener("input", (e) => {
     if (valueDisplay) valueDisplay.textContent = e.target.value;
 });
 
+// ═══════════════════════════════════════════════════════════════════
+// GLOW - Toggle HEX/RGB e sincronizzazione
+// ═══════════════════════════════════════════════════════════════════
+
+// Toggle HEX/RGB per Glow
+document.querySelectorAll('input[name="glow-color-format"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+        const format = e.target.value;
+        const hexControls = document.getElementById('glow-hex-controls');
+        const rgbControls = document.getElementById('glow-rgb-controls');
+        
+        if (format === 'hex') {
+            hexControls.style.display = '';
+            rgbControls.style.display = 'none';
+            announce('Modalità codice HEX attivata per bagliore', 'polite');
+        } else {
+            hexControls.style.display = 'none';
+            rgbControls.style.display = '';
+            
+            // Sincronizza valori RGB con HEX corrente
+            const color = document.getElementById('glow-color-hex').value;
+            if (color) syncHexToRgb(color, 'glow-color');
+            
+            announce('Modalità valori RGB attivata per bagliore', 'polite');
+        }
+    });
+});
+
+// Listener per campo HEX Glow
+document.getElementById('glow-color-hex')?.addEventListener('input', e => {
+    const value = e.target.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        document.getElementById('glow-color').value = value;
+        syncHexToRgb(value, 'glow-color');
+    }
+});
+
+// Listener per campi RGB Glow
+['glow-color-r', 'glow-color-g', 'glow-color-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+        const r = parseInt(document.getElementById('glow-color-r').value) || 0;
+        const g = parseInt(document.getElementById('glow-color-g').value) || 0;
+        const b = parseInt(document.getElementById('glow-color-b').value) || 0;
+        const hex = rgbToHex(r, g, b);
+        
+        document.getElementById('glow-color-hex').value = hex;
+        document.getElementById('glow-color').value = hex;
+    });
+});
+
+// Listener per color picker Glow
+document.getElementById('glow-color')?.addEventListener('change', e => {
+    const value = e.target.value;
+    document.getElementById('glow-color-hex').value = value;
+    syncHexToRgb(value, 'glow-color');
+});
+
 document.getElementById("btn-apply-glow")?.addEventListener("click", () => {
     const intensity = parseInt(document.getElementById("glow-intensity").value);
     const color = document.getElementById("glow-color").value;
@@ -22889,6 +23658,100 @@ document.getElementById("btn-create-gradient-text")?.addEventListener("click", (
 document.getElementById("duotone-intensity")?.addEventListener("input", (e) => {
     const valueDisplay = document.getElementById("duotone-intensity-value");
     if (valueDisplay) valueDisplay.textContent = e.target.value;
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// DUOTONE - Toggle HEX/RGB e sincronizzazione
+// ═══════════════════════════════════════════════════════════════════
+
+// Toggle HEX/RGB per Duotone
+document.querySelectorAll('input[name="duotone-color-format"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+        const format = e.target.value;
+        const hexControls1 = document.getElementById('duotone-hex-controls-1');
+        const hexControls2 = document.getElementById('duotone-hex-controls-2');
+        const rgbControls1 = document.getElementById('duotone-rgb-controls-1');
+        const rgbControls2 = document.getElementById('duotone-rgb-controls-2');
+        
+        if (format === 'hex') {
+            hexControls1.style.display = '';
+            hexControls2.style.display = '';
+            rgbControls1.style.display = 'none';
+            rgbControls2.style.display = 'none';
+            announce('Modalità codice HEX attivata per duotone', 'polite');
+        } else {
+            hexControls1.style.display = 'none';
+            hexControls2.style.display = 'none';
+            rgbControls1.style.display = '';
+            rgbControls2.style.display = '';
+            
+            // Sincronizza valori RGB con HEX corrente
+            const color1 = document.getElementById('duotone-color1-hex').value;
+            const color2 = document.getElementById('duotone-color2-hex').value;
+            if (color1) syncHexToRgb(color1, 'duotone-color1');
+            if (color2) syncHexToRgb(color2, 'duotone-color2');
+            
+            announce('Modalità valori RGB attivata per duotone', 'polite');
+        }
+    });
+});
+
+// Listener per campo HEX Duotone Colore 1
+document.getElementById('duotone-color1-hex')?.addEventListener('input', e => {
+    const value = e.target.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        document.getElementById('duotone-color1').value = value;
+        syncHexToRgb(value, 'duotone-color1');
+    }
+});
+
+// Listener per campo HEX Duotone Colore 2
+document.getElementById('duotone-color2-hex')?.addEventListener('input', e => {
+    const value = e.target.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        document.getElementById('duotone-color2').value = value;
+        syncHexToRgb(value, 'duotone-color2');
+    }
+});
+
+// Listener per campi RGB Duotone Colore 1
+['duotone-color1-r', 'duotone-color1-g', 'duotone-color1-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+        const r = parseInt(document.getElementById('duotone-color1-r').value) || 0;
+        const g = parseInt(document.getElementById('duotone-color1-g').value) || 0;
+        const b = parseInt(document.getElementById('duotone-color1-b').value) || 0;
+        const hex = rgbToHex(r, g, b);
+        
+        document.getElementById('duotone-color1-hex').value = hex;
+        document.getElementById('duotone-color1').value = hex;
+    });
+});
+
+// Listener per campi RGB Duotone Colore 2
+['duotone-color2-r', 'duotone-color2-g', 'duotone-color2-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+        const r = parseInt(document.getElementById('duotone-color2-r').value) || 0;
+        const g = parseInt(document.getElementById('duotone-color2-g').value) || 0;
+        const b = parseInt(document.getElementById('duotone-color2-b').value) || 0;
+        const hex = rgbToHex(r, g, b);
+        
+        document.getElementById('duotone-color2-hex').value = hex;
+        document.getElementById('duotone-color2').value = hex;
+    });
+});
+
+// Listener per color picker Duotone Colore 1
+document.getElementById('duotone-color1')?.addEventListener('change', e => {
+    const value = e.target.value;
+    document.getElementById('duotone-color1-hex').value = value;
+    syncHexToRgb(value, 'duotone-color1');
+});
+
+// Listener per color picker Duotone Colore 2
+document.getElementById('duotone-color2')?.addEventListener('change', e => {
+    const value = e.target.value;
+    document.getElementById('duotone-color2-hex').value = value;
+    syncHexToRgb(value, 'duotone-color2');
 });
 
 document.getElementById("btn-apply-duotone")?.addEventListener("click", () => {
@@ -23192,6 +24055,100 @@ document.getElementById("gradmap-preset")?.addEventListener("change", (e) => {
         if (shadowPicker) shadowPicker.value = preset[0];
         if (highlightPicker) highlightPicker.value = preset[1];
     }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// GRADIENT MAP - Toggle HEX/RGB e sincronizzazione
+// ═══════════════════════════════════════════════════════════════════
+
+// Toggle HEX/RGB per Gradient Map
+document.querySelectorAll('input[name="gradmap-color-format"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+        const format = e.target.value;
+        const hexControls1 = document.getElementById('gradmap-hex-controls-1');
+        const hexControls2 = document.getElementById('gradmap-hex-controls-2');
+        const rgbControls1 = document.getElementById('gradmap-rgb-controls-1');
+        const rgbControls2 = document.getElementById('gradmap-rgb-controls-2');
+        
+        if (format === 'hex') {
+            hexControls1.style.display = '';
+            hexControls2.style.display = '';
+            rgbControls1.style.display = 'none';
+            rgbControls2.style.display = 'none';
+            announce('Modalità codice HEX attivata per gradient map', 'polite');
+        } else {
+            hexControls1.style.display = 'none';
+            hexControls2.style.display = 'none';
+            rgbControls1.style.display = '';
+            rgbControls2.style.display = '';
+            
+            // Sincronizza valori RGB con HEX corrente
+            const shadow = document.getElementById('gradmap-shadow-hex').value;
+            const highlight = document.getElementById('gradmap-highlight-hex').value;
+            if (shadow) syncHexToRgb(shadow, 'gradmap-shadow');
+            if (highlight) syncHexToRgb(highlight, 'gradmap-highlight');
+            
+            announce('Modalità valori RGB attivata per gradient map', 'polite');
+        }
+    });
+});
+
+// Listener per campo HEX Shadow
+document.getElementById('gradmap-shadow-hex')?.addEventListener('input', e => {
+    const value = e.target.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        document.getElementById('gradmap-shadow').value = value;
+        syncHexToRgb(value, 'gradmap-shadow');
+    }
+});
+
+// Listener per campo HEX Highlight
+document.getElementById('gradmap-highlight-hex')?.addEventListener('input', e => {
+    const value = e.target.value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        document.getElementById('gradmap-highlight').value = value;
+        syncHexToRgb(value, 'gradmap-highlight');
+    }
+});
+
+// Listener per campi RGB Shadow
+['gradmap-shadow-r', 'gradmap-shadow-g', 'gradmap-shadow-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+        const r = parseInt(document.getElementById('gradmap-shadow-r').value) || 0;
+        const g = parseInt(document.getElementById('gradmap-shadow-g').value) || 0;
+        const b = parseInt(document.getElementById('gradmap-shadow-b').value) || 0;
+        const hex = rgbToHex(r, g, b);
+        
+        document.getElementById('gradmap-shadow-hex').value = hex;
+        document.getElementById('gradmap-shadow').value = hex;
+    });
+});
+
+// Listener per campi RGB Highlight
+['gradmap-highlight-r', 'gradmap-highlight-g', 'gradmap-highlight-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+        const r = parseInt(document.getElementById('gradmap-highlight-r').value) || 0;
+        const g = parseInt(document.getElementById('gradmap-highlight-g').value) || 0;
+        const b = parseInt(document.getElementById('gradmap-highlight-b').value) || 0;
+        const hex = rgbToHex(r, g, b);
+        
+        document.getElementById('gradmap-highlight-hex').value = hex;
+        document.getElementById('gradmap-highlight').value = hex;
+    });
+});
+
+// Listener per color picker Shadow
+document.getElementById('gradmap-shadow')?.addEventListener('change', e => {
+    const value = e.target.value;
+    document.getElementById('gradmap-shadow-hex').value = value;
+    syncHexToRgb(value, 'gradmap-shadow');
+});
+
+// Listener per color picker Highlight
+document.getElementById('gradmap-highlight')?.addEventListener('change', e => {
+    const value = e.target.value;
+    document.getElementById('gradmap-highlight-hex').value = value;
+    syncHexToRgb(value, 'gradmap-highlight');
 });
 
 document.getElementById("btn-apply-gradmap")?.addEventListener("click", () => {
