@@ -2617,28 +2617,186 @@ label {
  <h2 class="section-heading">Testo</h2>
  </div>
  <div class="section-content" id="text-section">
- <p class="section-description">Aggiungi testo al canvas</p>
+ <p class="section-description">Scrivi e formatta il testo</p>
  
  <!-- OPZIONI BASE -->
  <div class="section-basic">
  <div class="control-group">
  <strong class="control-group-title">Contenuto</strong>
- <textarea id="text-input" placeholder="Inserisci il tuo testo qui..." rows="5"></textarea>
+ <textarea id="text-input" placeholder="Inserisci il tuo testo qui..." rows="3"></textarea>
  <div id="text-lines-info" style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);"></div>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Font</strong>
+ <select id="nff">
+ <option value="Arial" selected>Arial</option>
+ <option value="Montserrat">Montserrat</option>
+ <option value="Open Sans">Open Sans</option>
+ <option value="Roboto">Roboto</option>
+ <option value="Lato">Lato</option>
+ <option value="Poppins">Poppins</option>
+ <option value="Raleway">Raleway</option>
+ <option value="Oswald">Oswald</option>
+ <option value="Merriweather">Merriweather</option>
+ <option value="Playfair Display">Playfair Display</option>
+ <option value="Georgia">Georgia</option>
+ <option value="Times New Roman">Times New Roman</option>
+ <option value="Courier New">Courier New</option>
+ <option value="Verdana">Verdana</option>
+ <option value="Trebuchet MS">Trebuchet MS</option>
+ <option value="Impact">Impact</option>
+ <option value="Comic Sans MS">Comic Sans MS</option>
+ </select>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Dimensioni</strong>
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="new-font-size">Dimensione</label>
+ <input type="number" id="new-font-size" min="8" max="200" value="32">
+ </div>
+ <div class="input-with-label">
+ <label for="nfw">Peso</label>
+ <select id="nfw">
+ <option value="100">Thin 100</option>
+ <option value="200">Extra Light 200</option>
+ <option value="300">Light 300</option>
+ <option value="400" selected>Regular 400</option>
+ <option value="500">Medium 500</option>
+ <option value="600">Semi Bold 600</option>
+ <option value="700">Bold 700</option>
+ <option value="800">Extra Bold 800</option>
+ <option value="900">Black 900</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Colore</strong>
+ <label for="tc" class="sr-only">Seleziona colore testo</label>
+ <select id="tc">
+ <option value="black">Nero</option>
+ <option value="white">Bianco</option>
+ <option value="red">Rosso</option>
+ <option value="green">Verde</option>
+ <option value="blue">Blu</option>
+ <option value="yellow">Giallo</option>
+ <option value="magenta">Magenta</option>
+ <option value="cyan">Ciano</option>
+ <option value="orange">Arancione</option>
+ <option value="purple">Viola</option>
+ <option value="pink">Rosa</option>
+ <option value="gray">Grigio</option>
+ <option value="brown">Marrone</option>
+ <option value="gold">Oro</option>
+ <option value="silver">Argento</option>
+ <option value="custom">Personalizzato...</option>
+ </select>
+ 
+ <!-- Sezione colore personalizzato (nascosta inizialmente) -->
+ <div id="text-color-custom-section" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 6px;">
+ <h4 style="font-size: 14px; margin-bottom: 8px;">Colore Personalizzato</h4>
+ <div class="control-row" style="gap: 8px;">
+ <div class="input-with-label flex-1" >
+ <label for="text-color-hex">Codice HEX</label>
+ <input type="text" id="text-color-hex" placeholder="#000000" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
+ </div>
+ </div>
+ <div class="control-row" style="gap: 8px; margin-top: 8px;">
+ <div class="input-with-label flex-1" >
+ <label for="text-color-r">R (Rosso)</label>
+ <input type="number" id="text-color-r" min="0" max="255" value="0">
+ </div>
+ <div class="input-with-label flex-1" >
+ <label for="text-color-g">G (Verde)</label>
+ <input type="number" id="text-color-g" min="0" max="255" value="0">
+ </div>
+ <div class="input-with-label flex-1" >
+ <label for="text-color-b">B (Blu)</label>
+ <input type="number" id="text-color-b" min="0" max="255" value="0">
+ </div>
+ </div>
+ <div style="margin-top: 8px; padding: 8px; background: white; border: 1px solid var(--border-color); border-radius: 4px; text-align: center;">
+ <div id="text-color-preview" style="width: 100%; height: 40px; border-radius: 4px; background: #000000;"></div>
+ <span id="text-color-preview-text" style="font-size: 12px; color: var(--text-secondary);">Anteprima colore</span>
+ </div>
+ </div>
  </div>
  
  <!-- NOTA INFORMATIVA -->
  <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
  <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #1e3a8a;">
- <strong>💡 Nota:</strong> Dopo aver aggiunto il testo, usa il pannello <strong>"Modifica Livello"</strong> per cambiare font, dimensione, colore, stile, posizione, rotazione, spaziatura lettere, sottolineato/barrato e tutti gli altri effetti.
+ <strong> Nota:</strong> Dopo aver aggiunto il testo, usa il pannello <strong>"Modifica Livello"</strong> (sezione 8) per cambiare posizione, rotazione, opacità, ombra e altri effetti avanzati.
  </p>
  </div>
  
- <div style="margin-top: 20px;">
+ <div style="margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--border-color);">
  <button class="btn btn-primary btn-full" id="btn-add-text" aria-describedby="add-text-help">
- ✏️ Aggiungi Testo al Canvas
+ ️ Aggiungi Testo al Canvas
  </button>
- <p id="add-text-help" class="sr-only">Clicca per aggiungere il testo al canvas, poi modifica tutte le proprietà nel pannello Modifica Livello</p>
+ <p id="add-text-help" class="sr-only">Clicca per aggiungere il testo configurato sopra al canvas</p>
+ </div>
+ </div>
+ 
+ <!-- PULSANTE TOGGLE AVANZATE -->
+ <button class="btn btn-toggle-advanced" id="toggle-text-advanced" aria-expanded="false" aria-controls="text-advanced">
+ <span class="icon">▼</span>
+ <span>Impostazioni Avanzate</span>
+ </button>
+ 
+ <!-- OPZIONI AVANZATE -->
+ <div class="advanced-section collapsed" id="text-advanced">
+ <div class="control-group">
+ <strong class="control-group-title">Spaziatura</strong>
+ <div class="input-with-label">
+ <label for="new-line-height">Interlinea</label>
+ <div class="slider-group">
+ <input type="range" id="new-line-height" min="0.5" max="3" value="1.2" step="0.1">
+ <span class="slider-value" id="new-line-height-value">1.2</span>
+ </div>
+ </div>
+ <div class="input-with-label">
+ <label for="new-letter-spacing">Spaziatura lettere</label>
+ <div class="slider-group">
+ <input type="range" id="new-letter-spacing" min="-5" max="20" value="0" step="0.5">
+ <span class="slider-value" id="new-letter-spacing-value">0 px</span>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Allineamento Testo</strong>
+ <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+ <strong>IMPORTANTE:</strong> Questo controlla come il testo si allinea rispetto alla coordinata X che imposti. <strong>Sinistra</strong> = X è il bordo sinistro, <strong>Centro</strong> = X è il centro del testo, <strong>Destra</strong> = X è il bordo destro. Influenza anche come si allineano le righe tra loro.
+ </p>
+ <div class="btn-group">
+ <button class="btn btn-secondary" id="new-btn-align-left" title="X rappresenta il bordo sinistro del testo">Sinistra</button>
+ <button class="btn btn-secondary" id="new-btn-align-center" title="X rappresenta il centro del testo">Centro</button>
+ <button class="btn btn-secondary" id="new-btn-align-right" title="X rappresenta il bordo destro del testo">Destra</button>
+ </div>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Posizione</strong>
+ <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+ Dove vuoi mettere il testo nel canvas. Usa il pulsante "Centra nel Canvas" per posizionarlo automaticamente al centro.
+ </p>
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="new-text-x">Posizione X</label>
+ <input type="number" id="new-text-x" value="100">
+ </div>
+ <div class="input-with-label">
+ <label for="new-text-y">Posizione Y</label>
+ <input type="number" id="new-text-y" value="100">
+ </div>
+ </div>
+ <button class="btn btn-info btn-full mt-8" id="btn-center-text-position" >
+ Centra nel Canvas
+ </button>
  </div>
  </div>
  </div>
@@ -2907,25 +3065,491 @@ label {
  </div>
  </section>
  
- 
  <!-- PANNELLO 7: MODIFICA LIVELLO -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
-  <span class="section-number">7</span>
-  <h2 class="section-heading">Modifica Livello</h2>
+ <span class="section-number">7</span>
+ <h2 class="section-heading">Modifica Livello</h2>
  </div>
- <div class="section-content" id="layer-edit-section">
-  <p class="section-description">Modifica le proprieta del livello selezionato</p>
-  
-  <!-- Contenuto dinamico -->
-  <div id="layer-edit-content" style="padding: 12px;">
-   <p style="color: #666; text-align: center; padding: 20px;">
-    Seleziona un livello dalla lista per modificarlo
-   </p>
-  </div>
+ <div class="section-content" id="edit-section">
+ <p class="section-description" id="edit-description">Seleziona un livello per modificarlo</p>
+ 
+ <!-- BOX DIMENSIONI TESTO - sempre visibile, aggiornato dinamicamente -->
+ <div class="text-dimensions-info" id="text-dimensions-box" style="margin: 16px 0; padding: 16px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: 2px solid #3b82f6; border-radius: 8px; font-size: 14px; line-height: 1.8; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);" role="region" aria-label="Informazioni dimensioni testo sul canvas">
+ <div>
+ <strong>Spazio occupato sul canvas:</strong><br>
+ <span id="text-dim-width" style="display: inline-block; margin: 4px 0;">Larghezza: 2595 pixel</span><br>
+ <span id="text-dim-height" style="display: inline-block; margin: 4px 0;">Altezza: 288 pixel</span><br>
+ <span id="text-dim-lines" style="display: inline-block; margin: 4px 0; font-weight: 600; color: #1e40af;">Righe di testo: 3</span><br>
+ <button onclick="window.showTextDimensions && window.showTextDimensions(); console.log('Aggiornamento dimensioni forzato');" 
+ style="margin-top: 8px; padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+ Aggiorna Dimensioni
+ </button>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="layer-name-controls" >
+ <strong class="control-group-title">Nome</strong>
+ <div style="display: flex; gap: 8px;">
+ <input type="text" id="layer-name-input" placeholder="Nome livello..." class="flex-1">
+ <button class="btn btn-primary" id="btn-rename-layer">Rinomina</button>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="text-edit-controls" >
+ <strong class="control-group-title">Contenuto</strong>
+ <div style="margin-bottom: 12px;">
+ <textarea id="text-edit" placeholder="Modifica il testo..."></textarea>
+ <button class="btn btn-full" id="btn-apply-text-edit" style="margin-top:8px;">Applica Modifiche</button>
+ </div>
+ 
+ <div class="control-group">
+ <strong class="control-group-title">Anteprima</strong>
+ <div class="live-preview" id="text-preview">Testo di prova</div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="font-controls" >
+ <strong class="control-group-title">Font</strong>
+ <!-- Select popolato dinamicamente in base a connettività -->
+ <select id="ff">
+ <option value="Arial">Caricamento font...</option>
+ </select>
+ 
+ <div class="control-row mt-12" >
+ <div class="input-with-label">
+ <label for="font-size">Dimensione</label>
+ <input type="number" id="font-size" min="8" max="200" value="32">
+ </div>
+ <div class="input-with-label">
+ <label for="fw">Peso</label>
+ <select id="fw">
+ <option value="100">Thin 100</option>
+ <option value="200">Extra Light 200</option>
+ <option value="300">Light 300</option>
+ <option value="400" selected>Regular 400</option>
+ <option value="500">Medium 500</option>
+ <option value="600">Semi Bold 600</option>
+ <option value="700">Bold 700</option>
+ <option value="800">Extra Bold 800</option>
+ <option value="900">Black 900</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="text-spacing-controls" >
+ <strong class="control-group-title">Spaziatura</strong>
+ <div class="input-with-label">
+ <label for="letter-spacing">Spaziatura lettere</label>
+ <div class="slider-group">
+ <input type="range" id="letter-spacing" min="-5" max="20" value="0" step="0.5" title="Regola lo spazio tra le lettere">
+ <span class="slider-value" id="letter-spacing-value">0 px</span>
+ </div>
+ </div>
+ <div class="input-with-label">
+ <label for="line-height">Altezza riga</label>
+ <div class="slider-group">
+ <input type="range" id="line-height" min="0.5" max="3" value="1.2" step="0.1" title="Regola l'altezza delle righe">
+ <span class="slider-value" id="line-height-value">1.2</span>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="text-style-controls" >
+ <strong class="control-group-title">Stili</strong>
+ <div class="btn-group">
+ <button class="btn btn-secondary" id="btn-italic" title="Corsivo">
+ I
+ </button>
+ <button class="btn btn-secondary" id="btn-underline" title="Sottolineato">
+ U
+ </button>
+ <button class="btn btn-secondary" id="btn-line-through" title="Barrato">
+ S
+ </button>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="text-align-controls" >
+ <strong class="control-group-title">Allineamento Righe</strong>
+ <div class="alignment-grid">
+ <button class="btn btn-secondary alignment-btn" id="btn-align-left" title="Allinea righe a sinistra">Sinistra</button>
+ <button class="btn btn-secondary alignment-btn" id="btn-align-center" title="Allinea righe al centro">Centro</button>
+ <button class="btn btn-secondary alignment-btn" id="btn-align-right" title="Allinea righe a destra">Destra</button>
+ </div>
+ 
+ <strong class="control-group-title" style="margin-top: 16px; display: block;">Posizione nel Canvas</strong>
+ <div style="display: grid; gap: 8px;">
+ <button class="btn btn-primary" id="btn-center-in-canvas" title="Centra il blocco testo nel canvas">
+ Centra nel Canvas
+ </button>
+ <div style="font-size: 11px; color: var(--text-secondary); padding: 4px 8px; background: var(--bg-input); border-radius: 4px;">
+ Posiziona il testo al centro visivo del canvas
+ </div>
+ <button class="btn btn-success" id="btn-center-social" 
+ title="Centra considerando le safe zone di tutti i social" 
+ style="margin-top: 8px;">
+ Centra per Social
+ </button>
+ <div style="font-size: 11px; color: #059669; padding: 4px 8px; background: #d1fae5; border-radius: 4px; margin-top: 4px;">
+ Safe zone universale (Instagram, TikTok, Facebook, YouTube, Twitter, ecc.)
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="color-controls" >
+ <strong class="control-group-title">Colore</strong>
+ <select id="lc">
+ <option value="black">Nero</option>
+ <option value="white">Bianco</option>
+ <option value="red">Rosso</option>
+ <option value="green">Verde</option>
+ <option value="blue">Blu</option>
+ <option value="yellow">Giallo</option>
+ <option value="magenta">Magenta</option>
+ <option value="cyan">Ciano</option>
+ <option value="orange">Arancione</option>
+ <option value="purple">Viola</option>
+ <option value="pink">Rosa</option>
+ <option value="gray">Grigio</option>
+ <option value="brown">Marrone</option>
+ <option value="custom">Personalizzato...</option>
+ <option value="eyedropper">Usa Contagocce</option>
+ </select>
+ 
+ <div id="layer-color-custom-section" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 6px;">
+ <h4 style="font-size: 14px; margin-bottom: 8px;">Colore Personalizzato</h4>
+ <div class="control-row" style="gap: 8px;">
+ <div class="input-with-label flex-1" >
+ <label for="layer-color-hex">HEX</label>
+ <input type="text" id="layer-color-hex" placeholder="#000000" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
+ </div>
+ </div>
+ <div class="control-row" style="gap: 8px; margin-top: 8px;">
+ <div class="input-with-label flex-1" >
+ <label for="layer-color-r">R</label>
+ <input type="number" id="layer-color-r" min="0" max="255" value="0">
+ </div>
+ <div class="input-with-label flex-1" >
+ <label for="layer-color-g">G</label>
+ <input type="number" id="layer-color-g" min="0" max="255" value="0">
+ </div>
+ <div class="input-with-label flex-1" >
+ <label for="layer-color-b">B</label>
+ <input type="number" id="layer-color-b" min="0" max="255" value="0">
+ </div>
+ </div>
+ <div style="margin-top: 8px; padding: 8px; background: white; border: 1px solid var(--border-color); border-radius: 4px;">
+ <div id="layer-color-preview" style="width: 100%; height: 40px; border-radius: 4px; background: #000000;"></div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="gradient-panel" >
+ <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
+ <input type="checkbox" id="use-gradient">
+ <strong class="control-group-title" style="margin: 0;">Usa Gradiente</strong>
+ </label>
+ 
+ <div id="gradient-controls" class="hidden">
+ <div class="gradient-preview" id="gradient-preview"></div>
+ 
+ <div class="input-with-label">
+ <label for="gradient-type">
+ <strong>Tipo di Gradiente Layer</strong>
+ </label>
+ <select id="gradient-type" aria-label="Tipo di gradiente">
+ <option value="linear">Lineare</option>
+ <option value="radial">Radiale</option>
+ </select>
+ </div>
+ 
+ <!-- Toggle HEX/RGB per gradiente forme -->
+ <div role="radiogroup" aria-label="Formato colore gradiente" style="margin-bottom: 12px; margin-top: 12px; display: flex; gap: 10px;">
+ <label style="display: flex; align-items: center; cursor: pointer;">
+ <input type="radio" name="layer-gradient-color-format" value="hex" checked style="margin-right: 6px;">
+ <span>Codice HEX</span>
+ </label>
+ <label style="display: flex; align-items: center; cursor: pointer;">
+ <input type="radio" name="layer-gradient-color-format" value="rgb" style="margin-right: 6px;">
+ <span>Valori RGB</span>
+ </label>
+ </div>
+ 
+ <!-- Colore 1 -->
+ <strong class="control-group-title">Colore 1</strong>
+ <div class="control-row">
+ <div class="input-with-label" id="layer-gradient-hex-controls-1">
+ <label for="gradient-color1-hex" class="sr-only">Codice HEX Colore 1</label>
+ <div style="display: flex; gap: 8px; align-items: center;">
+ <input type="color" id="gradient-color1" value="#ff0000" aria-hidden="true" tabindex="-1"
+ style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+ <input type="text" id="gradient-color1-hex" value="#ff0000" 
+ placeholder="#000000" maxlength="7"
+ style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+ pattern="^#[0-9A-Fa-f]{6}$">
+ </div>
+ </div>
+ <div class="input-with-label" id="layer-gradient-rgb-controls-1" style="display: none;">
+ <div style="display: flex; gap: 8px;">
+ <div style="flex: 1;">
+ <label for="gradient-color1-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+ <input type="number" id="gradient-color1-r" min="0" max="255" value="255" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="gradient-color1-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+ <input type="number" id="gradient-color1-g" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="gradient-color1-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+ <input type="number" id="gradient-color1-b" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Colore 2 -->
+ <strong class="control-group-title" style="margin-top: 16px; display: block;">Colore 2</strong>
+ <div class="control-row">
+ <div class="input-with-label" id="layer-gradient-hex-controls-2">
+ <label for="gradient-color2-hex" class="sr-only">Codice HEX Colore 2</label>
+ <div style="display: flex; gap: 8px; align-items: center;">
+ <input type="color" id="gradient-color2" value="#0000ff" aria-hidden="true" tabindex="-1"
+ style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+ <input type="text" id="gradient-color2-hex" value="#0000ff"
+ placeholder="#ffffff" maxlength="7"
+ style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+ pattern="^#[0-9A-Fa-f]{6}$">
+ </div>
+ </div>
+ <div class="input-with-label" id="layer-gradient-rgb-controls-2" style="display: none;">
+ <div style="display: flex; gap: 8px;">
+ <div style="flex: 1;">
+ <label for="gradient-color2-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+ <input type="number" id="gradient-color2-r" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="gradient-color2-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+ <input type="number" id="gradient-color2-g" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="gradient-color2-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+ <input type="number" id="gradient-color2-b" min="0" max="255" value="255" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="input-with-label" style="margin-top: 12px;">
+ <label for="gradient-angle">Angolo (solo lineare)</label>
+ <div class="slider-group">
+ <input type="range" id="gradient-angle" min="0" max="360" value="0">
+ <span class="slider-value" id="gradient-angle-value">0°</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="stroke-panel" >
+ <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
+ <input type="checkbox" id="use-stroke">
+ <strong style="margin: 0;">Bordo</strong>
+ </label>
+ 
+ <div id="stroke-controls" class="hidden">
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="sc">Colore Bordo</label>
+ <select id="sc">
+ <option value="black" selected>Nero</option>
+ <option value="white">Bianco</option>
+ <option value="red">Rosso</option>
+ <option value="green">Verde</option>
+ <option value="blue">Blu</option>
+ <option value="yellow">Giallo</option>
+ <option value="magenta">Magenta</option>
+ <option value="cyan">Ciano</option>
+ <option value="orange">Arancione</option>
+ <option value="purple">Viola</option>
+ <option value="pink">Rosa</option>
+ <option value="custom">Personalizzato...</option>
+ </select>
+ </div>
+ <div class="input-with-label">
+ <label for="stroke-width">Spessore</label>
+ <input type="number" id="stroke-width" min="1" max="50" value="2">
+ </div>
+ </div>
+ 
+ <!-- Sezione colore personalizzato bordo -->
+ <div id="stroke-color-custom-section" style="display: none; margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 6px;">
+ <h4 style="font-size: 14px; margin-bottom: 8px;">Colore Bordo Personalizzato</h4>
+ 
+ <!-- Toggle HEX/RGB per Bordo -->
+ <div role="radiogroup" aria-label="Formato colore bordo" style="margin-bottom: 8px; display: flex; gap: 10px;">
+ <label style="display: flex; align-items: center; cursor: pointer;">
+ <input type="radio" name="stroke-color-format" value="hex" checked style="margin-right: 6px;">
+ <span>Codice HEX</span>
+ </label>
+ <label style="display: flex; align-items: center; cursor: pointer;">
+ <input type="radio" name="stroke-color-format" value="rgb" style="margin-right: 6px;">
+ <span>Valori RGB</span>
+ </label>
+ </div>
+ 
+ <!-- Controlli HEX -->
+ <div id="stroke-hex-controls">
+ <div style="display: flex; gap: 8px; align-items: center;">
+ <input type="color" id="stroke-color-picker" value="#000000" aria-hidden="true" tabindex="-1"
+ style="width: 50px; height: 36px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer;">
+ <input type="text" id="stroke-color-hex" value="#000000" 
+ placeholder="#000000" maxlength="7" aria-label="Codice HEX colore bordo"
+ style="flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 13px;"
+ pattern="^#[0-9A-Fa-f]{6}$">
+ </div>
+ </div>
+ 
+ <!-- Controlli RGB -->
+ <div id="stroke-rgb-controls" style="display: none;">
+ <div style="display: flex; gap: 8px;">
+ <div style="flex: 1;">
+ <label for="stroke-color-r" style="font-size: 12px; color: var(--text-secondary);">R</label>
+ <input type="number" id="stroke-color-r" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="stroke-color-g" style="font-size: 12px; color: var(--text-secondary);">G</label>
+ <input type="number" id="stroke-color-g" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ <div style="flex: 1;">
+ <label for="stroke-color-b" style="font-size: 12px; color: var(--text-secondary);">B</label>
+ <input type="number" id="stroke-color-b" min="0" max="255" value="0" 
+ style="width: 100%; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px;">
+ </div>
+ </div>
+ </div>
+ 
+ <!-- Preview colore -->
+ <div style="margin-top: 8px; padding: 8px; background: white; border: 1px solid var(--border-color); border-radius: 4px;">
+ <div id="stroke-color-preview" style="width: 100%; height: 40px; border-radius: 4px; background: #000000;"></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="transform-controls" >
+ <strong class="control-group-title">Posizione</strong>
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="pos-x">X</label>
+ <input type="number" id="pos-x" value="0">
+ </div>
+ <div class="input-with-label">
+ <label for="pos-y">Y</label>
+ <input type="number" id="pos-y" value="0">
+ </div>
+ </div>
+ 
+ <strong class="control-group-title">Dimensione</strong>
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="width">Larghezza</label>
+ <input type="number" id="width" min="1" value="100">
+ </div>
+ <div class="input-with-label">
+ <label for="height">Altezza</label>
+ <input type="number" id="height" min="1" value="100">
+ </div>
+ </div>
+ <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-top: 8px;">
+ <input type="checkbox" id="maintain-aspect" checked>
+ <span>Mantieni proporzioni</span>
+ </label>
+ 
+ <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+ <h4 style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Scala Percentuale</h4>
+ <div class="control-row">
+ <div class="input-with-label">
+ <label for="scale-percent">Scala al %</label>
+ <input type="number" id="scale-percent" min="1" max="500" value="100" style="width: 100%;">
+ </div>
+ <button class="btn btn-primary flex-1" id="btn-apply-scale" >Applica</button>
+ </div>
+ <div class="btn-group mt-8" >
+ <button class="btn btn-secondary" id="btn-scale-50">50%</button>
+ <button class="btn btn-secondary" id="btn-scale-75">75%</button>
+ <button class="btn btn-secondary" id="btn-scale-150">150%</button>
+ <button class="btn btn-secondary" id="btn-scale-200">200%</button>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="corner-radius-group" >
+ <strong class="control-group-title">Angoli</strong>
+ <div class="slider-group">
+ <input type="range" id="corner-radius" min="0" max="100" value="0" title="Arrotonda gli angoli dei rettangoli">
+ <span class="slider-value" id="corner-radius-value">0 px</span>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="rotation-controls" >
+ <strong class="control-group-title">Rotazione</strong>
+ <div class="slider-group">
+ <input type="range" id="rotation" min="0" max="360" value="0">
+ <span class="slider-value" id="rotation-value">0°</span>
+ </div>
+ <div class="btn-group mt-8" >
+ <button class="btn btn-secondary" id="btn-rotate-90">↻ 90°</button>
+ <button class="btn btn-secondary" id="btn-rotate-180">↻ 180°</button>
+ <button class="btn btn-secondary" id="btn-rotate-270">↻ 270°</button>
+ <button class="btn btn-secondary" id="btn-rotate-reset">⟲ 0°</button>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="flip-controls" >
+ <strong class="control-group-title">Rifletti</strong>
+ <div class="btn-group">
+ <button class="btn btn-secondary" id="btn-flip-h">Orizzontale</button>
+ <button class="btn btn-secondary" id="btn-flip-v">Verticale</button>
+ </div>
+ </div>
+ 
+ <div class="control-group hidden" id="crop-group" >
+ <strong class="control-group-title">Ritaglia & Posizionamento</strong>
+ <button class="btn btn-primary btn-full" id="btn-center-canvas" 
+ style="margin-bottom: 8px;"
+ role="button" 
+ aria-label="Centra immagine nel canvas completo">
+ Centra nel Canvas
+ </button>
+ <button class="btn btn-success btn-full" id="btn-center-social-img" 
+ style="margin-bottom: 8px; display: none;"
+ role="button" 
+ aria-label="Centra immagine nella zona sicura per social">
+ Centra per Social
+ </button>
+ <button class="btn btn-secondary btn-full" id="btn-crop">Ritaglia Immagine</button>
+ </div>
+ 
+ <div class="control-group hidden" id="opacity-controls" >
+ <strong class="control-group-title">Opacità</strong>
+ <div class="slider-group">
+ <input type="range" id="opacity" min="0" max="100" value="100">
+ <span class="slider-value" id="opacity-value">100%</span>
+ </div>
+ </div>
  </div>
  </section>
- <!-- PANNELLO 8: GESTIONE LIVELLI -->
+ 
+ <!-- PANNELLO 9: GESTIONE LIVELLI -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
  <span class="section-number">8</span>
@@ -2979,9 +3603,7 @@ label {
  </div>
  </section>
  
-
-
- <!-- PANNELLO 9: ALLINEAMENTO -->
+ <!-- PANNELLO 10: ALLINEAMENTO -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
  <span class="section-number">9</span>
@@ -3051,7 +3673,8 @@ label {
  </div>
  </section>
  
- <!-- PANNELLO 10: EFFETTI & STILI -->
+ <!-- PANNELLO 11: PALETTE COLORI -->
+ <!-- PANNELLO 8: EFFETTI & STILI -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
  <span class="section-number">10</span>
@@ -4311,7 +4934,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
  <!-- ═══════════════════════════════════════════════════════════════ -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
- <span class="section-number">8B</span>
+ <span class="section-number">14</span>
  <h2 class="section-heading">Effetti GPU Avanzati</h2>
  </div>
  <div class="section-content" id="gpu-global-section">
@@ -4991,7 +5614,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
  
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
- <span class="section-number">11</span>
+ <span class="section-number">14</span>
  <h2 class="section-heading">Palette Colori</h2>
  </div>
  <div class="section-content" id="palette-section">
@@ -5006,11 +5629,11 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
  </section>
  
  
- <!-- PANNELLO 11: ESPORTA -->
+ <!-- PANNELLO 12: ESPORTA -->
  <!-- PANNELLO 12: ANALISI -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
- <span class="section-number">12</span>
+ <span class="section-number">14</span>
  <h2 class="section-heading">Analisi & Revisione</h2>
  </div>
  <div class="section-content" id="analysis-section">
@@ -5024,7 +5647,7 @@ Trasforma la foto in dipinto ad olio. Pennellate grandi = effetto più pittorico
  <!-- PANNELLO 13: EXPORT -->
  <section class="section-panel">
  <div class="section-header" style="width: 100%; text-align: left; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius); margin-bottom: 8px;">
- <span class="section-number">13</span>
+ <span class="section-number">14</span>
  <h2 class="section-heading">Esporta</h2>
  </div>
  <div class="section-content" id="export-section">
@@ -5566,10 +6189,6 @@ Errori registrati: ${errorLog.length}
  * Aggiorna un singolo effetto GPU globale
  */
  window.updateGlobalGPUEffect = function(effectName, value) {
- if (!window.state || !window.state.globalEffects) {
- console.warn('[updateGlobalGPUEffect] state non ancora inizializzato');
- return;
- }
  state.globalEffects.gpuEffects[effectName] = value;
  
  // Aggiorna display valore
@@ -5596,11 +6215,6 @@ Errori registrati: ${errorLog.length}
  * Reset tutti gli effetti GPU globali
  */
  window.resetGlobalGPUEffects = function() {
- if (!window.state || !window.state.globalEffects) {
- console.warn('[resetGlobalGPUEffects] state non ancora inizializzato');
- return;
- }
- 
  const effects = ['brightness', 'contrast', 'hue', 'saturation', 'vibrance'];
  
  effects.forEach(effect => {
@@ -7123,16 +7737,26 @@ const state = window.state = {
  setInterval(() => {
  const cleanedCount = cleanupAndValidateState();
  if (cleanedCount > 0) {
- if (typeof announceGemini === 'function') {
  announceGemini(`Pulizia automatica: ${cleanedCount} problemi risolti`, 'polite');
- } else {
- console.log('Pulizia automatica:', cleanedCount, 'problemi risolti');
- }
  }
  }, 120000); // 2 minuti
  
  // ---- Gestione Livelli (Aggiungi, Seleziona, Muovi) ----
+ // Variabili anti-duplicati (fuori dalla funzione per persistenza)
+ let lastAddTime = 0;
+ let lastAddKey = '';
+ 
  function addLayer(layer) {
+ // FILTRO ANTI-DUPLICATI LEGGERO
+ const now = Date.now();
+ const key = (layer.type || '') + '_' + (layer.shape || layer.text || '').substring(0, 10);
+ if (now - lastAddTime < 150 && key === lastAddKey) {
+ console.warn('⚠️ Duplicato bloccato');
+ return;
+ }
+ lastAddTime = now;
+ lastAddKey = key;
+ 
  console.log(' [DEBUG] addLayer chiamata con:', layer.type, layer.shape || layer.text);
  
  // VALIDAZIONE INPUT ROBUSTA
@@ -7170,7 +7794,6 @@ const state = window.state = {
  layer.locked = layer.locked || false;
  layer.opacity = (layer.opacity !== undefined) ? Math.max(0, Math.min(100, layer.opacity)) : 100;
  layer.rotation = layer.rotation || 0;
- layer.scale = layer.scale || 1; // Default 100%
  
  if (layer.type === 'text') { 
  // Validazione testo
@@ -7178,8 +7801,6 @@ const state = window.state = {
  layer.fontSize = layer.fontSize || 24;
  layer.fontFamily = layer.fontFamily || 'Arial';
  layer.color = layer.color || '#000000';
- layer.underline = layer.underline || false;
- layer.lineThrough = layer.lineThrough || false;
  
  // Calcola dimensioni testo in modo sicuro
  try {
@@ -7213,26 +7834,22 @@ const state = window.state = {
  }
  
  if (layer.type === 'shape' || layer.type === 'polygon') {
-  // Validazione forme
-  layer.color = layer.color || '#000000';
-  layer.fillColor = layer.fillColor || layer.color || '#000000';
-  layer.strokeColor = layer.strokeColor || '#000000';
-  layer.strokeWidth = layer.strokeWidth !== undefined ? layer.strokeWidth : 2;
-  layer.cornerRadius = layer.cornerRadius || 0;
-  
-  if (!layer.width || !layer.height || layer.width <= 0 || layer.height <= 0) {
-   logError('addLayer', new Error('Dimensioni forma non valide'), 'Width/Height devono essere > 0');
-   layer.width = layer.width || 100;
-   layer.height = layer.height || 100;
-  }
-  
-  // Validazione punti poligono
-  if (layer.type === 'polygon') {
-   if (!Array.isArray(layer.polygonPoints) || layer.polygonPoints.length < 2) {
-    logError('addLayer', new Error('Punti poligono non validi'), 'polygonPoints deve avere almeno 2 punti');
-    return;
-   }
-  }
+ // Validazione forme
+ layer.color = layer.color || '#000000';
+ 
+ if (!layer.width || !layer.height || layer.width <= 0 || layer.height <= 0) {
+ logError('addLayer', new Error('Dimensioni forma non valide'), 'Width/Height devono essere > 0');
+ layer.width = layer.width || 100;
+ layer.height = layer.height || 100;
+ }
+ 
+ // Validazione punti poligono
+ if (layer.type === 'polygon') {
+ if (!Array.isArray(layer.polygonPoints) || layer.polygonPoints.length < 2) {
+ logError('addLayer', new Error('Punti poligono non validi'), 'polygonPoints deve avere almeno 2 punti');
+ return;
+ }
+ }
  }
  
  // Aggiungi al layer array
@@ -7250,7 +7867,6 @@ const state = window.state = {
  
  scheduleRender();
  updateUI();
- updateLayerEditPanel(); // Aggiorna Pannello 7 "Modifica Livello"
  announce('Livello ' + layer.name + ' aggiunto');
  }
  
@@ -7324,7 +7940,6 @@ const state = window.state = {
  
  scheduleRender();
  updateUI();
- updateLayerEditPanel(); // Aggiorna pannello modifica livello
  }
  
  function deleteLayer() {
@@ -7893,23 +8508,16 @@ const state = window.state = {
  ctx.shadowOffsetY = layer.dropShadow.y || 0;
  }
  
- // Trasformazioni (rotazione e scala) con validazione
+ // Trasformazioni (rotazione) con validazione
  if (layer.width && layer.height) {
-  const rotation = layer.rotation || 0;
-  const scale = layer.scale || 1;
-  
-  if (!isNaN(rotation) && rotation !== 0 || scale !== 1) {
-   const cx = layer.x + layer.width / 2;
-   const cy = layer.y + layer.height / 2;
-   ctx.translate(cx, cy);
-   if (scale !== 1 && !isNaN(scale)) {
-    ctx.scale(scale, scale);
-   }
-   if (!isNaN(rotation) && rotation !== 0) {
-    ctx.rotate((rotation * Math.PI) / 180);
-   }
-   ctx.translate(-cx, -cy);
-  }
+ const rotation = layer.rotation || 0;
+ if (!isNaN(rotation) && rotation !== 0) {
+ const cx = layer.x + layer.width / 2;
+ const cy = layer.y + layer.height / 2;
+ ctx.translate(cx, cy);
+ ctx.rotate((rotation * Math.PI) / 180);
+ ctx.translate(-cx, -cy);
+ }
  }
  
  // Disegna layer con try-catch per errori specifici
@@ -8402,38 +9010,30 @@ const state = window.state = {
  
  // Riempimento (non per linee)
  if (layer.shape !== 'line') {
-  if (layer.useGradient && layer.gradient) {
-   ctx.fillStyle = createGradient(layer, layer.gradient);
-  } else {
-   ctx.fillStyle = layer.fillColor || layer.color || '#000000';
-  }
-  ctx.fill();
+ if (layer.useGradient && layer.gradient) {
+ ctx.fillStyle = createGradient(layer, layer.gradient);
+ } else {
+ ctx.fillStyle = layer.color;
+ }
+ ctx.fill();
  }
  
- // Bordo
- if (layer.strokeColor && layer.strokeWidth > 0) {
-  ctx.strokeStyle = layer.strokeColor;
-  ctx.lineWidth = layer.strokeWidth;
-  ctx.stroke();
- }
- 
- // Bordo con stile (vecchio sistema, mantenuto per compatibilità)
+ // Bordo con stile
  if (layer.useStroke && layer.stroke) {
-  ctx.strokeStyle = layer.stroke.color;
-  ctx.lineWidth = layer.stroke.width;
-  
-  // Applica stile linea
-  if (layer.stroke.style === 'dashed') {
-   ctx.setLineDash([10, 5]);
-  } else if (layer.stroke.style === 'dotted') {
-   ctx.setLineDash([2, 3]);
-  } else {
-   ctx.setLineDash([]);
-  }
-  
-  ctx.stroke();
-  ctx.setLineDash([]); // Reset
+ ctx.strokeStyle = layer.stroke.color;
+ ctx.lineWidth = layer.stroke.width;
+ 
+ // Applica stile linea
+ if (layer.stroke.style === 'dashed') {
+ ctx.setLineDash([10, 5]);
+ } else if (layer.stroke.style === 'dotted') {
+ ctx.setLineDash([2, 3]);
+ } else {
+ ctx.setLineDash([]);
  }
+ 
+ ctx.stroke();
+ ctx.setLineDash([]); // Reset
  }
  }
  
@@ -9090,9 +9690,9 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  };
  const overlayClickHandler = () => handleChoice(null);
  
- document.getElementById('vector-choice-polyline')?.addEventListener('click', polylineHandler);
- document.getElementById('vector-choice-smooth')?.addEventListener('click', smoothHandler);
- document.getElementById('vector-choice-cancel')?.addEventListener('click', cancelHandler);
+ document.getElementById('vector-choice-polyline').addEventListener('click', polylineHandler);
+ document.getElementById('vector-choice-smooth').addEventListener('click', smoothHandler);
+ document.getElementById('vector-choice-cancel').addEventListener('click', cancelHandler);
  dialog.addEventListener('keydown', keyHandler);
  overlay.addEventListener('click', overlayClickHandler);
  }
@@ -9109,6 +9709,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  window.renderShape = renderShape;
  window.renderText = renderText;
  window.renderPolygon = renderPolygon;
+ 
+ // ESPORTAZIONI FUNZIONI CRITICHE
+ window.addLayer = addLayer;
+ window.render = render;
+ window.updateUI = updateUI;
+ window.updateLayerList = updateLayerList;
+ window.announceGemini = announceGemini;
  
  function addVectorPoint() {
  if (!state.vectorDrawMode) return;
@@ -9568,15 +10175,26 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
  // Mostra controlli comuni
  document.getElementById('edit-description').textContent = 'Modificando: ' + layer.name;
- document.getElementById('layer-name-controls').style.display = 'block';
+ 
+ // Rimuovi hidden e mostra i controlli
+ const showControl = (id) => {
+ const el = document.getElementById(id);
+ if (el) {
+ el.style.display = 'block';
+ el.classList.remove('hidden');
+ }
+ };
+ 
+ showControl('layer-name-controls');
+ showControl('color-controls');
+ showControl('gradient-panel');
+ showControl('stroke-panel');
+ showControl('transform-controls');
+ showControl('rotation-controls');
+ showControl('flip-controls');
+ showControl('opacity-controls');
+ 
  document.getElementById('layer-name-input').value = layer.name;
- document.getElementById('color-controls').style.display = 'block';
- document.getElementById('gradient-panel').style.display = 'block';
- document.getElementById('stroke-panel').style.display = 'block';
- document.getElementById('transform-controls').style.display = 'block';
- document.getElementById('rotation-controls').style.display = 'block';
- document.getElementById('flip-controls').style.display = 'block';
- document.getElementById('opacity-controls').style.display = 'block';
  
  // Popola controlli comuni - aggiornato per nuovo sistema colore
  const layerColor = layer.color || '#000000';
@@ -9717,25 +10335,41 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
  } else if (layer.type === 'shape') {
  // Nascondi quelli di testo e immagine
- document.getElementById('text-edit-controls').style.display = 'none';
- document.getElementById('font-controls').style.display = 'none';
- document.getElementById('text-spacing-controls').style.display = 'none';
- document.getElementById('text-style-controls').style.display = 'none';
- document.getElementById('text-align-controls').style.display = 'none';
- document.getElementById('crop-group').style.display = 'none';
- document.getElementById('mask-controls').style.display = 'none';
- document.getElementById('mask-clipping-controls').style.display = 'none';
- document.getElementById('filters-panel').style.display = 'none';
- document.getElementById('image-transform-controls').style.display = 'none';
- document.getElementById('image-crop-controls').style.display = 'none';
+ const hideControl = (id) => {
+ const el = document.getElementById(id);
+ if (el) {
+ el.style.display = 'none';
+ el.classList.add('hidden');
+ }
+ };
+ 
+ hideControl('text-edit-controls');
+ hideControl('font-controls');
+ hideControl('text-spacing-controls');
+ hideControl('text-style-controls');
+ hideControl('text-align-controls');
+ hideControl('crop-group');
+ hideControl('mask-controls');
+ hideControl('mask-clipping-controls');
+ hideControl('filters-panel');
+ hideControl('image-transform-controls');
+ hideControl('image-crop-controls');
  
  // Mostra corner-radius solo per rettangoli
  if (layer.shape === 'rect') {
- document.getElementById('corner-radius-group').style.display = 'block';
+ const cornerGroup = document.getElementById('corner-radius-group');
+ if (cornerGroup) {
+ cornerGroup.style.display = 'block';
+ cornerGroup.classList.remove('hidden');
+ }
  document.getElementById('corner-radius').value = layer.cornerRadius || 0;
  document.getElementById('corner-radius-value').textContent = (layer.cornerRadius || 0) + ' px';
  } else {
- document.getElementById('corner-radius-group').style.display = 'none';
+ const cornerGroup = document.getElementById('corner-radius-group');
+ if (cornerGroup) {
+ cornerGroup.style.display = 'none';
+ cornerGroup.classList.add('hidden');
+ }
  }
 
  } else if (layer.type === 'image') {
@@ -10762,7 +11396,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sezione 1: Canvas
- document.getElementById('tpl')?.addEventListener('change', e => {
+ document.getElementById('tpl').addEventListener('change', e => {
  document.getElementById('tplCustom').style.display = (e.target.value === 'custom') ? 'flex' : 'none';
  // Annuncia il template selezionato
  const templates = {
@@ -10787,7 +11421,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  // DISABLED: announceGemini(`${selectedTemplate}. Premi Applica Dimensioni Canvas per confermare.`, 'polite');
  });
 
- document.getElementById('btn-apply-canvas')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-canvas').addEventListener('click', () => {
  const val = document.getElementById('tpl').value;
  let w = 1080, h = 1080, t = 60, r = 60, b = 60, l = 60;
  
@@ -10855,7 +11489,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Listener per tipo sfondo (mostra/nascondi controlli)
- document.getElementById('bg-type')?.addEventListener('change', e => {
+ document.getElementById('bg-type').addEventListener('change', e => {
  const type = e.target.value;
  const colorControls = document.getElementById('bg-color-controls');
  const gradientControls = document.getElementById('bg-gradient-controls');
@@ -10899,7 +11533,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Listener per slider angolo gradiente
- document.getElementById('bg-gradient-angle')?.addEventListener('input', e => {
+ document.getElementById('bg-gradient-angle').addEventListener('input', e => {
  document.getElementById('bg-gradient-angle-value').textContent = e.target.value + '°';
  });
  
@@ -10915,7 +11549,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sincronizzazione Colore 1: HEX → RGB
- document.getElementById('bg-gradient-color1-hex')?.addEventListener('input', e => {
+ document.getElementById('bg-gradient-color1-hex').addEventListener('input', e => {
  const hex = e.target.value;
  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
  const r = parseInt(hex.slice(1, 3), 16);
@@ -10930,7 +11564,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Sincronizzazione Colore 1: RGB → HEX
  ['bg-gradient-color1-r', 'bg-gradient-color1-g', 'bg-gradient-color1-b'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', () => {
+ document.getElementById(id).addEventListener('input', () => {
  const r = parseInt(document.getElementById('bg-gradient-color1-r').value) || 0;
  const g = parseInt(document.getElementById('bg-gradient-color1-g').value) || 0;
  const b = parseInt(document.getElementById('bg-gradient-color1-b').value) || 0;
@@ -10944,7 +11578,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sincronizzazione Colore 1: color picker → HEX e RGB
- document.getElementById('bg-gradient-color1')?.addEventListener('input', e => {
+ document.getElementById('bg-gradient-color1').addEventListener('input', e => {
  const hex = e.target.value;
  document.getElementById('bg-gradient-color1-hex').value = hex;
  const r = parseInt(hex.slice(1, 3), 16);
@@ -10956,7 +11590,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sincronizzazione Colore 2: HEX → RGB
- document.getElementById('bg-gradient-color2-hex')?.addEventListener('input', e => {
+ document.getElementById('bg-gradient-color2-hex').addEventListener('input', e => {
  const hex = e.target.value;
  if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
  const r = parseInt(hex.slice(1, 3), 16);
@@ -10971,7 +11605,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Sincronizzazione Colore 2: RGB → HEX
  ['bg-gradient-color2-r', 'bg-gradient-color2-g', 'bg-gradient-color2-b'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', () => {
+ document.getElementById(id).addEventListener('input', () => {
  const r = parseInt(document.getElementById('bg-gradient-color2-r').value) || 0;
  const g = parseInt(document.getElementById('bg-gradient-color2-g').value) || 0;
  const b = parseInt(document.getElementById('bg-gradient-color2-b').value) || 0;
@@ -10985,7 +11619,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sincronizzazione Colore 2: color picker → HEX e RGB
- document.getElementById('bg-gradient-color2')?.addEventListener('input', e => {
+ document.getElementById('bg-gradient-color2').addEventListener('input', e => {
  const hex = e.target.value;
  document.getElementById('bg-gradient-color2-hex').value = hex;
  const r = parseInt(hex.slice(1, 3), 16);
@@ -11006,7 +11640,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Listener per caricamento immagine sfondo
  let bgImageElement = null;
- document.getElementById('bg-image-upload')?.addEventListener('change', e => {
+ document.getElementById('bg-image-upload').addEventListener('change', e => {
  const file = e.target.files[0];
  if (!file) return;
  
@@ -11121,9 +11755,77 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  bgColorG.addEventListener('input', syncRgbToHex);
  bgColorB.addEventListener('input', syncRgbToHex);
  
- // === LISTENER PER SFONDO ===
+ // Gestione selettore colore TESTO con preset (stesso sistema dello sfondo)
+ const textColorPreset = document.getElementById('tc');
+ const textColorCustomSection = document.getElementById('text-color-custom-section');
+ const textColorHex = document.getElementById('text-color-hex');
+ const textColorR = document.getElementById('text-color-r');
+ const textColorG = document.getElementById('text-color-g');
+ const textColorB = document.getElementById('text-color-b');
+ const textColorPreview = document.getElementById('text-color-preview');
+ 
+ // Funzione per aggiornare l'anteprima colore testo
+ function updateTextColorPreview(color) {
+ textColorPreview.style.background = color;
+ document.getElementById('text-color-preview-text').textContent = color.toUpperCase();
+ }
+ 
+ // Quando cambia il preset testo
+ textColorPreset.addEventListener('change', (e) => {
+ const value = e.target.value;
+ 
+ if (value === 'custom') {
+ textColorCustomSection.style.display = 'block';
+ announceGemini('Modalità colore testo personalizzato attivata. Usa Tab per navigare tra i campi HEX e RGB', 'polite');
+ } else {
+ textColorCustomSection.style.display = 'none';
+ const hexColor = getColorHex(value);
+ updateTextColorPreview(hexColor);
+ 
+ // Aggiorna anche i campi RGB/HEX
+ const rgb = hexToRgb(hexColor);
+ if (rgb) {
+ textColorR.value = rgb.r;
+ textColorG.value = rgb.g;
+ textColorB.value = rgb.b;
+ textColorHex.value = hexColor;
+ }
+ 
+ const colorName = e.target.options[e.target.selectedIndex].text;
+ // DISABLED: announceGemini(`Colore testo: ${colorName}`, 'polite');
+ }
+ });
+ 
+ // Sincronizza HEX con RGB per testo
+ textColorHex.addEventListener('input', (e) => {
+ let hex = e.target.value;
+ if (!hex.startsWith('#')) hex = '#' + hex;
+ 
+ const rgb = hexToRgb(hex);
+ if (rgb) {
+ textColorR.value = rgb.r;
+ textColorG.value = rgb.g;
+ textColorB.value = rgb.b;
+ updateTextColorPreview(hex);
+ }
+ });
+ 
+ // Sincronizza RGB con HEX per testo
+ function syncTextRgbToHex() {
+ const r = parseInt(textColorR.value) || 0;
+ const g = parseInt(textColorG.value) || 0;
+ const b = parseInt(textColorB.value) || 0;
+ const hex = rgbToHex(r, g, b);
+ textColorHex.value = hex;
+ updateTextColorPreview(hex);
+ }
+ 
+ textColorR.addEventListener('input', syncTextRgbToHex);
+ textColorG.addEventListener('input', syncTextRgbToHex);
+ textColorB.addEventListener('input', syncTextRgbToHex);
+ 
  // Pulsante applica sfondo
- document.getElementById('btn-apply-bg')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-bg').addEventListener('click', () => {
  const bgType = document.getElementById('bg-type').value;
  
  if (bgType === 'color') {
@@ -11176,7 +11878,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  
  
- document.getElementById('show-grid')?.addEventListener('change', e => {
+ document.getElementById('show-grid').addEventListener('change', e => {
  state.showGrid = e.target.checked;
  document.getElementById('grid-controls').style.display = e.target.checked ? 'block' : 'none';
  scheduleRender();
@@ -11184,43 +11886,47 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // v39.1: Toggle Safe Zone Overlay
- document.getElementById('show-safe-zone')?.addEventListener('change', e => {
+ document.getElementById('show-safe-zone').addEventListener('change', e => {
  state.showSafeZone = e.target.checked;
  scheduleRender();
  // RIMOSSO: announceGemini(e.target.checked ? 'Safe zone visibili. Zone rosse indicano margini pericolosi per social media.' : 'Safe zone nascoste', 'polite'); // NVDA già legge il valore dello slider
  });
  
- document.getElementById('grid-size')?.addEventListener('input', e => {
+ document.getElementById('grid-size').addEventListener('input', e => {
  state.gridSize = parseInt(e.target.value) || 20;
  scheduleRender();
  announceDebounced('Dimensione griglia: ' + state.gridSize + ' pixel', 'polite');
  });
  
  // Sezione 2: Aggiungi Livelli
- document.getElementById('btn-add-text')?.addEventListener('click', () => {
- console.log('[DEBUG] btn-add-text clicked');
+ document.getElementById('btn-add-text').addEventListener('click', () => {
  const text = document.getElementById('text-input').value || 'Nuovo Testo';
- console.log('[DEBUG] text:', text);
+ const fontFamily = document.getElementById('nff').value;
+ const fontSize = parseInt(document.getElementById('new-font-size').value);
+ const fontWeight = document.getElementById('nfw').value;
+ const lineHeight = parseFloat(document.getElementById('new-line-height').value);
+ const letterSpacing = parseFloat(document.getElementById('new-letter-spacing').value);
  
- // Valori di default - tutte le modifiche si fanno in Pannello 7 "Modifica Livello"
- const fontFamily = 'Arial';
- const fontSize = 32;
- const fontWeight = '400';
- const lineHeight = 1.2;
- const letterSpacing = 0;
- const color = '#000000'; // Nero
- const textAlign = 'left';
+ // Ottieni colore dal nuovo sistema preset/personalizzato
+ const colorPreset = textColorPreset.value;
+ const color = (colorPreset === 'custom') ? textColorHex.value : getColorHex(colorPreset);
  
- // Posizione centrale del canvas
- const x = Math.round((state?.tpl?.w || 1080) / 2);
- const y = Math.round((state?.tpl?.h || 1080) / 2);
- console.log('[DEBUG] Position:', x, y);
+ const x = parseInt(document.getElementById('new-text-x').value);
+ const y = parseInt(document.getElementById('new-text-y').value);
+ 
+ // Determina allineamento dai bottoni
+ let textAlign = 'left';
+ const btnLeft = document.getElementById('new-btn-align-left');
+ const btnCenter = document.getElementById('new-btn-align-center');
+ const btnRight = document.getElementById('new-btn-align-right');
+ if (btnCenter.classList.contains('active')) textAlign = 'center';
+ else if (btnRight.classList.contains('active')) textAlign = 'right';
  
  // Calcola numero di righe
  const lines = text.split('\n').length;
  
  addLayer({
- type: 'text', name: text.substring(0, 30), text: text,
+ type: 'text', name: text, text: text,
  x: x, y: y,
  fontFamily: fontFamily, fontSize: fontSize, fontWeight: fontWeight,
  color: color, rotation: 0, opacity: 100,
@@ -11228,13 +11934,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  document.getElementById('text-input').value = '';
  const lineText = lines === 1 ? '1 riga' : `${lines} righe`;
- 
- // Safe call to announceGemini
- if (typeof announceGemini === 'function') {
- announceGemini(`Testo "${text.substring(0, 30)}" aggiunto al centro del canvas. Occupa ${lineText}. Usa il pannello "Modifica Livello" per cambiare font, dimensione, colore e posizione.`, 'polite');
- } else {
- console.warn('[WARN] announceGemini non disponibile');
- }
+ announceGemini(`Testo "${text}" aggiunto in posizione X:${x}, Y:${y}. Occupa ${lineText} sul canvas.`, 'polite');
  
  // Aggiorna il box delle dimensioni dopo 500ms
  if (typeof window.showTextDimensions === 'function') {
@@ -11242,7 +11942,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-add-rect')?.addEventListener('click', () => {
+ document.getElementById('btn-add-rect').addEventListener('click', () => {
  console.log(' [DEBUG] Click su btn-add-rect - aggiungendo rettangolo');
  addLayer({ type: 'shape', shape: 'rect', name: 'Rettangolo',
  x: 50, y: 50, width: 200, height: 150,
@@ -11253,7 +11953,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'block';
  });
  
- document.getElementById('btn-add-circle')?.addEventListener('click', () => {
+ document.getElementById('btn-add-circle').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'circle', name: 'Cerchio',
  x: 50, y: 50, width: 150, height: 150,
  color: '#10b981', rotation: 0, opacity: 100
@@ -11263,7 +11963,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'none';
  });
  
- document.getElementById('btn-add-triangle')?.addEventListener('click', () => {
+ document.getElementById('btn-add-triangle').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'triangle', name: 'Triangolo',
  x: 50, y: 50, width: 150, height: 150,
  color: '#f59e0b', rotation: 0, opacity: 100
@@ -11273,7 +11973,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'none';
  });
  
- document.getElementById('btn-add-star')?.addEventListener('click', () => {
+ document.getElementById('btn-add-star').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'star', name: 'Stella',
  x: 50, y: 50, width: 150, height: 150,
  color: '#eab308', rotation: 0, opacity: 100
@@ -11282,7 +11982,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'none';
  });
  
- document.getElementById('btn-add-line')?.addEventListener('click', () => {
+ document.getElementById('btn-add-line').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'line', name: 'Linea',
  x: 50, y: 100, width: 200, height: 0,
  color: '#0f172a', rotation: 0, opacity: 100,
@@ -11292,7 +11992,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'none';
  });
  
- document.getElementById('btn-add-hexagon')?.addEventListener('click', () => {
+ document.getElementById('btn-add-hexagon').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'hexagon', name: 'Esagono',
  x: 50, y: 50, width: 150, height: 130,
  color: '#8b5cf6', rotation: 0, opacity: 100
@@ -11301,7 +12001,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  if (cornerGroup) cornerGroup.style.display = 'none';
  });
  
- document.getElementById('btn-add-arrow')?.addEventListener('click', () => {
+ document.getElementById('btn-add-arrow').addEventListener('click', () => {
  addLayer({ type: 'shape', shape: 'arrow', name: 'Freccia',
  x: 50, y: 50, width: 200, height: 50,
  color: '#06b6d4', rotation: 0, opacity: 100,
@@ -11312,7 +12012,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  announceGemini('Freccia aggiunta! Usa i controlli per modificarla.', 'polite');
  });
  
- document.getElementById('image-upload')?.addEventListener('change', e => {
+ document.getElementById('image-upload').addEventListener('change', e => {
  const file = e.target.files[0];
  if (!file) return;
  
@@ -11358,20 +12058,20 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Mostra controlli quando si clicca sul campo immagine
- document.getElementById('image-upload')?.addEventListener('click', () => {
+ document.getElementById('image-upload').addEventListener('click', () => {
  document.getElementById('new-image-size-controls').style.display = 'block';
  document.getElementById('new-image-position-controls').style.display = 'block';
  });
  
  // Gestione proporzioni immagine
- document.getElementById('new-img-width')?.addEventListener('input', e => {
+ document.getElementById('new-img-width').addEventListener('input', e => {
  if (document.getElementById('new-img-lock-ratio').checked) {
  const ratio = parseInt(document.getElementById('new-img-height').getAttribute('data-ratio') || 1);
  document.getElementById('new-img-height').value = Math.round(parseInt(e.target.value) * ratio);
  }
  });
  
- document.getElementById('new-img-height')?.addEventListener('input', e => {
+ document.getElementById('new-img-height').addEventListener('input', e => {
  if (document.getElementById('new-img-lock-ratio').checked) {
  const ratio = parseInt(document.getElementById('new-img-width').getAttribute('data-ratio') || 1);
  document.getElementById('new-img-width').value = Math.round(parseInt(e.target.value) / ratio);
@@ -11379,6 +12079,50 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Listener per i controlli del nuovo testo
+ document.getElementById('new-line-height').addEventListener('input', e => {
+ document.getElementById('new-line-height-value').textContent = e.target.value;
+ });
+ 
+ document.getElementById('new-letter-spacing').addEventListener('input', e => {
+ document.getElementById('new-letter-spacing-value').textContent = e.target.value + ' px';
+ });
+ 
+ // Bottoni allineamento testo (nuovo pannello)
+ ['new-btn-align-left', 'new-btn-align-center', 'new-btn-align-right'].forEach(id => {
+ document.getElementById(id).addEventListener('click', function() {
+ // Rimuovi active da tutti
+ document.getElementById('new-btn-align-left').classList.remove('active');
+ document.getElementById('new-btn-align-center').classList.remove('active');
+ document.getElementById('new-btn-align-right').classList.remove('active');
+ // Aggiungi active a questo
+ this.classList.add('active');
+ 
+ // Annuncia il cambio
+ const alignText = id.includes('left') ? 'sinistra' : id.includes('center') ? 'centro' : 'destra';
+ announceGemini(`Allineamento righe: ${alignText}`, 'polite');
+ });
+ });
+ // Imposta left come default
+ document.getElementById('new-btn-align-left').classList.add('active');
+ 
+ // Pulsante centra testo nel canvas
+ document.getElementById('btn-center-text-position').addEventListener('click', () => {
+ // Calcola il centro in base alle dimensioni del canvas attuale
+ const centerX = Math.round(state.tpl.w / 2);
+ const centerY = Math.round(state.tpl.h / 2);
+ 
+ document.getElementById('new-text-x').value = centerX;
+ document.getElementById('new-text-y').value = centerY;
+ 
+ // Imposta automaticamente l'allineamento su "Centro" per garantire che funzioni correttamente
+ document.getElementById('new-btn-align-left').classList.remove('active');
+ document.getElementById('new-btn-align-center').classList.add('active');
+ document.getElementById('new-btn-align-right').classList.remove('active');
+ 
+ // Annuncio immediato e assertive così viene letto subito
+ announceGemini(`Testo centrato nel canvas. Posizione: X ${centerX}, Y ${centerY}. Allineamento: Centro.`, 'assertive');
+ });
+ 
  // Aggiorna forme per usare i nuovi controlli di posizione
  const updateShapeButtons = () => {
  const shapes = ['rect', 'circle', 'triangle', 'star', 'star8', 'heart', 'speech', 'line', 'hexagon', 'arrow'];
@@ -11459,7 +12203,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  updateShapeButtons();
  
  // Listener per corner radius slider
- document.getElementById('new-corner-radius')?.addEventListener('input', e => {
+ document.getElementById('new-corner-radius').addEventListener('input', e => {
  document.getElementById('new-corner-radius-value').textContent = e.target.value + '%';
  });
  
@@ -11543,27 +12287,27 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  console.error(' Area vector-focus-area non trovata!');
  }
  
- document.getElementById('vector-step')?.addEventListener('input', e => {
+ document.getElementById('vector-step').addEventListener('input', e => {
  state.vectorStep = parseInt(e.target.value);
  document.getElementById('vector-step-value').textContent = state.vectorStep + ' px';
  });
  
- document.getElementById('vfc')?.addEventListener('input', e => {
+ document.getElementById('vfc').addEventListener('input', e => {
  state.vectorFillColor = getColorHex(e.target.value);
  });
  
- document.getElementById('vsc')?.addEventListener('input', e => {
+ document.getElementById('vsc').addEventListener('input', e => {
  state.vectorStrokeColor = getColorHex(e.target.value);
  });
  
- document.getElementById('vector-stroke-width')?.addEventListener('input', e => {
+ document.getElementById('vector-stroke-width').addEventListener('input', e => {
  state.vectorStrokeWidth = parseInt(e.target.value);
  });
  
  // Sezione 3: Modifica (Listeners dinamici)
  
  // Testo
- document.getElementById('btn-apply-text-edit')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-text-edit').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.text = document.getElementById('text-edit').value;
@@ -11586,7 +12330,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Font
  ['ff', 'font-size', 'fw'].forEach(id => {
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.fontFamily = document.getElementById('ff').value;
@@ -11608,7 +12352,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Letter Spacing
- document.getElementById('letter-spacing')?.addEventListener('input', e => {
+ document.getElementById('letter-spacing').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.letterSpacing = parseFloat(e.target.value);
@@ -11624,13 +12368,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('letter-spacing')?.addEventListener('change', () => {
+ document.getElementById('letter-spacing').addEventListener('change', () => {
  saveState('Spaziatura lettere modificata');
  updateUI();
  });
  
  // Line Height
- document.getElementById('line-height')?.addEventListener('input', e => {
+ document.getElementById('line-height').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.lineHeight = parseFloat(e.target.value);
@@ -11641,13 +12385,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('line-height')?.addEventListener('change', () => {
+ document.getElementById('line-height').addEventListener('change', () => {
  saveState('Altezza riga modificata');
  updateUI();
  });
  
  // Stili testo
- document.getElementById('btn-italic')?.addEventListener('click', () => {
+ document.getElementById('btn-italic').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.italic = !layer.italic;
@@ -11658,7 +12402,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-underline')?.addEventListener('click', () => {
+ document.getElementById('btn-underline').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.underline = !layer.underline;
@@ -11669,7 +12413,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-line-through')?.addEventListener('click', () => {
+ document.getElementById('btn-line-through').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.lineThrough = !layer.lineThrough;
@@ -11682,7 +12426,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Allineamento testo
  ['btn-align-left', 'btn-align-center', 'btn-align-right'].forEach(id => {
- document.getElementById(id)?.addEventListener('click', () => {
+ document.getElementById(id).addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  layer.textAlign = id.split('-')[2]; // left, center, right
@@ -11695,7 +12439,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Centra testo nel canvas (posizionamento visivo)
- document.getElementById('btn-center-in-canvas')?.addEventListener('click', () => {
+ document.getElementById('btn-center-in-canvas').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  // Calcola la larghezza reale del blocco testo
@@ -11741,7 +12485,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 
  // CENTRA TESTO PER SOCIAL (Safe Zone Universale)
  if (document.getElementById('btn-center-social')) {
- document.getElementById('btn-center-social')?.addEventListener('click', () => {
+ document.getElementById('btn-center-social').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'text') {
  // Ottieni safe zone universale in pixel
@@ -11807,7 +12551,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // 🆕 PULSANTE CENTRA IMMAGINE (non solo testo!)
  if (document.getElementById('btn-center-canvas')) {
- document.getElementById('btn-center-canvas')?.addEventListener('click', () => {
+ document.getElementById('btn-center-canvas').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  // Calcola il centro del canvas
@@ -11840,7 +12584,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // PULSANTE CENTRA IN ZONA SICURA (v44.2)
  if (document.getElementById('btn-center-safe')) {
- document.getElementById('btn-center-social-img')?.addEventListener('click', () => {
+ document.getElementById('btn-center-social-img').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  // Ottieni safe zone del template corrente
@@ -12217,7 +12961,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  
  // Gradiente
- document.getElementById('use-gradient')?.addEventListener('change', e => {
+ document.getElementById('use-gradient').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.useGradient = e.target.checked;
@@ -12253,7 +12997,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Gradient type con annuncio NVDA esplicativo
- document.getElementById('gradient-type')?.addEventListener('change', (e) => {
+ document.getElementById('gradient-type').addEventListener('change', (e) => {
  const layer = getSelectedLayer();
  if (layer && layer.gradient) {
  const newType = e.target.value;
@@ -12388,7 +13132,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Gradient colors
  ['gradient-color1', 'gradient-color2'].forEach(id => {
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  const layer = getSelectedLayer();
  if (layer && layer.gradient) {
  layer.gradient.color1 = document.getElementById('gradient-color1').value;
@@ -12407,7 +13151,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Listener per i campi HEX del gradiente
- document.getElementById('gradient-color1-hex')?.addEventListener('input', e => {
+ document.getElementById('gradient-color1-hex').addEventListener('input', e => {
  const value = e.target.value;
  if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
  const layer = getSelectedLayer();
@@ -12424,11 +13168,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('gradient-color1-hex')?.addEventListener('change', () => {
+ document.getElementById('gradient-color1-hex').addEventListener('change', () => {
  saveState('Colore 1 gradiente modificato');
  });
  
- document.getElementById('gradient-color2-hex')?.addEventListener('input', e => {
+ document.getElementById('gradient-color2-hex').addEventListener('input', e => {
  const value = e.target.value;
  if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
  const layer = getSelectedLayer();
@@ -12445,11 +13189,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('gradient-color2-hex')?.addEventListener('change', () => {
+ document.getElementById('gradient-color2-hex').addEventListener('change', () => {
  saveState('Colore 2 gradiente modificato');
  });
  
- document.getElementById('gradient-angle')?.addEventListener('input', e => {
+ document.getElementById('gradient-angle').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.gradient) {
  layer.gradient.angle = parseInt(e.target.value);
@@ -12460,7 +13204,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('gradient-angle')?.addEventListener('change', () => {
+ document.getElementById('gradient-angle').addEventListener('change', () => {
  saveState('Angolo gradiente modificato');
  });
  
@@ -12498,7 +13242,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Listener per campi RGB del gradiente forme - Colore 1
  ['gradient-color1-r', 'gradient-color1-g', 'gradient-color1-b'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', () => {
+ document.getElementById(id).addEventListener('input', () => {
  const r = parseInt(document.getElementById('gradient-color1-r').value) || 0;
  const g = parseInt(document.getElementById('gradient-color1-g').value) || 0;
  const b = parseInt(document.getElementById('gradient-color1-b').value) || 0;
@@ -12515,14 +13259,14 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  saveState('Colore 1 gradiente modificato (RGB)');
  });
  });
  
  // Listener per campi RGB del gradiente forme - Colore 2
  ['gradient-color2-r', 'gradient-color2-g', 'gradient-color2-b'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', () => {
+ document.getElementById(id).addEventListener('input', () => {
  const r = parseInt(document.getElementById('gradient-color2-r').value) || 0;
  const g = parseInt(document.getElementById('gradient-color2-g').value) || 0;
  const b = parseInt(document.getElementById('gradient-color2-b').value) || 0;
@@ -12539,13 +13283,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  saveState('Colore 2 gradiente modificato (RGB)');
  });
  });
  
  // Bordo
- document.getElementById('use-stroke')?.addEventListener('change', e => {
+ document.getElementById('use-stroke').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.useStroke = e.target.checked;
@@ -12560,7 +13304,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  ['sc', 'stroke-width'].forEach(id => {
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  const layer = getSelectedLayer();
  if (layer && layer.stroke) {
  const scValue = document.getElementById('sc').value;
@@ -12585,7 +13329,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  // ═══════════════════════════════════════════════════════════════════
  
  // Mostra/nascondi sezione colore personalizzato
- document.getElementById('sc')?.addEventListener('change', e => {
+ document.getElementById('sc').addEventListener('change', e => {
  const customSection = document.getElementById('stroke-color-custom-section');
  if (e.target.value === 'custom') {
  customSection.style.display = 'block';
@@ -12674,7 +13418,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  
  // Trasformazioni
  ['pos-x', 'pos-y', 'width', 'height'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', () => {
+ document.getElementById(id).addEventListener('input', () => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.x = parseFloat(document.getElementById('pos-x').value);
@@ -12707,13 +13451,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  saveState('Trasformazione modificata');
  });
  });
  
  // Corner Radius (solo rettangoli)
- document.getElementById('corner-radius')?.addEventListener('input', e => {
+ document.getElementById('corner-radius').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.shape === 'rect') {
  layer.cornerRadius = parseInt(e.target.value);
@@ -12723,12 +13467,12 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('corner-radius')?.addEventListener('change', () => {
+ document.getElementById('corner-radius').addEventListener('change', () => {
  saveState('Arrotondamento modificato');
  });
  
  // Rotazione
- document.getElementById('rotation')?.addEventListener('input', e => {
+ document.getElementById('rotation').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.rotation = parseInt(e.target.value);
@@ -12738,12 +13482,12 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('rotation')?.addEventListener('change', () => {
+ document.getElementById('rotation').addEventListener('change', () => {
  saveState('Rotazione modificata');
  });
  
  // Flip
- document.getElementById('btn-flip-h')?.addEventListener('click', () => {
+ document.getElementById('btn-flip-h').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  layer.flipH = !layer.flipH;
@@ -12753,7 +13497,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-flip-v')?.addEventListener('click', () => {
+ document.getElementById('btn-flip-v').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  layer.flipV = !layer.flipV;
@@ -12764,7 +13508,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Opacità
- document.getElementById('opacity')?.addEventListener('input', e => {
+ document.getElementById('opacity').addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.opacity = parseInt(e.target.value);
@@ -12774,14 +13518,14 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('opacity')?.addEventListener('change', () => {
+ document.getElementById('opacity').addEventListener('change', () => {
  saveState('Opacità modificata');
  });
  
  // Sezione 4: Effetti
  
  // Drop Shadow
- document.getElementById('shadow-enabled')?.addEventListener('change', e => {
+ document.getElementById('shadow-enabled').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer) {
  if (!layer.dropShadow) {
@@ -12795,7 +13539,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('shc')?.addEventListener('change', () => {
+ document.getElementById('shc').addEventListener('change', () => {
  const layer = getSelectedLayer();
  if (layer && layer.dropShadow) {
  const shcValue = document.getElementById('shc').value;
@@ -12817,7 +13561,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  // ═══════════════════════════════════════════════════════════════════
  
  // Mostra/nascondi sezione colore personalizzato
- document.getElementById('shc')?.addEventListener('change', e => {
+ document.getElementById('shc').addEventListener('change', e => {
  const customSection = document.getElementById('shadow-color-custom-section');
  if (e.target.value === 'custom') {
  customSection.style.display = 'block';
@@ -12905,7 +13649,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  ['shadow-blur', 'shadow-x', 'shadow-y'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', e => {
+ document.getElementById(id).addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.dropShadow) {
  const prop = id.split('-')[1]; // blur, x, y
@@ -12916,13 +13660,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  saveState('Ombra modificata');
  });
  });
  
  // Blend Mode
- document.getElementById('blend-mode')?.addEventListener('change', e => {
+ document.getElementById('blend-mode').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.blendMode = e.target.value;
@@ -12933,7 +13677,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Filtri Immagine
- document.getElementById('filter-preset')?.addEventListener('change', e => {
+ document.getElementById('filter-preset').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  if (!layer.filters) layer.filters = { brightness: 0, contrast: 0, saturation: 0, hue: 0, sepia: 0, blur: 0, preset: 'none' };
@@ -12945,7 +13689,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  ['filter-brightness', 'filter-contrast', 'filter-saturation', 'filter-hue', 'filter-sepia', 'filter-blur'].forEach(id => {
- document.getElementById(id)?.addEventListener('input', e => {
+ document.getElementById(id).addEventListener('input', e => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  if (!layer.filters) layer.filters = { brightness: 0, contrast: 0, saturation: 0, hue: 0, sepia: 0, blur: 0, preset: 'none' };
@@ -12968,13 +13712,13 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById(id)?.addEventListener('change', () => {
+ document.getElementById(id).addEventListener('change', () => {
  saveState('Filtro modificato');
  });
  });
  
  // Maschera
- document.getElementById('mask-shape')?.addEventListener('change', e => {
+ document.getElementById('mask-shape').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  layer.mask = e.target.value;
@@ -12985,36 +13729,36 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sezione 5: Gestione Livelli
- document.getElementById('btn-move-up')?.addEventListener('click', () => moveLayer('up'));
- document.getElementById('btn-move-down')?.addEventListener('click', () => moveLayer('down'));
- document.getElementById('btn-lock')?.addEventListener('click', toggleLock);
- document.getElementById('btn-delete')?.addEventListener('click', deleteLayer);
+ document.getElementById('btn-move-up').addEventListener('click', () => moveLayer('up'));
+ document.getElementById('btn-move-down').addEventListener('click', () => moveLayer('down'));
+ document.getElementById('btn-lock').addEventListener('click', toggleLock);
+ document.getElementById('btn-delete').addEventListener('click', deleteLayer);
  
  // Sezione 6: Allineamento
- document.getElementById('btn-align-tl')?.addEventListener('click', () => alignLayer('top-left'));
- document.getElementById('btn-align-tc')?.addEventListener('click', () => alignLayer('top-center'));
- document.getElementById('btn-align-tr')?.addEventListener('click', () => alignLayer('top-right'));
- document.getElementById('btn-align-ml')?.addEventListener('click', () => alignLayer('middle-left'));
- document.getElementById('btn-align-center-2')?.addEventListener('click', () => alignLayer('center')); // FIX: era btn-align-center
- document.getElementById('btn-align-mr')?.addEventListener('click', () => alignLayer('middle-right'));
- document.getElementById('btn-align-bl')?.addEventListener('click', () => alignLayer('bottom-left'));
- document.getElementById('btn-align-bc')?.addEventListener('click', () => alignLayer('bottom-center'));
- document.getElementById('btn-align-br')?.addEventListener('click', () => alignLayer('bottom-right'));
+ document.getElementById('btn-align-tl').addEventListener('click', () => alignLayer('top-left'));
+ document.getElementById('btn-align-tc').addEventListener('click', () => alignLayer('top-center'));
+ document.getElementById('btn-align-tr').addEventListener('click', () => alignLayer('top-right'));
+ document.getElementById('btn-align-ml').addEventListener('click', () => alignLayer('middle-left'));
+ document.getElementById('btn-align-center-2').addEventListener('click', () => alignLayer('center')); // FIX: era btn-align-center
+ document.getElementById('btn-align-mr').addEventListener('click', () => alignLayer('middle-right'));
+ document.getElementById('btn-align-bl').addEventListener('click', () => alignLayer('bottom-left'));
+ document.getElementById('btn-align-bc').addEventListener('click', () => alignLayer('bottom-center'));
+ document.getElementById('btn-align-br').addEventListener('click', () => alignLayer('bottom-right'));
  
  // Allineamento Relativo tra Elementi
- document.getElementById('btn-align-left-rel')?.addEventListener('click', () => alignLayersRelative('left'));
- document.getElementById('btn-align-center-h-rel')?.addEventListener('click', () => alignLayersRelative('center-h'));
- document.getElementById('btn-align-right-rel')?.addEventListener('click', () => alignLayersRelative('right'));
- document.getElementById('btn-align-top-rel')?.addEventListener('click', () => alignLayersRelative('top'));
- document.getElementById('btn-align-center-v-rel')?.addEventListener('click', () => alignLayersRelative('center-v'));
- document.getElementById('btn-align-bottom-rel')?.addEventListener('click', () => alignLayersRelative('bottom'));
+ document.getElementById('btn-align-left-rel').addEventListener('click', () => alignLayersRelative('left'));
+ document.getElementById('btn-align-center-h-rel').addEventListener('click', () => alignLayersRelative('center-h'));
+ document.getElementById('btn-align-right-rel').addEventListener('click', () => alignLayersRelative('right'));
+ document.getElementById('btn-align-top-rel').addEventListener('click', () => alignLayersRelative('top'));
+ document.getElementById('btn-align-center-v-rel').addEventListener('click', () => alignLayersRelative('center-v'));
+ document.getElementById('btn-align-bottom-rel').addEventListener('click', () => alignLayersRelative('bottom'));
  
  // Distribuzione Uniforme
- document.getElementById('btn-distribute-h')?.addEventListener('click', () => distributeLayersUniform('horizontal'));
- document.getElementById('btn-distribute-v')?.addEventListener('click', () => distributeLayersUniform('vertical'));
+ document.getElementById('btn-distribute-h').addEventListener('click', () => distributeLayersUniform('horizontal'));
+ document.getElementById('btn-distribute-v').addEventListener('click', () => distributeLayersUniform('vertical'));
  
  // Sezione 7: Palette Colori
- document.getElementById('btn-save-color')?.addEventListener('click', () => {
+ document.getElementById('btn-save-color').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.color) {
  if (!state.colorPalette.includes(layer.color)) {
@@ -13032,10 +13776,10 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  // Sezione 12: Esplorazione Canvas - Pulsanti Step
  
  // Sezione 12: Esporta
- document.getElementById('btn-export-png')?.addEventListener('click', () => exportImage('png'));
- document.getElementById('btn-export-jpg')?.addEventListener('click', () => exportImage('jpeg'));
- document.getElementById('btn-save-project')?.addEventListener('click', saveProject);
- document.getElementById('load-project')?.addEventListener('change', e => {
+ document.getElementById('btn-export-png').addEventListener('click', () => exportImage('png'));
+ document.getElementById('btn-export-jpg').addEventListener('click', () => exportImage('jpeg'));
+ document.getElementById('btn-save-project').addEventListener('click', saveProject);
+ document.getElementById('load-project').addEventListener('change', e => {
  if (e.target.files[0]) {
  loadProject(e.target.files[0]);
  e.target.value = ''; // Reset
@@ -13043,11 +13787,11 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sezione 9: Analisi
- document.getElementById('btn-analyze')?.addEventListener('click', runFullAnalysis);
- document.getElementById('btn-generate-alt')?.addEventListener('click', generateAltText);
+ document.getElementById('btn-analyze').addEventListener('click', runFullAnalysis);
+ document.getElementById('btn-generate-alt').addEventListener('click', generateAltText);
 
  // Rinomina Livello
- document.getElementById('btn-rename-layer')?.addEventListener('click', () => {
+ document.getElementById('btn-rename-layer').addEventListener('click', () => {
  const layer = getSelectedLayer();
  const newName = document.getElementById('layer-name-input').value.trim();
  
@@ -13068,7 +13812,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Sostituisci Immagine
- document.getElementById('replace-image')?.addEventListener('change', e => {
+ document.getElementById('replace-image').addEventListener('change', e => {
  const layer = getSelectedLayer();
  if (!layer || layer.type !== 'image') return;
  
@@ -13093,7 +13837,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Controlli Immagine - Flip
- document.getElementById('btn-flip-h')?.addEventListener('click', () => {
+ document.getElementById('btn-flip-h').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  layer.flipH = !layer.flipH;
@@ -13103,7 +13847,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-flip-v')?.addEventListener('click', () => {
+ document.getElementById('btn-flip-v').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer && layer.type === 'image') {
  layer.flipV = !layer.flipV;
@@ -13114,7 +13858,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Maschera di Ritaglio
- document.getElementById('btn-apply-mask')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-mask').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (!layer || layer.type !== 'image') {
  announceGemini('Seleziona un\'immagine per applicare la maschera', 'assertive');
@@ -13142,7 +13886,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  announceGemini(`Maschera ${shapeNames[maskShape]} applicata all'immagine`, 'polite');
  });
  
- document.getElementById('btn-remove-mask')?.addEventListener('click', () => {
+ document.getElementById('btn-remove-mask').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (!layer || layer.type !== 'image') {
  // RIMOSSO (ridondante): announceGemini('Seleziona un\'immagine', 'assertive');
@@ -13161,7 +13905,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Crop Preset
- document.getElementById('btn-apply-crop-preset')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-crop-preset').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (!layer || layer.type !== 'image' || !layer.imageElement) return;
  
@@ -13213,7 +13957,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Crop Manuale
- document.getElementById('btn-apply-crop-manual')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-crop-manual').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (!layer || layer.type !== 'image' || !layer.imageElement) return;
  
@@ -13245,7 +13989,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Rotazione Preset
- document.getElementById('btn-rotate-90')?.addEventListener('click', () => {
+ document.getElementById('btn-rotate-90').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.rotation = (layer.rotation + 90) % 360;
@@ -13257,7 +14001,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-rotate-180')?.addEventListener('click', () => {
+ document.getElementById('btn-rotate-180').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.rotation = (layer.rotation + 180) % 360;
@@ -13269,7 +14013,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-rotate-270')?.addEventListener('click', () => {
+ document.getElementById('btn-rotate-270').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.rotation = (layer.rotation + 270) % 360;
@@ -13281,7 +14025,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  }
  });
  
- document.getElementById('btn-rotate-reset')?.addEventListener('click', () => {
+ document.getElementById('btn-rotate-reset').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (layer) {
  layer.rotation = 0;
@@ -13294,7 +14038,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  
  // Duplica con Offset
- document.getElementById('btn-duplicate-offset')?.addEventListener('click', () => {
+ document.getElementById('btn-duplicate-offset').addEventListener('click', () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un livello da duplicare', 'assertive');
@@ -13384,27 +14128,27 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  announceGemini(`Livello scalato al ${percent}%. Nuove dimensioni: ${newWidth}x${newHeight} pixel`, 'polite');
  };
  
- document.getElementById('btn-apply-scale')?.addEventListener('click', () => {
+ document.getElementById('btn-apply-scale').addEventListener('click', () => {
  const percent = parseInt(document.getElementById('scale-percent').value) || 100;
  applyScale(percent);
  });
  
- document.getElementById('btn-scale-50')?.addEventListener('click', () => applyScale(50));
- document.getElementById('btn-scale-75')?.addEventListener('click', () => applyScale(75));
- document.getElementById('btn-scale-150')?.addEventListener('click', () => applyScale(150));
- document.getElementById('btn-scale-200')?.addEventListener('click', () => applyScale(200));
+ document.getElementById('btn-scale-50').addEventListener('click', () => applyScale(50));
+ document.getElementById('btn-scale-75').addEventListener('click', () => applyScale(75));
+ document.getElementById('btn-scale-150').addEventListener('click', () => applyScale(150));
+ document.getElementById('btn-scale-200').addEventListener('click', () => applyScale(200));
  
  // Toolbar
- document.getElementById('btn-undo')?.addEventListener('click', undo);
- document.getElementById('btn-redo')?.addEventListener('click', redo);
+ document.getElementById('btn-undo').addEventListener('click', undo);
+ document.getElementById('btn-redo').addEventListener('click', redo);
  
  // Guida e Modali
- document.getElementById('btn-keyboard-guide')?.addEventListener('click', showKeyboardGuide);
+ document.getElementById('btn-keyboard-guide').addEventListener('click', showKeyboardGuide);
  const btnShowGuide = document.getElementById('btn-show-guide');
  if (btnShowGuide) btnShowGuide.addEventListener('click', showKeyboardGuide);
- document.getElementById('closeGuide')?.addEventListener('click', () => closeModal(modalGuide));
- document.getElementById('closeAnalysis')?.addEventListener('click', () => closeModal(modalAnalysis));
- document.getElementById('closeAltText')?.addEventListener('click', () => closeModal(modalAltText));
+ document.getElementById('closeGuide').addEventListener('click', () => closeModal(modalGuide));
+ document.getElementById('closeAnalysis').addEventListener('click', () => closeModal(modalAnalysis));
+ document.getElementById('closeAltText').addEventListener('click', () => closeModal(modalAltText));
  
  // Modale API Config
  const btnOpenApiConfig = document.getElementById('btn-open-api-config');
@@ -13466,18 +14210,18 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
  }
 
- document.getElementById('copyAltText')?.addEventListener('click', () => { 
+ document.getElementById('copyAltText').addEventListener('click', () => { 
  navigator.clipboard.writeText(altTextBody.textContent);
  announceGemini('Testo copiato.', 'assertive');
  });
 
  // Zoom
- document.getElementById('btn-zoom-in')?.addEventListener('click', () => setZoom(state.zoom + 0.1));
- document.getElementById('btn-zoom-out')?.addEventListener('click', () => setZoom(state.zoom - 0.1));
- document.getElementById('btn-zoom-reset')?.addEventListener('click', () => setZoom(1));
+ document.getElementById('btn-zoom-in').addEventListener('click', () => setZoom(state.zoom + 0.1));
+ document.getElementById('btn-zoom-out').addEventListener('click', () => setZoom(state.zoom - 0.1));
+ document.getElementById('btn-zoom-reset').addEventListener('click', () => setZoom(1));
  
  // Anteprima Fullscreen
- document.getElementById('btn-fullscreen')?.addEventListener('click', (e) => {
+ document.getElementById('btn-fullscreen').addEventListener('click', (e) => {
  try {
  elementToFocusAfterFullscreen = e.target;
  const fsCtx = fullscreenCanvas.getContext('2d');
@@ -13560,7 +14304,7 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  });
 
  // Mappa Sonora
- document.getElementById('btn-sound-map')?.addEventListener('click', toggleGridMode);
+ document.getElementById('btn-sound-map').addEventListener('click', toggleGridMode);
 
  // ===== SISTEMA AIUTO F2 =====
  const f2HelpModal = document.getElementById('f2-help-modal');
@@ -13726,6 +14470,22 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  { subtitle: 'Cosa fa', text: 'Imposta il colore del testo che verrà aggiunto.' },
  { subtitle: 'Come si usa', text: 'Si clicca sul selettore colore per scegliere la tonalità desiderata.' },
  { subtitle: 'Consiglio', text: 'Il nero (#000000) e il bianco (#FFFFFF) sono sempre efficaci. Per un look moderno, usare grigio scuro (#2d3748) invece del nero puro.' }
+ ]
+ },
+ 'new-line-height': {
+ title: 'Interlinea',
+ sections: [
+ { subtitle: 'Cosa fa', text: 'Regola lo spazio verticale tra le righe di testo in un livello testo multi-riga.' },
+ { subtitle: 'Come si usa', text: 'Si usa lo slider. 1.0 significa nessuno spazio extra, 1.5 aggiunge il 50% di spazio tra le righe, ecc.' },
+ { subtitle: 'Consiglio', text: 'Per testi lunghi, usare 1.4-1.6 per migliorare la leggibilità. Per titoli su più righe, 1.1-1.2 crea un aspetto più compatto.' }
+ ]
+ },
+ 'new-letter-spacing': {
+ title: 'Spaziatura lettere',
+ sections: [
+ { subtitle: 'Cosa fa', text: 'Aumenta o diminuisce lo spazio orizzontale tra ogni lettera del testo.' },
+ { subtitle: 'Come si usa', text: 'Si usa lo slider. Valori positivi allargano le lettere, valori negativi le stringono. 0 è lo spazio predefinito del font.' },
+ { subtitle: 'Consiglio', text: 'Una leggera spaziatura positiva (+1 o +2px) su testi in maiuscolo li rende più leggibili ed eleganti. Evitare valori negativi a meno che non sia un effetto ricercato.' }
  ]
  },
  'x': {
@@ -14030,6 +14790,22 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  { subtitle: 'Cosa fa', text: 'Ritaglia l\'immagine in forme specifiche come cerchio, stella, cuore, esagono, ecc.' },
  { subtitle: 'Come si usa', text: 'Si seleziona un\'immagine, si sceglie la forma desiderata dal menu e si applica il ritaglio.' },
  { subtitle: 'Consiglio', text: 'Il cerchio è perfetto per foto profilo. Le stelle e i cuori creano effetti decorativi. L\'esagono è molto usato nei design moderni.' }
+ ]
+ },
+ 'new-text-x': {
+ title: 'Posizione X nuovo testo',
+ sections: [
+ { subtitle: 'Cosa fa', text: 'Definisce la coordinata orizzontale (asse X) dove apparirà il nuovo testo (0 = bordo sinistro).' },
+ { subtitle: 'Come si usa', text: 'Si inserisce un valore in pixel. Definisce il punto di partenza (o il centro, se centrato) del blocco di testo.' },
+ { subtitle: 'Consiglio', text: 'Si può lasciare il valore predefinito e poi usare i controlli di allineamento per posizionare il testo più facilmente.' }
+ ]
+ },
+ 'new-text-y': {
+ title: 'Posizione Y nuovo testo',
+ sections: [
+ { subtitle: 'Cosa fa', text: 'Definisce la coordinata verticale (asse Y) dove apparirà il nuovo testo (0 = bordo superiore).' },
+ { subtitle: 'Come si usa', text: 'Si inserisce un valore in pixel. Utile per posizionare il testo a un\'altezza specifica.' },
+ { subtitle: 'Consiglio', text: 'Per i post sui social, è bene lasciare sempre un "margine di sicurezza" (es. 60-100px) dai bordi superiore e inferiore.' }
  ]
  },
  'new-shape-fill': {
@@ -14864,19 +15640,19 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  announceGemini('Testo vuoto, operazione annullata', 'polite');
  return;
  }
- 
- // Valori di default - tutte le modifiche si fanno in Pannello 7 "Modifica Livello"
- const fontFamily = 'Arial';
- const fontSize = 32;
- const fontWeight = '400';
- const color = '#000000';
- const lineHeight = 1.2;
- const letterSpacing = 0;
- const textAlign = 'left';
- 
+ const fontFamily = document.getElementById('nff').value;
+ const fontSize = parseInt(document.getElementById('new-font-size').value);
+ const fontWeight = document.getElementById('nfw').value;
+ const colorPresetVal = textColorPreset.value;
+ const color = (colorPresetVal === 'custom') ? textColorHex.value : getColorHex(colorPresetVal);
+ const lineHeight = parseFloat(document.getElementById('new-line-height').value);
+ const letterSpacing = parseFloat(document.getElementById('new-letter-spacing').value);
+ let textAlign = 'left';
+ if (document.getElementById('new-btn-align-center').classList.contains('active')) textAlign = 'center';
+ else if (document.getElementById('new-btn-align-right').classList.contains('active')) textAlign = 'right';
  const lines = txt.split('\n').length;
  addLayer({
- type: 'text', name: txt.substring(0, 30), text: txt,
+ type: 'text', name: txt, text: txt,
  x: state.explorationCursor.x, y: state.explorationCursor.y,
  fontFamily: fontFamily, fontSize: fontSize, fontWeight: fontWeight,
  color: color, rotation: 0, opacity: 100,
@@ -16115,33 +16891,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
 </script>
 
 <script>
-// === Filtro Console Error per errori noti non critici ===
-(function() {
- const originalError = console.error;
- console.error = function(...args) {
- const message = args.join(' ');
- 
- // Lista errori da silenziare (noti e non critici)
- const silentErrors = [
- 'Unexpected token',
- 'Unexpected identifier', 
- 'state is not defined',
- 'announceGemini is not defined',
- 'glfx'
- ];
- 
- // Se l'errore contiene una delle stringhe da silenziare, non logga
- if (silentErrors.some(err => message.includes(err))) {
- return; // Silenzio totale
- }
- 
- // Altrimenti, logga normalmente
- originalError.apply(console, args);
- };
-})();
-</script>
-
-<script>
 // === Guard-rails di stabilità (fixed6) ===
 (function(){
  function srSpeak(msg){
@@ -16155,21 +16904,6 @@ Premi 1 per Polilinea, 2 per Pennarello Smooth, ESC per annullare`;
  // Global error + unhandledrejection
  window.addEventListener('error', function(e){
  try{
- // Filtra errori non critici
- const message = e.message || '';
- 
- // Errori da ignorare COMPLETAMENTE (non critici, non impediscono funzionamento)
- if (message.includes('glfx') || 
- message.includes('Unexpected token') ||
- message.includes('Unexpected identifier') ||
- message.includes('state is not defined') ||
- message.includes('announceGemini is not defined')) {
- // SILENZIO TOTALE - questi errori sono noti e non critici
- e.stopImmediatePropagation();
- e.preventDefault();
- return;
- }
- 
  console.error('[Guard]', e.message, e.error);
  srSpeak(e.message || 'Errore sconosciuto');
  }catch(err){console.warn("Silent catch:",err);}
@@ -21022,8 +21756,8 @@ Sii specifico ma conciso. Usa ️ per problemi critici.`;
  vectorSection.insertBefore(container, vectorSection.firstChild);
  
  // Event listeners
- document.getElementById('btn-upload-generated')?.addEventListener('click', handleGeneratedImageUpload);
- document.getElementById('btn-cancel-generated')?.addEventListener('click', () => {
+ document.getElementById('btn-upload-generated').addEventListener('click', handleGeneratedImageUpload);
+ document.getElementById('btn-cancel-generated').addEventListener('click', () => {
  container.remove();
  delete window._pendingGeneration;
  announceGemini('Operazione annullata', 'polite');
@@ -23442,7 +24176,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // Event listener per pulsante dettagli GPU
  if (document.getElementById('btn-gpu-details')) {
- document.getElementById('btn-gpu-details')?.addEventListener('click', showGpuDetails);
+ document.getElementById('btn-gpu-details').addEventListener('click', showGpuDetails);
  }
  
  // Inizializza WebGL al caricamento con delay per sistema fallback glfx
@@ -23479,26 +24213,26 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // Slider updaters
  if (document.getElementById('vibrance-amount')) {
- document.getElementById('vibrance-amount')?.addEventListener('input', e => {
+ document.getElementById('vibrance-amount').addEventListener('input', e => {
  document.getElementById('vibrance-amount-value').textContent = e.target.value;
  });
  }
  
  // 🆕 Motion Blur sliders
  if (document.getElementById('motionblur-distance')) {
- document.getElementById('motionblur-distance')?.addEventListener('input', e => {
+ document.getElementById('motionblur-distance').addEventListener('input', e => {
  document.getElementById('motionblur-distance-value').textContent = e.target.value + ' px';
  });
- document.getElementById('motionblur-distance')?.addEventListener('change', e => {
+ document.getElementById('motionblur-distance').addEventListener('change', e => {
  // RIMOSSO: announceGemini(`Distanza Motion Blur: ${e.target.value} pixel`, 'polite'); // NVDA già legge il valore dello slider
  });
  }
  
  if (document.getElementById('motionblur-angle')) {
- document.getElementById('motionblur-angle')?.addEventListener('input', e => {
+ document.getElementById('motionblur-angle').addEventListener('input', e => {
  document.getElementById('motionblur-angle-value').textContent = e.target.value + '°';
  });
- document.getElementById('motionblur-angle')?.addEventListener('change', e => {
+ document.getElementById('motionblur-angle').addEventListener('change', e => {
  const directions = {
  0: 'orizzontale verso destra',
  45: 'diagonale alto-destra',
@@ -23520,10 +24254,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 Tilt-Shift sliders
  if (document.getElementById('tiltshift-blur')) {
- document.getElementById('tiltshift-blur')?.addEventListener('input', e => {
+ document.getElementById('tiltshift-blur').addEventListener('input', e => {
  document.getElementById('tiltshift-blur-value').textContent = e.target.value;
  });
- document.getElementById('tiltshift-blur')?.addEventListener('change', e => {
+ document.getElementById('tiltshift-blur').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let intensity = 'leggera';
  if (value >= 16) intensity = 'forte';
@@ -23533,10 +24267,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('tiltshift-gradient')) {
- document.getElementById('tiltshift-gradient')?.addEventListener('input', e => {
+ document.getElementById('tiltshift-gradient').addEventListener('input', e => {
  document.getElementById('tiltshift-gradient-value').textContent = e.target.value + '%';
  });
- document.getElementById('tiltshift-gradient')?.addEventListener('change', e => {
+ document.getElementById('tiltshift-gradient').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let size = 'stretta';
  if (value >= 55) size = 'ampia';
@@ -23547,10 +24281,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 Gaussian Blur slider
  if (document.getElementById('gaussianblur-radius')) {
- document.getElementById('gaussianblur-radius')?.addEventListener('input', e => {
+ document.getElementById('gaussianblur-radius').addEventListener('input', e => {
  document.getElementById('gaussianblur-radius-value').textContent = e.target.value + ' px';
  });
- document.getElementById('gaussianblur-radius')?.addEventListener('change', e => {
+ document.getElementById('gaussianblur-radius').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let intensity = 'leggera';
  if (value >= 61) intensity = 'estrema';
@@ -23561,7 +24295,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('gaussianblur-quality')) {
- document.getElementById('gaussianblur-quality')?.addEventListener('change', e => {
+ document.getElementById('gaussianblur-quality').addEventListener('change', e => {
  const qualityNames = {
  'fast': 'veloce',
  'balanced': 'bilanciata',
@@ -23577,10 +24311,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 Chromatic Shift sliders
  if (document.getElementById('chromatic-intensity')) {
- document.getElementById('chromatic-intensity')?.addEventListener('input', e => {
+ document.getElementById('chromatic-intensity').addEventListener('input', e => {
  document.getElementById('chromatic-intensity-value').textContent = e.target.value + ' px';
  });
- document.getElementById('chromatic-intensity')?.addEventListener('change', e => {
+ document.getElementById('chromatic-intensity').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let level = 'leggera';
  if (value >= 15) level = 'estrema';
@@ -23591,7 +24325,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('chromatic-angle')) {
- document.getElementById('chromatic-angle')?.addEventListener('input', e => {
+ document.getElementById('chromatic-angle').addEventListener('input', e => {
  const value = parseInt(e.target.value);
  let direction = 'orizzontale';
  if (value === 45) direction = 'diagonale destra-alto';
@@ -23608,10 +24342,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 Glitch sliders
  if (document.getElementById('glitch-intensity')) {
- document.getElementById('glitch-intensity')?.addEventListener('input', e => {
+ document.getElementById('glitch-intensity').addEventListener('input', e => {
  document.getElementById('glitch-intensity-value').textContent = e.target.value;
  });
- document.getElementById('glitch-intensity')?.addEventListener('change', e => {
+ document.getElementById('glitch-intensity').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let level = 'leggera';
  if (value >= 70) level = 'estrema';
@@ -23622,10 +24356,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('glitch-blocks')) {
- document.getElementById('glitch-blocks')?.addEventListener('input', e => {
+ document.getElementById('glitch-blocks').addEventListener('input', e => {
  document.getElementById('glitch-blocks-value').textContent = e.target.value;
  });
- document.getElementById('glitch-blocks')?.addEventListener('change', e => {
+ document.getElementById('glitch-blocks').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let chaos = 'ordinato';
  if (value >= 15) chaos = 'molto caotico';
@@ -23637,10 +24371,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 VHS Light sliders
  if (document.getElementById('vhs-intensity')) {
- document.getElementById('vhs-intensity')?.addEventListener('input', e => {
+ document.getElementById('vhs-intensity').addEventListener('input', e => {
  document.getElementById('vhs-intensity-value').textContent = e.target.value;
  });
- document.getElementById('vhs-intensity')?.addEventListener('change', e => {
+ document.getElementById('vhs-intensity').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  let vintage = 'leggero';
  if (value >= 70) vintage = 'estremo anni 80';
@@ -23651,10 +24385,10 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('vhs-lines')) {
- document.getElementById('vhs-lines')?.addEventListener('input', e => {
+ document.getElementById('vhs-lines').addEventListener('input', e => {
  document.getElementById('vhs-lines-value').textContent = e.target.value;
  });
- document.getElementById('vhs-lines')?.addEventListener('change', e => {
+ document.getElementById('vhs-lines').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  if (value === 0) {
  // RIMOSSO: announceGemini('Righe VHS: nessuna riga di scansione', 'polite'); // NVDA già legge il valore dello slider
@@ -23666,20 +24400,20 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.1 - DEHAZE / DEFOG LISTENERS
  if (document.getElementById('dehaze-strength')) {
- document.getElementById('dehaze-strength')?.addEventListener('input', e => {
+ document.getElementById('dehaze-strength').addEventListener('input', e => {
  document.getElementById('dehaze-strength-value').textContent = e.target.value;
  });
- document.getElementById('dehaze-strength')?.addEventListener('change', e => {
+ document.getElementById('dehaze-strength').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  // RIMOSSO: announceGemini(`Intensità Dehaze: ${value}`, 'polite'); // NVDA già legge il valore dello slider
  });
  }
  
  if (document.getElementById('dehaze-saturation')) {
- document.getElementById('dehaze-saturation')?.addEventListener('input', e => {
+ document.getElementById('dehaze-saturation').addEventListener('input', e => {
  document.getElementById('dehaze-saturation-value').textContent = e.target.value;
  });
- document.getElementById('dehaze-saturation')?.addEventListener('change', e => {
+ document.getElementById('dehaze-saturation').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  // RIMOSSO: announceGemini(`Recupero saturazione Dehaze: ${value}`, 'polite'); // NVDA già legge il valore dello slider
  });
@@ -23687,80 +24421,80 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.1 - BLOOM SOFT LISTENERS
  if (document.getElementById('bloomsoft-threshold')) {
- document.getElementById('bloomsoft-threshold')?.addEventListener('input', e => {
+ document.getElementById('bloomsoft-threshold').addEventListener('input', e => {
  document.getElementById('bloomsoft-threshold-value').textContent = e.target.value;
  });
- document.getElementById('bloomsoft-threshold')?.addEventListener('change', e => {
+ document.getElementById('bloomsoft-threshold').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  // RIMOSSO: announceGemini(`Soglia luminosità Bloom Soft: ${value}`, 'polite'); // NVDA già legge il valore dello slider
  });
  }
  
  if (document.getElementById('bloomsoft-intensity')) {
- document.getElementById('bloomsoft-intensity')?.addEventListener('input', e => {
+ document.getElementById('bloomsoft-intensity').addEventListener('input', e => {
  document.getElementById('bloomsoft-intensity-value').textContent = e.target.value;
  });
- document.getElementById('bloomsoft-intensity')?.addEventListener('change', e => {
+ document.getElementById('bloomsoft-intensity').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  // RIMOSSO: announceGemini(`Intensità bagliore Bloom Soft: ${value}`, 'polite'); // NVDA già legge il valore dello slider
  });
  }
  
  if (document.getElementById('bloomsoft-radius')) {
- document.getElementById('bloomsoft-radius')?.addEventListener('input', e => {
+ document.getElementById('bloomsoft-radius').addEventListener('input', e => {
  document.getElementById('bloomsoft-radius-value').textContent = e.target.value + ' px';
  });
- document.getElementById('bloomsoft-radius')?.addEventListener('change', e => {
+ document.getElementById('bloomsoft-radius').addEventListener('change', e => {
  const value = parseInt(e.target.value);
  // RIMOSSO: announceGemini(`Raggio diffusione Bloom Soft: ${value} pixel`, 'polite'); // NVDA già legge il valore dello slider
  });
  }
  
  if (document.getElementById('wb-temperature')) {
- document.getElementById('wb-temperature')?.addEventListener('input', e => {
+ document.getElementById('wb-temperature').addEventListener('input', e => {
  document.getElementById('wb-temperature-value').textContent = e.target.value;
  });
- document.getElementById('wb-tint')?.addEventListener('input', e => {
+ document.getElementById('wb-tint').addEventListener('input', e => {
  document.getElementById('wb-tint-value').textContent = e.target.value;
  });
  }
  
  if (document.getElementById('hs-shadows')) {
- document.getElementById('hs-shadows')?.addEventListener('input', e => {
+ document.getElementById('hs-shadows').addEventListener('input', e => {
  document.getElementById('hs-shadows-value').textContent = e.target.value;
  });
- document.getElementById('hs-highlights')?.addEventListener('input', e => {
+ document.getElementById('hs-highlights').addEventListener('input', e => {
  document.getElementById('hs-highlights-value').textContent = e.target.value;
  });
  }
  
  if (document.getElementById('balance-shadows')) {
- document.getElementById('balance-shadows')?.addEventListener('input', e => {
+ document.getElementById('balance-shadows').addEventListener('input', e => {
  document.getElementById('balance-shadows-value').textContent = e.target.value;
  });
- document.getElementById('balance-highlights')?.addEventListener('input', e => {
+ document.getElementById('balance-highlights').addEventListener('input', e => {
  document.getElementById('balance-highlights-value').textContent = e.target.value;
  });
  }
  
  if (document.getElementById('gpu-blur-radius')) {
- document.getElementById('gpu-blur-radius')?.addEventListener('input', e => {
+ document.getElementById('gpu-blur-radius').addEventListener('input', e => {
  document.getElementById('gpu-blur-radius-value').textContent = e.target.value + ' px';
  });
  }
  
  if (document.getElementById('bloom-threshold')) {
- document.getElementById('bloom-threshold')?.addEventListener('input', e => {
+ document.getElementById('bloom-threshold').addEventListener('input', e => {
  document.getElementById('bloom-threshold-value').textContent = e.target.value;
  });
- document.getElementById('bloom-intensity')?.addEventListener('input', e => {
+ document.getElementById('bloom-intensity').addEventListener('input', e => {
  document.getElementById('bloom-intensity-value').textContent = e.target.value;
  });
  }
  
  // Button listeners - VERSIONE CORRETTA con supporto multi-layer
  if (document.getElementById('btn-apply-curves')) {
- document.getElementById('btn-apply-curves')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-curves').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23788,7 +24522,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-color-balance')) {
- document.getElementById('btn-apply-color-balance')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-color-balance').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23814,7 +24548,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-gpu-blur')) {
- document.getElementById('btn-apply-gpu-blur')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-gpu-blur').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23839,7 +24573,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-bloom')) {
- document.getElementById('btn-apply-bloom')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-bloom').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23865,7 +24599,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-vibrance')) {
- document.getElementById('btn-apply-vibrance')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-vibrance').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23890,7 +24624,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-white-balance')) {
- document.getElementById('btn-apply-white-balance')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-white-balance').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23916,7 +24650,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  }
  
  if (document.getElementById('btn-apply-highlights-shadows')) {
- document.getElementById('btn-apply-highlights-shadows')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-highlights-shadows').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23943,7 +24677,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v43.0 - MOTION BLUR
  if (document.getElementById('btn-apply-motionblur')) {
- document.getElementById('btn-apply-motionblur')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-motionblur').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23970,7 +24704,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v43.0 - TILT-SHIFT
  if (document.getElementById('btn-apply-tiltshift')) {
- document.getElementById('btn-apply-tiltshift')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-tiltshift').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -23997,7 +24731,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v43.0 - GAUSSIAN BLUR PRO
  if (document.getElementById('btn-apply-gaussianblur')) {
- document.getElementById('btn-apply-gaussianblur')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-gaussianblur').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24028,7 +24762,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.0 - CHROMATIC SHIFT
  if (document.getElementById('btn-apply-chromatic')) {
- document.getElementById('btn-apply-chromatic')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-chromatic').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24072,7 +24806,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.0 - GLITCH EFFECT
  if (document.getElementById('btn-apply-glitch')) {
- document.getElementById('btn-apply-glitch')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-glitch').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24116,7 +24850,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.0 - VHS LIGHT EFFECT
  if (document.getElementById('btn-apply-vhs')) {
- document.getElementById('btn-apply-vhs')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-vhs').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24164,7 +24898,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.1 - DEHAZE / DEFOG
  if (document.getElementById('btn-apply-dehaze')) {
- document.getElementById('btn-apply-dehaze')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-dehaze').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24208,7 +24942,7 @@ Tutti gli effetti GPU in questo editor utilizzano questa GPU per l'elaborazione 
  
  // 🆕 v44.1 - BLOOM SOFT
  if (document.getElementById('btn-apply-bloomsoft')) {
- document.getElementById('btn-apply-bloomsoft')?.addEventListener('click', async () => {
+ document.getElementById('btn-apply-bloomsoft').addEventListener('click', async () => {
  const layer = getSelectedLayer();
  if (!layer) {
  announceGemini('Seleziona un layer prima di applicare effetti', 'assertive');
@@ -24782,1092 +25516,6 @@ function copyPromptToClipboard() {
  }
  }
 }
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// PANNELLO MODIFICA LIVELLO
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/**
- * Aggiorna il pannello di modifica in base al livello selezionato
- */
-function updateLayerEditPanel() {
- const content = document.getElementById('layer-edit-content');
- if (!content) return;
- 
- // Ottieni livello selezionato
- const selectedLayers = getSelectedLayers();
- 
- // Se nessun livello selezionato o selezione multipla
- if (selectedLayers.length === 0) {
-  content.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Seleziona un livello dalla lista per modificarlo</p>';
-  return;
- }
- 
- if (selectedLayers.length > 1) {
-  content.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Modifica non disponibile per selezione multipla</p>';
-  return;
- }
- 
- const layer = selectedLayers[0];
- 
- // Genera controlli in base al tipo
- if (layer.type === 'text') {
-  showTextControls(layer, content);
- } else if (layer.type === 'image') {
-  showImageControls(layer, content);
- } else if (layer.type === 'shape' || layer.type === 'polygon') {
-  showShapeControls(layer, content);
- } else if (layer.type === 'vector' || layer.type === 'polyline') {
-  showVectorControls(layer, content);
- } else {
-  content.innerHTML = `<p style="color: #666; text-align: center; padding: 20px;">Tipo livello "${layer.type}" non supportato</p>`;
- }
-}
-
-/**
- * Genera opzioni font per il select
- */
-function generateFontOptions(current) {
- const systemFonts = [
-  { value: 'Arial', label: 'Arial' },
-  { value: 'Helvetica, Arial, sans-serif', label: 'Helvetica' },
-  { value: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", label: 'Segoe UI' },
-  { value: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", label: 'System UI' },
-  { value: 'Georgia, serif', label: 'Georgia' },
-  { value: "'Times New Roman', Times, serif", label: 'Times New Roman' },
-  { value: "'Courier New', Courier, monospace", label: 'Courier New' },
-  { value: 'Verdana, Geneva, sans-serif', label: 'Verdana' },
-  { value: 'Tahoma, Geneva, sans-serif', label: 'Tahoma' },
-  { value: "'Trebuchet MS', sans-serif", label: 'Trebuchet MS' },
-  { value: 'Impact, Charcoal, sans-serif', label: 'Impact' },
-  { value: "'Comic Sans MS', cursive", label: 'Comic Sans MS' }
- ];
- 
- return systemFonts.map(f => 
-  `<option value="${f.value}" ${f.value === current ? 'selected' : ''}>${f.label}</option>`
- ).join('');
-}
-
-/**
- * Controlli per testo
- */
-function showTextControls(layer, content) {
- content.innerHTML = `
-  <div style="display: flex; flex-direction: column; gap: 15px;">
-   
-   <!-- Controlli Generali -->
-   <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; border: 2px solid #3b82f6;">
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-text-visible" ${layer.visible !== false ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Visibilita livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello visibile</span>
-    </label>
-    
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-text-locked" ${layer.locked ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Blocca livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello bloccato</span>
-    </label>
-    
-    <div style="margin-bottom: 10px;">
-     <label for="edit-text-rotation" style="display: block; margin-bottom: 5px; font-weight: 600;">Rotazione: <span id="edit-text-rotation-val">${layer.rotation || 0} gradi</span></label>
-     <input type="range" id="edit-text-rotation" min="0" max="360" value="${layer.rotation || 0}" 
-      style="width: 100%;" 
-      aria-label="Rotazione" 
-      aria-valuemin="0" 
-      aria-valuemax="360" 
-      aria-valuenow="${layer.rotation || 0}">
-    </div>
-    
-    <div>
-     <label for="edit-text-scale" style="display: block; margin-bottom: 5px; font-weight: 600;">Scala: <span id="edit-text-scale-val">${(layer.scale || 1) * 100}%</span></label>
-     <input type="range" id="edit-text-scale" min="10" max="300" value="${(layer.scale || 1) * 100}" 
-      style="width: 100%;" 
-      aria-label="Scala" 
-      aria-valuemin="10" 
-      aria-valuemax="300" 
-      aria-valuenow="${(layer.scale || 1) * 100}">
-     <p style="font-size: 12px; color: #666; margin-top: 3px;">10% = molto piccolo, 100% = normale, 300% = molto grande</p>
-    </div>
-   </div>
-   
-   <!-- Nome Livello -->
-   <div>
-    <label for="edit-text-name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome livello:</label>
-    <input type="text" id="edit-text-name" value="${layer.name || 'Senza nome'}" 
-     style="width: 100%; padding: 8px; border: 2px solid #333; border-radius: 4px; font-size: 14px;"
-     placeholder="Inserisci nome..."
-     aria-label="Nome livello">
-   </div>
-   
-   <div>
-    <label for="edit-font-family" style="display: block; margin-bottom: 5px; font-weight: 600;">Font:</label>
-    <select id="edit-font-family" style="width: 100%; padding: 8px; border: 2px solid #333; border-radius: 4px; font-size: 14px;">
-     ${generateFontOptions(layer.fontFamily)}
-    </select>
-   </div>
-   
-   <div>
-    <label for="edit-font-size" style="display: block; margin-bottom: 5px; font-weight: 600;">Dimensione: <span id="edit-fs-val">${layer.fontSize}px</span></label>
-    <input type="range" id="edit-font-size" min="8" max="200" value="${layer.fontSize}" 
-     style="width: 100%;" 
-     aria-label="Dimensione carattere" 
-     aria-valuemin="8" 
-     aria-valuemax="200" 
-     aria-valuenow="${layer.fontSize}">
-   </div>
-   
-   <div>
-    <label for="edit-text-color" style="display: block; margin-bottom: 5px; font-weight: 600;">Colore testo:</label>
-    <div style="display: flex; gap: 10px; align-items: center;">
-     <input type="color" id="edit-text-color" value="${layer.color}" 
-      style="width: 60px; height: 40px; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-     <input type="text" id="edit-text-color-hex" value="${layer.color}" 
-      placeholder="#000000" 
-      style="flex: 1; padding: 8px; border: 2px solid #333; border-radius: 4px; font-family: monospace; font-size: 14px;"
-      aria-label="Colore testo in formato esadecimale">
-    </div>
-   </div>
-   
-   <div>
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Stile:</label>
-    <div style="display: flex; gap: 10px;">
-     <button id="edit-bold" type="button" 
-      style="flex: 1; padding: 10px; background: ${layer.bold ? '#4CAF50' : '#fff'}; color: ${layer.bold ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; font-weight: bold; cursor: pointer;">
-      Grassetto
-     </button>
-     <button id="edit-italic" type="button"
-      style="flex: 1; padding: 10px; background: ${layer.italic ? '#4CAF50' : '#fff'}; color: ${layer.italic ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; font-style: italic; cursor: pointer;">
-      Corsivo
-     </button>
-    </div>
-   </div>
-   
-   <div>
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Allineamento:</label>
-    <div style="display: flex; gap: 10px;">
-     <button id="edit-align-left" type="button"
-      style="flex: 1; padding: 10px; background: ${layer.textAlign === 'left' ? '#4CAF50' : '#fff'}; color: ${layer.textAlign === 'left' ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-      Sinistra
-     </button>
-     <button id="edit-align-center" type="button"
-      style="flex: 1; padding: 10px; background: ${layer.textAlign === 'center' ? '#4CAF50' : '#fff'}; color: ${layer.textAlign === 'center' ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-      Centro
-     </button>
-     <button id="edit-align-right" type="button"
-      style="flex: 1; padding: 10px; background: ${layer.textAlign === 'right' ? '#4CAF50' : '#fff'}; color: ${layer.textAlign === 'right' ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-      Destra
-     </button>
-    </div>
-   </div>
-   
-   <div>
-    <label for="edit-line-height" style="display: block; margin-bottom: 5px; font-weight: 600;">Interlinea: <span id="edit-lh-val">${layer.lineHeight || 1.2}</span></label>
-    <input type="range" id="edit-line-height" min="0.8" max="3" step="0.1" value="${layer.lineHeight || 1.2}"
-     style="width: 100%;"
-     aria-label="Interlinea"
-     aria-valuemin="0.8"
-     aria-valuemax="3"
-     aria-valuenow="${layer.lineHeight || 1.2}">
-   </div>
-   
-   <div>
-    <label for="edit-letter-spacing" style="display: block; margin-bottom: 5px; font-weight: 600;">Spaziatura lettere: <span id="edit-letter-spacing-val">${layer.letterSpacing || 0}px</span></label>
-    <input type="range" id="edit-letter-spacing" min="-5" max="20" step="0.5" value="${layer.letterSpacing || 0}"
-     style="width: 100%;"
-     aria-label="Spaziatura lettere"
-     aria-valuemin="-5"
-     aria-valuemax="20"
-     aria-valuenow="${layer.letterSpacing || 0}">
-    <p style="font-size: 12px; color: #666; margin-top: 3px;">-5 = lettere compresse, 0 = normale, 20 = lettere distanziate</p>
-   </div>
-   
-   <div>
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Decorazioni:</label>
-    <div style="display: flex; gap: 10px;">
-     <button id="edit-underline" type="button" 
-      style="flex: 1; padding: 10px; background: ${layer.underline ? '#4CAF50' : '#fff'}; color: ${layer.underline ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; text-decoration: underline; cursor: pointer;">
-      Sottolineato
-     </button>
-     <button id="edit-line-through" type="button"
-      style="flex: 1; padding: 10px; background: ${layer.lineThrough ? '#4CAF50' : '#fff'}; color: ${layer.lineThrough ? '#fff' : '#000'}; border: 2px solid #333; border-radius: 4px; text-decoration: line-through; cursor: pointer;">
-      Barrato
-     </button>
-    </div>
-   </div>
-   
-   <div style="border-top: 2px solid #ddd; padding-top: 15px; margin-top: 5px;">
-    <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 15px;">Dimensioni e Posizione</label>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-     <div>
-      <label for="edit-text-x" style="display: block; margin-bottom: 3px; font-size: 13px;">X: <span id="edit-text-x-val">${Math.round(layer.x)}</span></label>
-      <input type="number" id="edit-text-x" value="${Math.round(layer.x)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione X">
-     </div>
-     <div>
-      <label for="edit-text-y" style="display: block; margin-bottom: 3px; font-size: 13px;">Y: <span id="edit-text-y-val">${Math.round(layer.y)}</span></label>
-      <input type="number" id="edit-text-y" value="${Math.round(layer.y)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione Y">
-     </div>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-     <div>
-      <label for="edit-text-width" style="display: block; margin-bottom: 3px; font-size: 13px;">Larghezza: <span id="edit-text-width-val">${Math.round(layer.width)}</span></label>
-      <input type="number" id="edit-text-width" value="${Math.round(layer.width)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Larghezza">
-     </div>
-     <div>
-      <label for="edit-text-height" style="display: block; margin-bottom: 3px; font-size: 13px;">Altezza: <span id="edit-text-height-val">${Math.round(layer.height)}</span></label>
-      <input type="number" id="edit-text-height" value="${Math.round(layer.height)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Altezza">
-     </div>
-    </div>
-   </div>
-  </div>
- `;
- 
- // Listener
- // Visibilità
- document.getElementById('edit-text-visible')?.addEventListener('change', function() {
-  layer.visible = this.checked;
-  scheduleRender();
-  announce(layer.visible ? 'Livello visibile' : 'Livello nascosto', 'polite');
- });
- 
- // Blocco
- document.getElementById('edit-text-locked')?.addEventListener('change', function() {
-  layer.locked = this.checked;
-  updateLayerList(); // Aggiorna la lista per mostrare l'icona lucchetto
-  announce(layer.locked ? 'Livello bloccato' : 'Livello sbloccato', 'polite');
- });
- 
- // Rotazione
- const textRotationSlider = document.getElementById('edit-text-rotation');
- const textRotationVal = document.getElementById('edit-text-rotation-val');
- textRotationSlider?.addEventListener('input', function() {
-  layer.rotation = parseInt(this.value);
-  if (textRotationVal) textRotationVal.textContent = this.value + ' gradi';
-  scheduleRender();
- });
- 
- // Scala
- const textScaleSlider = document.getElementById('edit-text-scale');
- const textScaleVal = document.getElementById('edit-text-scale-val');
- textScaleSlider?.addEventListener('input', function() {
-  layer.scale = parseInt(this.value) / 100;
-  if (textScaleVal) textScaleVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- // Nome livello
- document.getElementById('edit-text-name')?.addEventListener('input', function() {
-  layer.name = this.value || 'Senza nome';
-  updateLayerList(); // Aggiorna la lista per mostrare il nuovo nome
- });
- 
- document.getElementById('edit-font-family')?.addEventListener('change', function() {
-  layer.fontFamily = this.value;
-  scheduleRender();
-  announce('Font cambiato', 'polite');
- });
- 
- const sizeSlider = document.getElementById('edit-font-size');
- const sizeVal = document.getElementById('edit-fs-val');
- sizeSlider?.addEventListener('input', function() {
-  layer.fontSize = parseInt(this.value);
-  if (sizeVal) sizeVal.textContent = this.value + 'px';
-  scheduleRender();
- });
- 
- const colorPicker = document.getElementById('edit-text-color');
- const colorHex = document.getElementById('edit-text-color-hex');
- colorPicker?.addEventListener('input', function() {
-  layer.color = this.value;
-  if (colorHex) colorHex.value = this.value;
-  scheduleRender();
- });
- colorHex?.addEventListener('input', function() {
-  const val = this.value.trim();
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-   layer.color = val;
-   if (colorPicker) colorPicker.value = val;
-   scheduleRender();
-  }
- });
- 
- document.getElementById('edit-bold')?.addEventListener('click', function() {
-  layer.bold = !layer.bold;
-  this.style.background = layer.bold ? '#4CAF50' : '#fff';
-  this.style.color = layer.bold ? '#fff' : '#000';
-  scheduleRender();
-  announce(layer.bold ? 'Grassetto attivato' : 'Grassetto disattivato', 'polite');
- });
- 
- document.getElementById('edit-italic')?.addEventListener('click', function() {
-  layer.italic = !layer.italic;
-  this.style.background = layer.italic ? '#4CAF50' : '#fff';
-  this.style.color = layer.italic ? '#fff' : '#000';
-  scheduleRender();
-  announce(layer.italic ? 'Corsivo attivato' : 'Corsivo disattivato', 'polite');
- });
- 
- ['left', 'center', 'right'].forEach(align => {
-  document.getElementById(`edit-align-${align}`)?.addEventListener('click', function() {
-   layer.textAlign = align;
-   ['left', 'center', 'right'].forEach(a => {
-    const btn = document.getElementById(`edit-align-${a}`);
-    if (btn) {
-     btn.style.background = a === align ? '#4CAF50' : '#fff';
-     btn.style.color = a === align ? '#fff' : '#000';
-    }
-   });
-   scheduleRender();
-   announce(`Allineamento ${align === 'left' ? 'sinistra' : align === 'center' ? 'centro' : 'destra'}`, 'polite');
-  });
- });
- 
- const lhSlider = document.getElementById('edit-line-height');
- const lhVal = document.getElementById('edit-lh-val');
- lhSlider?.addEventListener('input', function() {
-  layer.lineHeight = parseFloat(this.value);
-  if (lhVal) lhVal.textContent = this.value;
-  scheduleRender();
- });
- 
- // Letter Spacing
- const letterSpacingSlider = document.getElementById('edit-letter-spacing');
- const letterSpacingVal = document.getElementById('edit-letter-spacing-val');
- letterSpacingSlider?.addEventListener('input', function() {
-  layer.letterSpacing = parseFloat(this.value);
-  if (letterSpacingVal) letterSpacingVal.textContent = this.value + 'px';
-  scheduleRender();
- });
- 
- // Underline
- document.getElementById('edit-underline')?.addEventListener('click', function() {
-  layer.underline = !layer.underline;
-  this.style.background = layer.underline ? '#4CAF50' : '#fff';
-  this.style.color = layer.underline ? '#fff' : '#000';
-  scheduleRender();
-  announce(layer.underline ? 'Sottolineato attivato' : 'Sottolineato disattivato', 'polite');
- });
- 
- // Line Through
- document.getElementById('edit-line-through')?.addEventListener('click', function() {
-  layer.lineThrough = !layer.lineThrough;
-  this.style.background = layer.lineThrough ? '#4CAF50' : '#fff';
-  this.style.color = layer.lineThrough ? '#fff' : '#000';
-  scheduleRender();
-  announce(layer.lineThrough ? 'Barrato attivato' : 'Barrato disattivato', 'polite');
- });
- 
- // Listener per dimensioni e posizione
- document.getElementById('edit-text-x')?.addEventListener('input', function() {
-  layer.x = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-text-y')?.addEventListener('input', function() {
-  layer.y = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-text-width')?.addEventListener('input', function() {
-  layer.width = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-text-height')?.addEventListener('input', function() {
-  layer.height = parseFloat(this.value);
-  scheduleRender();
- });
-}
-
-/**
- * Controlli per immagine
- */
-function showImageControls(layer, content) {
- content.innerHTML = `
-  <div style="display: flex; flex-direction: column; gap: 15px;">
-   
-   <!-- Controlli Generali -->
-   <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; border: 2px solid #3b82f6;">
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-img-visible" ${layer.visible !== false ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Visibilita livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello visibile</span>
-    </label>
-    
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-     <input type="checkbox" id="edit-img-locked" ${layer.locked ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Blocca livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello bloccato</span>
-    </label>
-   </div>
-   
-   <div>
-    <label for="edit-img-scale" style="display: block; margin-bottom: 5px; font-weight: 600;">Scala: <span id="edit-img-scale-val">${(layer.scale || 1) * 100}%</span></label>
-    <input type="range" id="edit-img-scale" min="10" max="300" value="${(layer.scale || 1) * 100}" 
-     style="width: 100%;" 
-     aria-label="Scala" 
-     aria-valuemin="10" 
-     aria-valuemax="300" 
-     aria-valuenow="${(layer.scale || 1) * 100}">
-    <p style="font-size: 12px; color: #666; margin-top: 3px;">10% = molto piccolo, 100% = normale, 300% = molto grande</p>
-   </div>
-   
-   <!-- Nome Livello -->
-   <div>
-    <label for="edit-img-name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome livello:</label>
-    <input type="text" id="edit-img-name" value="${layer.name || 'Senza nome'}" 
-     style="width: 100%; padding: 8px; border: 2px solid #333; border-radius: 4px; font-size: 14px;"
-     placeholder="Inserisci nome..."
-     aria-label="Nome livello">
-   </div>
-   
-   <div>
-    <label for="edit-img-opacity" style="display: block; margin-bottom: 5px; font-weight: 600;">Opacita: <span id="edit-opacity-val">${Math.round((layer.opacity || 1) * 100)}%</span></label>
-    <input type="range" id="edit-img-opacity" min="0" max="100" value="${Math.round((layer.opacity || 1) * 100)}" 
-     style="width: 100%;" 
-     aria-label="Opacita immagine" 
-     aria-valuemin="0" 
-     aria-valuemax="100" 
-     aria-valuenow="${Math.round((layer.opacity || 1) * 100)}">
-   </div>
-   
-   <div>
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Trasformazioni:</label>
-    <div style="display: flex; gap: 10px;">
-     <button id="edit-img-flip-h" type="button"
-      style="flex: 1; padding: 10px; background: #fff; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-      Rifletti H
-     </button>
-     <button id="edit-img-flip-v" type="button"
-      style="flex: 1; padding: 10px; background: #fff; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-      Rifletti V
-     </button>
-    </div>
-   </div>
-   
-   <div>
-    <label for="edit-img-rotation" style="display: block; margin-bottom: 5px; font-weight: 600;">Rotazione: <span id="edit-rotation-val">${layer.rotation || 0} gradi</span></label>
-    <input type="range" id="edit-img-rotation" min="0" max="360" value="${layer.rotation || 0}" 
-     style="width: 100%;" 
-     aria-label="Rotazione immagine" 
-     aria-valuemin="0" 
-     aria-valuemax="360" 
-     aria-valuenow="${layer.rotation || 0}">
-   </div>
-   
-   <div>
-    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Filtri avanzati:</label>
-    <button id="edit-img-filters" type="button"
-     style="width: 100%; padding: 10px; background: #2196F3; color: white; border: 2px solid #1976D2; border-radius: 4px; cursor: pointer; font-weight: 600;">
-     Apri pannello filtri
-    </button>
-    <p style="font-size: 12px; color: #666; margin-top: 5px;">Accedi a brightness, contrast, hue, saturazione e altri effetti WebGL</p>
-   </div>
-   
-   <div style="border-top: 2px solid #ddd; padding-top: 15px; margin-top: 5px;">
-    <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 15px;">Dimensioni e Posizione</label>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-     <div>
-      <label for="edit-img-x" style="display: block; margin-bottom: 3px; font-size: 13px;">X: <span id="edit-img-x-val">${Math.round(layer.x)}</span></label>
-      <input type="number" id="edit-img-x" value="${Math.round(layer.x)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione X">
-     </div>
-     <div>
-      <label for="edit-img-y" style="display: block; margin-bottom: 3px; font-size: 13px;">Y: <span id="edit-img-y-val">${Math.round(layer.y)}</span></label>
-      <input type="number" id="edit-img-y" value="${Math.round(layer.y)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione Y">
-     </div>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-     <div>
-      <label for="edit-img-width" style="display: block; margin-bottom: 3px; font-size: 13px;">Larghezza: <span id="edit-img-width-val">${Math.round(layer.width)}</span></label>
-      <input type="number" id="edit-img-width" value="${Math.round(layer.width)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Larghezza">
-     </div>
-     <div>
-      <label for="edit-img-height" style="display: block; margin-bottom: 3px; font-size: 13px;">Altezza: <span id="edit-img-height-val">${Math.round(layer.height)}</span></label>
-      <input type="number" id="edit-img-height" value="${Math.round(layer.height)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Altezza">
-     </div>
-    </div>
-   </div>
-  </div>
- `;
- 
- // Listener
- // Visibilità
- document.getElementById('edit-img-visible')?.addEventListener('change', function() {
-  layer.visible = this.checked;
-  scheduleRender();
-  announce(layer.visible ? 'Livello visibile' : 'Livello nascosto', 'polite');
- });
- 
- // Blocco
- document.getElementById('edit-img-locked')?.addEventListener('change', function() {
-  layer.locked = this.checked;
-  updateLayerList();
-  announce(layer.locked ? 'Livello bloccato' : 'Livello sbloccato', 'polite');
- });
- 
- // Scala
- const imgScaleSlider = document.getElementById('edit-img-scale');
- const imgScaleVal = document.getElementById('edit-img-scale-val');
- imgScaleSlider?.addEventListener('input', function() {
-  layer.scale = parseInt(this.value) / 100;
-  if (imgScaleVal) imgScaleVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- // Nome livello
- document.getElementById('edit-img-name')?.addEventListener('input', function() {
-  layer.name = this.value || 'Senza nome';
-  updateLayerList();
- });
- 
- const opacitySlider = document.getElementById('edit-img-opacity');
- const opacityVal = document.getElementById('edit-opacity-val');
- opacitySlider?.addEventListener('input', function() {
-  layer.opacity = parseInt(this.value) / 100;
-  if (opacityVal) opacityVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- document.getElementById('edit-img-flip-h')?.addEventListener('click', function() {
-  layer.flipH = !layer.flipH;
-  scheduleRender();
-  announce('Immagine riflessa orizzontalmente', 'polite');
- });
- 
- document.getElementById('edit-img-flip-v')?.addEventListener('click', function() {
-  layer.flipV = !layer.flipV;
-  scheduleRender();
-  announce('Immagine riflessa verticalmente', 'polite');
- });
- 
- const rotationSlider = document.getElementById('edit-img-rotation');
- const rotationVal = document.getElementById('edit-rotation-val');
- rotationSlider?.addEventListener('input', function() {
-  layer.rotation = parseInt(this.value);
-  if (rotationVal) rotationVal.textContent = this.value + ' gradi';
-  scheduleRender();
- });
- 
- document.getElementById('edit-img-filters')?.addEventListener('click', function() {
-  // Scorri al pannello filtri
-  const filtersPanel = document.getElementById('filters-panel');
-  if (filtersPanel) {
-   filtersPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-   announce('Pannello filtri aperto. Scorri verso l alto per vedere i controlli', 'polite');
-  }
- });
- 
- // Listener per dimensioni e posizione
- document.getElementById('edit-img-x')?.addEventListener('input', function() {
-  layer.x = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-img-y')?.addEventListener('input', function() {
-  layer.y = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-img-width')?.addEventListener('input', function() {
-  layer.width = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-img-height')?.addEventListener('input', function() {
-  layer.height = parseFloat(this.value);
-  scheduleRender();
- });
-}
-
-/**
- * Controlli per forme
- */
-function showShapeControls(layer, content) {
- content.innerHTML = `
-  <div style="display: flex; flex-direction: column; gap: 15px;">
-   
-   <!-- Controlli Generali -->
-   <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; border: 2px solid #3b82f6;">
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-shape-visible" ${layer.visible !== false ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Visibilita livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello visibile</span>
-    </label>
-    
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-shape-locked" ${layer.locked ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Blocca livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello bloccato</span>
-    </label>
-    
-    <div style="margin-bottom: 10px;">
-     <label for="edit-shape-rotation" style="display: block; margin-bottom: 5px; font-weight: 600;">Rotazione: <span id="edit-shape-rotation-val">${layer.rotation || 0} gradi</span></label>
-     <input type="range" id="edit-shape-rotation" min="0" max="360" value="${layer.rotation || 0}" 
-      style="width: 100%;" 
-      aria-label="Rotazione" 
-      aria-valuemin="0" 
-      aria-valuemax="360" 
-      aria-valuenow="${layer.rotation || 0}">
-    </div>
-    
-    <div>
-     <label for="edit-shape-scale" style="display: block; margin-bottom: 5px; font-weight: 600;">Scala: <span id="edit-shape-scale-val">${(layer.scale || 1) * 100}%</span></label>
-     <input type="range" id="edit-shape-scale" min="10" max="300" value="${(layer.scale || 1) * 100}" 
-      style="width: 100%;" 
-      aria-label="Scala" 
-      aria-valuemin="10" 
-      aria-valuemax="300" 
-      aria-valuenow="${(layer.scale || 1) * 100}">
-     <p style="font-size: 12px; color: #666; margin-top: 3px;">10% = molto piccolo, 100% = normale, 300% = molto grande</p>
-    </div>
-   </div>
-   
-   <!-- Nome Livello -->
-   <div>
-    <label for="edit-shape-name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome livello:</label>
-    <input type="text" id="edit-shape-name" value="${layer.name || 'Senza nome'}" 
-     style="width: 100%; padding: 8px; border: 2px solid #333; border-radius: 4px; font-size: 14px;"
-     placeholder="Inserisci nome..."
-     aria-label="Nome livello">
-   </div>
-   
-   <div>
-    <label for="edit-shape-fill" style="display: block; margin-bottom: 5px; font-weight: 600;">Colore riempimento:</label>
-    <div style="display: flex; gap: 10px; align-items: center;">
-     <input type="color" id="edit-shape-fill" value="${layer.fillColor || '#000000'}" 
-      style="width: 60px; height: 40px; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-     <input type="text" id="edit-shape-fill-hex" value="${layer.fillColor || '#000000'}" 
-      placeholder="#000000" 
-      style="flex: 1; padding: 8px; border: 2px solid #333; border-radius: 4px; font-family: monospace; font-size: 14px;"
-      aria-label="Colore riempimento in formato esadecimale">
-    </div>
-   </div>
-   
-   <div>
-    <label for="edit-shape-stroke" style="display: block; margin-bottom: 5px; font-weight: 600;">Colore bordo:</label>
-    <div style="display: flex; gap: 10px; align-items: center;">
-     <input type="color" id="edit-shape-stroke" value="${layer.strokeColor || '#000000'}" 
-      style="width: 60px; height: 40px; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-     <input type="text" id="edit-shape-stroke-hex" value="${layer.strokeColor || '#000000'}" 
-      placeholder="#000000" 
-      style="flex: 1; padding: 8px; border: 2px solid #333; border-radius: 4px; font-family: monospace; font-size: 14px;"
-      aria-label="Colore bordo in formato esadecimale">
-    </div>
-   </div>
-   
-   <div>
-    <label for="edit-shape-stroke-width" style="display: block; margin-bottom: 5px; font-weight: 600;">Spessore bordo: <span id="edit-stroke-width-val">${layer.strokeWidth || 2}px</span></label>
-    <input type="range" id="edit-shape-stroke-width" min="0" max="50" value="${layer.strokeWidth || 2}" 
-     style="width: 100%;" 
-     aria-label="Spessore bordo" 
-     aria-valuemin="0" 
-     aria-valuemax="50" 
-     aria-valuenow="${layer.strokeWidth || 2}">
-   </div>
-   
-   <div>
-    <label for="edit-shape-opacity" style="display: block; margin-bottom: 5px; font-weight: 600;">Opacita: <span id="edit-shape-opacity-val">${Math.round((layer.opacity || 1) * 100)}%</span></label>
-    <input type="range" id="edit-shape-opacity" min="0" max="100" value="${Math.round((layer.opacity || 1) * 100)}" 
-     style="width: 100%;" 
-     aria-label="Opacita forma" 
-     aria-valuemin="0" 
-     aria-valuemax="100" 
-     aria-valuenow="${Math.round((layer.opacity || 1) * 100)}">
-   </div>
-   
-   <div>
-    <label for="edit-shape-corner-radius" style="display: block; margin-bottom: 5px; font-weight: 600;">Angoli arrotondati: <span id="edit-corner-radius-val">${layer.cornerRadius || 0}px</span></label>
-    <input type="range" id="edit-shape-corner-radius" min="0" max="100" value="${layer.cornerRadius || 0}" 
-     style="width: 100%;" 
-     aria-label="Raggio angoli arrotondati" 
-     aria-valuemin="0" 
-     aria-valuemax="100" 
-     aria-valuenow="${layer.cornerRadius || 0}">
-    <p style="font-size: 12px; color: #666; margin-top: 3px;">0 = angoli retti, 100 = angoli molto arrotondati</p>
-   </div>
-   
-   <div style="border-top: 2px solid #ddd; padding-top: 15px; margin-top: 5px;">
-    <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 15px;">Dimensioni e Posizione</label>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-     <div>
-      <label for="edit-shape-x" style="display: block; margin-bottom: 3px; font-size: 13px;">X: <span id="edit-shape-x-val">${Math.round(layer.x)}</span></label>
-      <input type="number" id="edit-shape-x" value="${Math.round(layer.x)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione X">
-     </div>
-     <div>
-      <label for="edit-shape-y" style="display: block; margin-bottom: 3px; font-size: 13px;">Y: <span id="edit-shape-y-val">${Math.round(layer.y)}</span></label>
-      <input type="number" id="edit-shape-y" value="${Math.round(layer.y)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione Y">
-     </div>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-     <div>
-      <label for="edit-shape-width" style="display: block; margin-bottom: 3px; font-size: 13px;">Larghezza: <span id="edit-shape-width-val">${Math.round(layer.width)}</span></label>
-      <input type="number" id="edit-shape-width" value="${Math.round(layer.width)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Larghezza">
-     </div>
-     <div>
-      <label for="edit-shape-height" style="display: block; margin-bottom: 3px; font-size: 13px;">Altezza: <span id="edit-shape-height-val">${Math.round(layer.height)}</span></label>
-      <input type="number" id="edit-shape-height" value="${Math.round(layer.height)}" min="10"
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Altezza">
-     </div>
-    </div>
-   </div>
-  </div>
- `;
- 
- // Listener
- // Visibilità
- document.getElementById('edit-shape-visible')?.addEventListener('change', function() {
-  layer.visible = this.checked;
-  scheduleRender();
-  announce(layer.visible ? 'Livello visibile' : 'Livello nascosto', 'polite');
- });
- 
- // Blocco
- document.getElementById('edit-shape-locked')?.addEventListener('change', function() {
-  layer.locked = this.checked;
-  updateLayerList();
-  announce(layer.locked ? 'Livello bloccato' : 'Livello sbloccato', 'polite');
- });
- 
- // Rotazione
- const shapeRotationSlider = document.getElementById('edit-shape-rotation');
- const shapeRotationVal = document.getElementById('edit-shape-rotation-val');
- shapeRotationSlider?.addEventListener('input', function() {
-  layer.rotation = parseInt(this.value);
-  if (shapeRotationVal) shapeRotationVal.textContent = this.value + ' gradi';
-  scheduleRender();
- });
- 
- // Scala
- const shapeScaleSlider = document.getElementById('edit-shape-scale');
- const shapeScaleVal = document.getElementById('edit-shape-scale-val');
- shapeScaleSlider?.addEventListener('input', function() {
-  layer.scale = parseInt(this.value) / 100;
-  if (shapeScaleVal) shapeScaleVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- const fillPicker = document.getElementById('edit-shape-fill');
- const fillHex = document.getElementById('edit-shape-fill-hex');
- fillPicker?.addEventListener('input', function() {
-  layer.fillColor = this.value;
-  if (fillHex) fillHex.value = this.value;
-  scheduleRender();
- });
- fillHex?.addEventListener('input', function() {
-  const val = this.value.trim();
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-   layer.fillColor = val;
-   if (fillPicker) fillPicker.value = val;
-   scheduleRender();
-  }
- });
- 
- const strokePicker = document.getElementById('edit-shape-stroke');
- const strokeHex = document.getElementById('edit-shape-stroke-hex');
- strokePicker?.addEventListener('input', function() {
-  layer.strokeColor = this.value;
-  if (strokeHex) strokeHex.value = this.value;
-  scheduleRender();
- });
- strokeHex?.addEventListener('input', function() {
-  const val = this.value.trim();
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-   layer.strokeColor = val;
-   if (strokePicker) strokePicker.value = val;
-   scheduleRender();
-  }
- });
- 
- const strokeWidthSlider = document.getElementById('edit-shape-stroke-width');
- const strokeWidthVal = document.getElementById('edit-stroke-width-val');
- strokeWidthSlider?.addEventListener('input', function() {
-  layer.strokeWidth = parseInt(this.value);
-  if (strokeWidthVal) strokeWidthVal.textContent = this.value + 'px';
-  scheduleRender();
- });
- 
- const shapeOpacitySlider = document.getElementById('edit-shape-opacity');
- const shapeOpacityVal = document.getElementById('edit-shape-opacity-val');
- shapeOpacitySlider?.addEventListener('input', function() {
-  layer.opacity = parseInt(this.value) / 100;
-  if (shapeOpacityVal) shapeOpacityVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- // Nome livello
- document.getElementById('edit-shape-name')?.addEventListener('input', function() {
-  layer.name = this.value || 'Senza nome';
-  updateLayerList();
- });
- 
- // Corner Radius (Angoli arrotondati)
- const cornerRadiusSlider = document.getElementById('edit-shape-corner-radius');
- const cornerRadiusVal = document.getElementById('edit-corner-radius-val');
- cornerRadiusSlider?.addEventListener('input', function() {
-  layer.cornerRadius = parseInt(this.value);
-  if (cornerRadiusVal) cornerRadiusVal.textContent = this.value + 'px';
-  scheduleRender();
- });
- 
- // Listener per dimensioni e posizione
- document.getElementById('edit-shape-x')?.addEventListener('input', function() {
-  layer.x = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-shape-y')?.addEventListener('input', function() {
-  layer.y = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-shape-width')?.addEventListener('input', function() {
-  layer.width = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-shape-height')?.addEventListener('input', function() {
-  layer.height = parseFloat(this.value);
-  scheduleRender();
- });
-}
-
-/**
- * Controlli per disegno vettoriale
- */
-function showVectorControls(layer, content) {
- content.innerHTML = `
-  <div style="display: flex; flex-direction: column; gap: 15px;">
-   
-   <!-- Controlli Generali -->
-   <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; border: 2px solid #3b82f6;">
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-vector-visible" ${layer.visible !== false ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Visibilita livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello visibile</span>
-    </label>
-    
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px;">
-     <input type="checkbox" id="edit-vector-locked" ${layer.locked ? 'checked' : ''}
-      style="width: 20px; height: 20px; cursor: pointer;"
-      aria-label="Blocca livello">
-     <span style="font-weight: 600; font-size: 15px;">Livello bloccato</span>
-    </label>
-    
-    <div>
-     <label for="edit-vector-scale" style="display: block; margin-bottom: 5px; font-weight: 600;">Scala: <span id="edit-vector-scale-val">${(layer.scale || 1) * 100}%</span></label>
-     <input type="range" id="edit-vector-scale" min="10" max="300" value="${(layer.scale || 1) * 100}" 
-      style="width: 100%;" 
-      aria-label="Scala" 
-      aria-valuemin="10" 
-      aria-valuemax="300" 
-      aria-valuenow="${(layer.scale || 1) * 100}">
-     <p style="font-size: 12px; color: #666; margin-top: 3px;">10% = molto piccolo, 100% = normale, 300% = molto grande</p>
-    </div>
-   </div>
-   
-   <!-- Nome Livello -->
-   <div>
-    <label for="edit-vector-name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome livello:</label>
-    <input type="text" id="edit-vector-name" value="${layer.name || 'Senza nome'}" 
-     style="width: 100%; padding: 8px; border: 2px solid #333; border-radius: 4px; font-size: 14px;"
-     placeholder="Inserisci nome..."
-     aria-label="Nome livello">
-   </div>
-   
-   <div>
-    <label for="edit-vector-color" style="display: block; margin-bottom: 5px; font-weight: 600;">Colore linea:</label>
-    <div style="display: flex; gap: 10px; align-items: center;">
-     <input type="color" id="edit-vector-color" value="${layer.color || '#000000'}" 
-      style="width: 60px; height: 40px; border: 2px solid #333; border-radius: 4px; cursor: pointer;">
-     <input type="text" id="edit-vector-color-hex" value="${layer.color || '#000000'}" 
-      placeholder="#000000" 
-      style="flex: 1; padding: 8px; border: 2px solid #333; border-radius: 4px; font-family: monospace; font-size: 14px;"
-      aria-label="Colore linea in formato esadecimale">
-    </div>
-   </div>
-   
-   <div>
-    <label for="edit-vector-width" style="display: block; margin-bottom: 5px; font-weight: 600;">Spessore linea: <span id="edit-vector-width-val">${layer.lineWidth || 2}px</span></label>
-    <input type="range" id="edit-vector-width" min="1" max="50" value="${layer.lineWidth || 2}" 
-     style="width: 100%;" 
-     aria-label="Spessore linea" 
-     aria-valuemin="1" 
-     aria-valuemax="50" 
-     aria-valuenow="${layer.lineWidth || 2}">
-   </div>
-   
-   <div>
-    <label for="edit-vector-opacity" style="display: block; margin-bottom: 5px; font-weight: 600;">Opacita: <span id="edit-vector-opacity-val">${Math.round((layer.opacity || 1) * 100)}%</span></label>
-    <input type="range" id="edit-vector-opacity" min="0" max="100" value="${Math.round((layer.opacity || 1) * 100)}" 
-     style="width: 100%;" 
-     aria-label="Opacita linea" 
-     aria-valuemin="0" 
-     aria-valuemax="100" 
-     aria-valuenow="${Math.round((layer.opacity || 1) * 100)}">
-   </div>
-   
-   ${layer.smoothing !== undefined ? `
-   <div>
-    <label for="edit-vector-smoothing" style="display: block; margin-bottom: 5px; font-weight: 600;">Smoothing: <span id="edit-vector-smoothing-val">${layer.smoothing || 0}</span></label>
-    <input type="range" id="edit-vector-smoothing" min="0" max="1" step="0.1" value="${layer.smoothing || 0}" 
-     style="width: 100%;" 
-     aria-label="Livello smoothing" 
-     aria-valuemin="0" 
-     aria-valuemax="1" 
-     aria-valuenow="${layer.smoothing || 0}">
-    <p style="font-size: 12px; color: #666; margin-top: 5px;">0 = linea spigolosa, 1 = linea morbida</p>
-   </div>
-   ` : ''}
-   
-   <div style="border-top: 2px solid #ddd; padding-top: 15px; margin-top: 5px;">
-    <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 15px;">Posizione</label>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-     <div>
-      <label for="edit-vector-x" style="display: block; margin-bottom: 3px; font-size: 13px;">X: <span id="edit-vector-x-val">${Math.round(layer.x || 0)}</span></label>
-      <input type="number" id="edit-vector-x" value="${Math.round(layer.x || 0)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione X">
-     </div>
-     <div>
-      <label for="edit-vector-y" style="display: block; margin-bottom: 3px; font-size: 13px;">Y: <span id="edit-vector-y-val">${Math.round(layer.y || 0)}</span></label>
-      <input type="number" id="edit-vector-y" value="${Math.round(layer.y || 0)}" 
-       style="width: 100%; padding: 6px; border: 2px solid #333; border-radius: 4px;"
-       aria-label="Posizione Y">
-     </div>
-    </div>
-   </div>
-  </div>
- `;
- 
- // Listener
- // Visibilità
- document.getElementById('edit-vector-visible')?.addEventListener('change', function() {
-  layer.visible = this.checked;
-  scheduleRender();
-  announce(layer.visible ? 'Livello visibile' : 'Livello nascosto', 'polite');
- });
- 
- // Blocco
- document.getElementById('edit-vector-locked')?.addEventListener('change', function() {
-  layer.locked = this.checked;
-  updateLayerList();
-  announce(layer.locked ? 'Livello bloccato' : 'Livello sbloccato', 'polite');
- });
- 
- // Scala
- const vectorScaleSlider = document.getElementById('edit-vector-scale');
- const vectorScaleVal = document.getElementById('edit-vector-scale-val');
- vectorScaleSlider?.addEventListener('input', function() {
-  layer.scale = parseInt(this.value) / 100;
-  if (vectorScaleVal) vectorScaleVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- // Nome livello
- document.getElementById('edit-vector-name')?.addEventListener('input', function() {
-  layer.name = this.value || 'Senza nome';
-  updateLayerList();
- });
- 
- const vectorColorPicker = document.getElementById('edit-vector-color');
- const vectorColorHex = document.getElementById('edit-vector-color-hex');
- vectorColorPicker?.addEventListener('input', function() {
-  layer.color = this.value;
-  if (vectorColorHex) vectorColorHex.value = this.value;
-  scheduleRender();
- });
- vectorColorHex?.addEventListener('input', function() {
-  const val = this.value.trim();
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-   layer.color = val;
-   if (vectorColorPicker) vectorColorPicker.value = val;
-   scheduleRender();
-  }
- });
- 
- const vectorWidthSlider = document.getElementById('edit-vector-width');
- const vectorWidthVal = document.getElementById('edit-vector-width-val');
- vectorWidthSlider?.addEventListener('input', function() {
-  layer.lineWidth = parseInt(this.value);
-  if (vectorWidthVal) vectorWidthVal.textContent = this.value + 'px';
-  scheduleRender();
- });
- 
- const vectorOpacitySlider = document.getElementById('edit-vector-opacity');
- const vectorOpacityVal = document.getElementById('edit-vector-opacity-val');
- vectorOpacitySlider?.addEventListener('input', function() {
-  layer.opacity = parseInt(this.value) / 100;
-  if (vectorOpacityVal) vectorOpacityVal.textContent = this.value + '%';
-  scheduleRender();
- });
- 
- const smoothingSlider = document.getElementById('edit-vector-smoothing');
- const smoothingVal = document.getElementById('edit-vector-smoothing-val');
- smoothingSlider?.addEventListener('input', function() {
-  layer.smoothing = parseFloat(this.value);
-  if (smoothingVal) smoothingVal.textContent = this.value;
-  scheduleRender();
- });
- 
- // Listener per posizione
- document.getElementById('edit-vector-x')?.addEventListener('input', function() {
-  const offset = parseFloat(this.value) - (layer.x || 0);
-  if (layer.points && layer.points.length > 0) {
-   // Sposta tutti i punti del disegno
-   layer.points = layer.points.map(p => ({ x: p.x + offset, y: p.y }));
-  }
-  layer.x = parseFloat(this.value);
-  scheduleRender();
- });
- 
- document.getElementById('edit-vector-y')?.addEventListener('input', function() {
-  const offset = parseFloat(this.value) - (layer.y || 0);
-  if (layer.points && layer.points.length > 0) {
-   // Sposta tutti i punti del disegno
-   layer.points = layer.points.map(p => ({ x: p.x, y: p.y + offset }));
-  }
-  layer.y = parseFloat(this.value);
-  scheduleRender();
- });
-}
-
 </script>
 </body>
 </html>
